@@ -1,0 +1,36 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {
+                changeMode = id; 
+                changeTool = id; 
+                duplicate = id; 
+                importShapes = id; 
+                reallyRedo = id; 
+                reallyUndo = id; 
+                selectNone = id; 
+                showPreferences = id; 
+                toggleGrid = id; 
+                toggleInspector = id; 
+                togglePalette = id; 
+            }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {toggleInspector = id; togglePalette = id; }; 
+            CLASS = ForgeryApplication; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                application = NSApplication; 
+                inspector = ForgeryInspector; 
+                palette = ForgeryPalette; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = ForgeryInspector; LANGUAGE = ObjC; SUPERCLASS = NSWindowController; }, 
+        {CLASS = ForgeryPalette; LANGUAGE = ObjC; SUPERCLASS = NSWindowController; }
+    ); 
+    IBVersion = 1; 
+}

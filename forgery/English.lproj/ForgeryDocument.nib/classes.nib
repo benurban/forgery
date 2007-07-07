@@ -1,0 +1,95 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            CLASS = ForgeryCeilingTextureMode; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = ForgeryTextureMode; 
+        }, 
+        {
+            CLASS = ForgeryDocument; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                ceilingTextureMode = ForgeryCeilingTextureMode; 
+                currentMode = ForgeryMode; 
+                drawMode = ForgeryDrawMode; 
+                floorTextureMode = ForgeryFloorTextureMode; 
+                myWindow = NSWindow; 
+                view = ForgeryView; 
+            }; 
+            SUPERCLASS = NSDocument; 
+        }, 
+        {CLASS = ForgeryDocumentPreferences; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = ForgeryDrawMode; LANGUAGE = ObjC; SUPERCLASS = ForgeryMode; }, 
+        {CLASS = ForgeryDrawView; LANGUAGE = ObjC; SUPERCLASS = ForgeryViewDelegate; }, 
+        {
+            CLASS = ForgeryFloorTextureMode; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = ForgeryTextureMode; 
+        }, 
+        {
+            CLASS = ForgeryMap; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {undoManager = ForgeryUndoManager; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            CLASS = ForgeryMode; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                document = ForgeryDocument; 
+                paletteDelegate = ForgeryPaletteDelegate; 
+                statusBar = NSTextField; 
+                view = ForgeryView; 
+                viewDelegate = ForgeryViewDelegate; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            CLASS = ForgeryPaletteDelegate; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {mode = ForgeryMode; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            CLASS = ForgeryPreferences; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = ForgeryDocumentPreferences; 
+        }, 
+        {CLASS = ForgeryTextureMode; LANGUAGE = ObjC; SUPERCLASS = ForgeryMode; }, 
+        {
+            CLASS = ForgeryTexturePalette; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = ForgeryPaletteDelegate; 
+        }, 
+        {
+            CLASS = ForgeryTextureView; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = ForgeryViewDelegate; 
+        }, 
+        {
+            CLASS = ForgeryToolPalette; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = ForgeryPaletteDelegate; 
+        }, 
+        {
+            CLASS = ForgeryUndoManager; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {data = ForgeryMap; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            CLASS = ForgeryView; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {document = ForgeryDocument; statusBar = NSTextField; }; 
+            SUPERCLASS = NSOpenGLView; 
+        }, 
+        {
+            CLASS = ForgeryViewDelegate; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {document = ForgeryDocument; }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}

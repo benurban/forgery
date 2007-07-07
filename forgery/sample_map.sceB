@@ -1,0 +1,577 @@
+<mapPack version="1">
+	<map name="Sample Map">
+		<vertex id="vertex 000" x="-3840.0" y="-3840.0"/>
+		<vertex id="vertex 001" x="-5120.0" y="0.0"/>
+		<vertex id="vertex 002" x="-3840.0" y="3840.0"/>
+		<vertex id="vertex 003" x="0.0" y="5120.0"/>
+		<vertex id="vertex 004" x="3840.0" y="3840.0"/>
+		<vertex id="vertex 005" x="5120.0" y="0.0"/>
+		<vertex id="vertex 006" x="3840.0" y="-3840.0"/>
+		<vertex id="vertex 007" x="0.0" y="-5120.0"/>
+		<vertex id="vertex 008" x="-768.0" y="-768.0"/>
+		<vertex id="vertex 009" x="-1024.0" y="0.0"/>
+		<vertex id="vertex 010" x="-768.0" y="768.0"/>
+		<vertex id="vertex 011" x="0.0" y="1024.0"/>
+		<vertex id="vertex 012" x="768.0" y="768.0"/>
+		<vertex id="vertex 013" x="1024.0" y="0.0"/>
+		<vertex id="vertex 014" x="768.0" y="-768.0"/>
+		<vertex id="vertex 015" x="0.0" y="-1024.0"/>
+		<line id="line 000">
+			<vertex id="vertex 000"/>
+			<vertex id="vertex 001"/>
+			<side index="0">
+				<surface id="wall 000" location="middleSurface"/>
+			</side>
+		</line>
+		<line id="line 001">
+			<vertex id="vertex 001"/>
+			<vertex id="vertex 002"/>
+			<side index="0">
+				<surface id="wall 001" location="middleSurface"/>
+			</side>
+		</line>
+		<line id="line 002">
+			<vertex id="vertex 002"/>
+			<vertex id="vertex 003"/>
+			<side index="0">
+				<surface id="wall 002" location="middleSurface"/>
+			</side>
+		</line>
+		<line id="line 003">
+			<vertex id="vertex 003"/>
+			<vertex id="vertex 004"/>
+			<side index="0">
+				<surface id="wall 003" location="middleSurface"/>
+			</side>
+		</line>
+		<line id="line 004">
+			<vertex id="vertex 004"/>
+			<vertex id="vertex 005"/>
+			<side index="0">
+				<surface id="wall 004" location="middleSurface"/>
+			</side>
+		</line>
+		<line id="line 005">
+			<vertex id="vertex 005"/>
+			<vertex id="vertex 006"/>
+			<side index="0">
+				<surface id="wall 005" location="middleSurface"/>
+			</side>
+		</line>
+		<line id="line 006">
+			<vertex id="vertex 006"/>
+			<vertex id="vertex 007"/>
+			<side index="0">
+				<surface id="wall 006" location="middleSurface"/>
+			</side>
+		</line>
+		<line id="line 007">
+			<vertex id="vertex 007"/>
+			<vertex id="vertex 000"/>
+			<side index="0">
+				<surface id="wall 007" location="middleSurface"/>
+			</side>
+		</line>
+		<line id="line 008">
+			<vertex id="vertex 008"/>
+			<vertex id="vertex 009"/>
+			<side index="0"/>
+			<side index="1">
+				<surface id="wall 008" location="lowerSurface"/>
+				<surface id="wall 009" location="upperSurface"/>
+			</side>
+		</line>
+		<line id="line 009">
+			<vertex id="vertex 009"/>
+			<vertex id="vertex 010"/>
+			<side index="0"/>
+			<side index="1">
+				<surface id="wall 010" location="lowerSurface"/>
+				<surface id="wall 011" location="upperSurface"/>
+			</side>
+		</line>
+		<line id="line 010">
+			<vertex id="vertex 010"/>
+			<vertex id="vertex 011"/>
+			<side index="0"/>
+			<side index="1">
+				<surface id="wall 012" location="lowerSurface"/>
+				<surface id="wall 013" location="upperSurface"/>
+			</side>
+		</line>
+		<line id="line 011">
+			<vertex id="vertex 011"/>
+			<vertex id="vertex 012"/>
+			<side index="0"/>
+			<side index="1">
+				<surface id="wall 014" location="lowerSurface"/>
+				<surface id="wall 015" location="upperSurface"/>
+			</side>
+		</line>
+		<line id="line 012">
+			<vertex id="vertex 012"/>
+			<vertex id="vertex 013"/>
+			<side index="0"/>
+			<side index="1">
+				<surface id="wall 016" location="lowerSurface"/>
+				<surface id="wall 017" location="upperSurface"/>
+			</side>
+		</line>
+		<line id="line 013">
+			<vertex id="vertex 013"/>
+			<vertex id="vertex 014"/>
+			<side index="0"/>
+			<side index="1">
+				<surface id="wall 018" location="lowerSurface"/>
+				<surface id="wall 019" location="upperSurface"/>
+			</side>
+		</line>
+		<line id="line 014">
+			<vertex id="vertex 014"/>
+			<vertex id="vertex 015"/>
+			<side index="0"/>
+			<side index="1">
+				<surface id="wall 020" location="lowerSurface"/>
+				<surface id="wall 021" location="upperSurface"/>
+			</side>
+		</line>
+		<line id="line 015">
+			<vertex id="vertex 015"/>
+			<vertex id="vertex 008"/>
+			<side index="0"/>
+			<side index="1">
+				<surface id="wall 022" location="lowerSurface"/>
+				<surface id="wall 023" location="upperSurface"/>
+			</side>
+		</line>
+		<line id="line 016">
+			<vertex id="vertex 000"/>
+			<vertex id="vertex 008"/>
+			<side index="0"/>
+			<side index="1"/>
+		</line>
+		<line id="line 017">
+			<vertex id="vertex 001"/>
+			<vertex id="vertex 009"/>
+			<side index="0"/>
+			<side index="1"/>
+		</line>
+		<line id="line 018">
+			<vertex id="vertex 002"/>
+			<vertex id="vertex 010"/>
+			<side index="0"/>
+			<side index="1"/>
+		</line>
+		<line id="line 019">
+			<vertex id="vertex 003"/>
+			<vertex id="vertex 011"/>
+			<side index="0"/>
+			<side index="1"/>
+		</line>
+		<line id="line 020">
+			<vertex id="vertex 004"/>
+			<vertex id="vertex 012"/>
+			<side index="0"/>
+			<side index="1"/>
+		</line>
+		<line id="line 021">
+			<vertex id="vertex 005"/>
+			<vertex id="vertex 013"/>
+			<side index="0"/>
+			<side index="1"/>
+		</line>
+		<line id="line 022">
+			<vertex id="vertex 006"/>
+			<vertex id="vertex 014"/>
+			<side index="0"/>
+			<side index="1"/>
+		</line>
+		<line id="line 023">
+			<vertex id="vertex 007"/>
+			<vertex id="vertex 015"/>
+			<side index="0"/>
+			<side index="1"/>
+		</line>
+		<polygon id="polygon 000" layer="layer 000" floorOffset="0.1" ceilingOffset="2.9">
+			<surface id="floor 000" location="floor"/>
+			<surface id="ceiling 000" location="ceiling"/>
+			<line id="line 015"/>
+			<line id="line 014"/>
+			<line id="line 013"/>
+			<line id="line 012"/>
+			<line id="line 011"/>
+			<line id="line 010"/>
+			<line id="line 009"/>
+			<line id="line 008"/>
+		</polygon>
+		<polygon id="polygon 001" layer="layer 000" floorOffset="0.0" ceilingOffset="3.0">
+			<surface id="floor 001" location="floor"/>
+			<surface id="ceiling 001" location="ceiling"/>
+			<line id="line 016"/>
+			<line id="line 008"/>
+			<line id="line 017"/>
+			<line id="line 000"/>
+		</polygon>
+		<polygon id="polygon 002" layer="layer 000" floorOffset="0.0" ceilingOffset="3.0">
+			<surface id="floor 002" location="floor"/>
+			<surface id="ceiling 002" location="ceiling"/>
+			<line id="line 017"/>
+			<line id="line 009"/>
+			<line id="line 018"/>
+			<line id="line 001"/>
+		</polygon>
+		<polygon id="polygon 003" layer="layer 000" floorOffset="0.0" ceilingOffset="3.0">
+			<surface id="floor 003" location="floor"/>
+			<surface id="ceiling 003" location="ceiling"/>
+			<line id="line 018"/>
+			<line id="line 010"/>
+			<line id="line 019"/>
+			<line id="line 002"/>
+		</polygon>
+		<polygon id="polygon 004" layer="layer 000" floorOffset="0.0" ceilingOffset="3.0">
+			<surface id="floor 004" location="floor"/>
+			<surface id="ceiling 004" location="ceiling"/>
+			<line id="line 019"/>
+			<line id="line 011"/>
+			<line id="line 020"/>
+			<line id="line 003"/>
+		</polygon>
+		<polygon id="polygon 005" layer="layer 000" floorOffset="0.0" ceilingOffset="3.0">
+			<surface id="floor 005" location="floor"/>
+			<surface id="ceiling 005" location="ceiling"/>
+			<line id="line 020"/>
+			<line id="line 012"/>
+			<line id="line 021"/>
+			<line id="line 004"/>
+		</polygon>
+		<polygon id="polygon 006" layer="layer 000" floorOffset="0.0" ceilingOffset="3.0">
+			<surface id="floor 006" location="floor"/>
+			<surface id="ceiling 006" location="ceiling"/>
+			<line id="line 021"/>
+			<line id="line 013"/>
+			<line id="line 022"/>
+			<line id="line 005"/>
+		</polygon>
+		<polygon id="polygon 007" layer="layer 000" floorOffset="0.0" ceilingOffset="3.0">
+			<surface id="floor 007" location="floor"/>
+			<surface id="ceiling 007" location="ceiling"/>
+			<line id="line 022"/>
+			<line id="line 014"/>
+			<line id="line 023"/>
+			<line id="line 006"/>
+		</polygon>
+		<polygon id="polygon 008" layer="layer 000" floorOffset="0.0" ceilingOffset="3.0">
+			<surface id="floor 008" location="floor"/>
+			<surface id="ceiling 008" location="ceiling"/>
+			<line id="line 023"/>
+			<line id="line 015"/>
+			<line id="line 016"/>
+			<line id="line 007"/>
+		</polygon>
+		<layer id="layer 000" offset="-1.5"/>
+		<surface id="ceiling 000">
+			<action kind="recharger" shieldRate="0.5" shieldLimit="3.5" oxygenRate="-0.1"/>
+			<texture id="collection 018 bitmap 010 clut 000"/>
+		</surface>
+		<surface id="ceiling 001">
+			<texture id="collection 018 bitmap 028 clut 000"/>
+		</surface>
+		<surface id="ceiling 002">
+			<texture id="collection 018 bitmap 028 clut 000"/>
+		</surface>
+		<surface id="ceiling 003">
+			<texture id="collection 018 bitmap 028 clut 000"/>
+		</surface>
+		<surface id="ceiling 004">
+			<texture id="collection 018 bitmap 028 clut 000"/>
+		</surface>
+		<surface id="ceiling 005">
+			<texture id="collection 018 bitmap 028 clut 000"/>
+		</surface>
+		<surface id="ceiling 006">
+			<texture id="collection 018 bitmap 028 clut 000"/>
+		</surface>
+		<surface id="ceiling 007">
+			<texture id="collection 018 bitmap 028 clut 000"/>
+		</surface>
+		<surface id="ceiling 008">
+			<texture id="collection 018 bitmap 028 clut 000"/>
+		</surface>
+		<surface id="floor 000">
+			<action kind="recharger" shieldRate="0.5" shieldLimit="3.5" oxygenRate="-0.1"/>
+			<texture id="collection 018 bitmap 010 clut 000"/>
+		</surface>
+		<surface id="floor 001">
+			<texture id="collection 017 bitmap 005 clut 000"/>
+		</surface>
+		<surface id="floor 002">
+			<texture id="collection 017 bitmap 005 clut 000"/>
+		</surface>
+		<surface id="floor 003">
+			<texture id="collection 017 bitmap 005 clut 000"/>
+		</surface>
+		<surface id="floor 004">
+			<texture id="collection 017 bitmap 005 clut 000"/>
+		</surface>
+		<surface id="floor 005">
+			<texture id="collection 017 bitmap 005 clut 000"/>
+		</surface>
+		<surface id="floor 006">
+			<texture id="collection 017 bitmap 005 clut 000"/>
+		</surface>
+		<surface id="floor 007">
+			<texture id="collection 017 bitmap 005 clut 000"/>
+		</surface>
+		<surface id="floor 008">
+			<texture id="collection 017 bitmap 005 clut 000"/>
+		</surface>
+		<surface id="wall 000" dx="0" dy="0">
+			<texture id=""/>
+		</surface>
+		<surface id="wall 001" dx="80" dy="0">
+			<texture id=""/>
+		</surface>
+		<surface id="wall 002" dx="31" dy="0">
+			<texture id=""/>
+		</surface>
+		<surface id="wall 003" dx="111" dy="0">
+			<texture id=""/>
+		</surface>
+		<surface id="wall 004" dx="63" dy="0">
+			<texture id=""/>
+		</surface>
+		<surface id="wall 005" dx="15" dy="0">
+			<texture id=""/>
+		</surface>
+		<surface id="wall 006" dx="94" dy="0">
+			<texture id=""/>
+		</surface>
+		<surface id="wall 007" dx="46" dy="0">
+			<texture id=""/>
+		</surface>
+		<surface id="wall 008" dx="0" dy="60">
+			<effect kind="slide" dx="1"/>
+			<texture id="collection 020 bitmap 020 clut 000"/>
+		</surface>
+		<surface id="wall 009" dx="0" dy="44">
+			<effect kind="slide" dx="1"/>
+			<texture id="collection 020 bitmap 020 clut 000"/>
+		</surface>
+		<surface id="wall 010" dx="42" dy="60">
+			<effect kind="slide" dx="1"/>
+			<texture id="collection 020 bitmap 020 clut 000"/>
+		</surface>
+		<surface id="wall 011" dx="42" dy="44">
+			<effect kind="slide" dx="1"/>
+			<texture id="collection 020 bitmap 020 clut 000"/>
+		</surface>
+		<surface id="wall 012" dx="83" dy="60">
+			<effect kind="slide" dx="1"/>
+			<texture id="collection 020 bitmap 020 clut 000"/>
+		</surface>
+		<surface id="wall 013" dx="83" dy="44">
+			<effect kind="slide" dx="1"/>
+			<texture id="collection 020 bitmap 020 clut 000"/>
+		</surface>
+		<surface id="wall 014" dx="125" dy="60">
+			<effect kind="slide" dx="1"/>
+			<texture id="collection 020 bitmap 020 clut 000"/>
+		</surface>
+		<surface id="wall 015" dx="125" dy="44">
+			<effect kind="slide" dx="1"/>
+			<texture id="collection 020 bitmap 020 clut 000"/>
+		</surface>
+		<surface id="wall 016" dx="38" dy="60">
+			<effect kind="slide" dx="1"/>
+			<texture id="collection 020 bitmap 020 clut 000"/>
+		</surface>
+		<surface id="wall 017" dx="38" dy="44">
+			<effect kind="slide" dx="1"/>
+			<texture id="collection 020 bitmap 020 clut 000"/>
+		</surface>
+		<surface id="wall 018" dx="80" dy="60">
+			<effect kind="slide" dx="1"/>
+			<texture id="collection 020 bitmap 020 clut 000"/>
+		</surface>
+		<surface id="wall 019" dx="80" dy="44">
+			<effect kind="slide" dx="1"/>
+			<texture id="collection 020 bitmap 020 clut 000"/>
+		</surface>
+		<surface id="wall 020" dx="121" dy="60">
+			<effect kind="slide" dx="1"/>
+			<texture id="collection 020 bitmap 020 clut 000"/>
+		</surface>
+		<surface id="wall 021" dx="121" dy="44">
+			<effect kind="slide" dx="1"/>
+			<texture id="collection 020 bitmap 020 clut 000"/>
+		</surface>
+		<surface id="wall 022" dx="35" dy="60">
+			<effect kind="slide" dx="1"/>
+			<texture id="collection 020 bitmap 020 clut 000"/>
+		</surface>
+		<surface id="wall 023" dx="35" dy="44">
+			<effect kind="slide" dx="1"/>
+			<texture id="collection 020 bitmap 020 clut 000"/>
+		</surface>
+		<texture id=""/>
+		<texture id="collection 017 bitmap 000 clut 000" collectionID="17" bitmapID="0" clutID="0"/>
+		<texture id="collection 017 bitmap 001 clut 000" collectionID="17" bitmapID="1" clutID="0"/>
+		<texture id="collection 017 bitmap 002 clut 000" collectionID="17" bitmapID="2" clutID="0"/>
+		<texture id="collection 017 bitmap 003 clut 000" collectionID="17" bitmapID="3" clutID="0"/>
+		<texture id="collection 017 bitmap 004 clut 000" collectionID="17" bitmapID="4" clutID="0"/>
+		<texture id="collection 017 bitmap 005 clut 000" collectionID="17" bitmapID="5" clutID="0"/>
+		<texture id="collection 017 bitmap 006 clut 000" collectionID="17" bitmapID="6" clutID="0"/>
+		<texture id="collection 017 bitmap 007 clut 000" collectionID="17" bitmapID="7" clutID="0"/>
+		<texture id="collection 017 bitmap 008 clut 000" collectionID="17" bitmapID="8" clutID="0"/>
+		<texture id="collection 017 bitmap 009 clut 000" collectionID="17" bitmapID="9" clutID="0"/>
+		<texture id="collection 017 bitmap 010 clut 000" collectionID="17" bitmapID="10" clutID="0"/>
+		<texture id="collection 017 bitmap 011 clut 000" collectionID="17" bitmapID="11" clutID="0"/>
+		<texture id="collection 017 bitmap 012 clut 000" collectionID="17" bitmapID="12" clutID="0"/>
+		<texture id="collection 017 bitmap 013 clut 000" collectionID="17" bitmapID="13" clutID="0"/>
+		<texture id="collection 017 bitmap 014 clut 000" collectionID="17" bitmapID="14" clutID="0"/>
+		<texture id="collection 017 bitmap 015 clut 000" collectionID="17" bitmapID="15" clutID="0"/>
+		<texture id="collection 017 bitmap 016 clut 000" collectionID="17" bitmapID="16" clutID="0"/>
+		<texture id="collection 017 bitmap 017 clut 000" collectionID="17" bitmapID="17" clutID="0"/>
+		<texture id="collection 017 bitmap 018 clut 000" collectionID="17" bitmapID="18" clutID="0"/>
+		<texture id="collection 017 bitmap 019 clut 000" collectionID="17" bitmapID="19" clutID="0"/>
+		<texture id="collection 017 bitmap 020 clut 000" collectionID="17" bitmapID="20" clutID="0"/>
+		<texture id="collection 017 bitmap 021 clut 000" collectionID="17" bitmapID="21" clutID="0"/>
+		<texture id="collection 017 bitmap 022 clut 000" collectionID="17" bitmapID="22" clutID="0"/>
+		<texture id="collection 017 bitmap 023 clut 000" collectionID="17" bitmapID="23" clutID="0"/>
+		<texture id="collection 017 bitmap 024 clut 000" collectionID="17" bitmapID="24" clutID="0"/>
+		<texture id="collection 017 bitmap 025 clut 000" collectionID="17" bitmapID="25" clutID="0"/>
+		<texture id="collection 017 bitmap 026 clut 000" collectionID="17" bitmapID="26" clutID="0"/>
+		<texture id="collection 017 bitmap 027 clut 000" collectionID="17" bitmapID="27" clutID="0"/>
+		<texture id="collection 017 bitmap 028 clut 000" collectionID="17" bitmapID="28" clutID="0"/>
+		<texture id="collection 017 bitmap 029 clut 000" collectionID="17" bitmapID="29" clutID="0"/>
+		<texture id="collection 018 bitmap 000 clut 000" collectionID="18" bitmapID="0" clutID="0"/>
+		<texture id="collection 018 bitmap 001 clut 000" collectionID="18" bitmapID="1" clutID="0"/>
+		<texture id="collection 018 bitmap 002 clut 000" collectionID="18" bitmapID="2" clutID="0"/>
+		<texture id="collection 018 bitmap 003 clut 000" collectionID="18" bitmapID="3" clutID="0"/>
+		<texture id="collection 018 bitmap 004 clut 000" collectionID="18" bitmapID="4" clutID="0"/>
+		<texture id="collection 018 bitmap 005 clut 000" collectionID="18" bitmapID="5" clutID="0"/>
+		<texture id="collection 018 bitmap 006 clut 000" collectionID="18" bitmapID="6" clutID="0"/>
+		<texture id="collection 018 bitmap 007 clut 000" collectionID="18" bitmapID="7" clutID="0"/>
+		<texture id="collection 018 bitmap 008 clut 000" collectionID="18" bitmapID="8" clutID="0"/>
+		<texture id="collection 018 bitmap 009 clut 000" collectionID="18" bitmapID="9" clutID="0"/>
+		<texture id="collection 018 bitmap 010 clut 000" collectionID="18" bitmapID="10" clutID="0"/>
+		<texture id="collection 018 bitmap 011 clut 000" collectionID="18" bitmapID="11" clutID="0"/>
+		<texture id="collection 018 bitmap 012 clut 000" collectionID="18" bitmapID="12" clutID="0"/>
+		<texture id="collection 018 bitmap 013 clut 000" collectionID="18" bitmapID="13" clutID="0"/>
+		<texture id="collection 018 bitmap 014 clut 000" collectionID="18" bitmapID="14" clutID="0"/>
+		<texture id="collection 018 bitmap 015 clut 000" collectionID="18" bitmapID="15" clutID="0"/>
+		<texture id="collection 018 bitmap 016 clut 000" collectionID="18" bitmapID="16" clutID="0"/>
+		<texture id="collection 018 bitmap 017 clut 000" collectionID="18" bitmapID="17" clutID="0"/>
+		<texture id="collection 018 bitmap 018 clut 000" collectionID="18" bitmapID="18" clutID="0"/>
+		<texture id="collection 018 bitmap 019 clut 000" collectionID="18" bitmapID="19" clutID="0"/>
+		<texture id="collection 018 bitmap 020 clut 000" collectionID="18" bitmapID="20" clutID="0"/>
+		<texture id="collection 018 bitmap 021 clut 000" collectionID="18" bitmapID="21" clutID="0"/>
+		<texture id="collection 018 bitmap 022 clut 000" collectionID="18" bitmapID="22" clutID="0"/>
+		<texture id="collection 018 bitmap 023 clut 000" collectionID="18" bitmapID="23" clutID="0"/>
+		<texture id="collection 018 bitmap 024 clut 000" collectionID="18" bitmapID="24" clutID="0"/>
+		<texture id="collection 018 bitmap 025 clut 000" collectionID="18" bitmapID="25" clutID="0"/>
+		<texture id="collection 018 bitmap 026 clut 000" collectionID="18" bitmapID="26" clutID="0"/>
+		<texture id="collection 018 bitmap 027 clut 000" collectionID="18" bitmapID="27" clutID="0"/>
+		<texture id="collection 018 bitmap 028 clut 000" collectionID="18" bitmapID="28" clutID="0"/>
+		<texture id="collection 018 bitmap 029 clut 000" collectionID="18" bitmapID="29" clutID="0"/>
+		<texture id="collection 019 bitmap 000 clut 000" collectionID="19" bitmapID="0" clutID="0"/>
+		<texture id="collection 019 bitmap 001 clut 000" collectionID="19" bitmapID="1" clutID="0"/>
+		<texture id="collection 019 bitmap 002 clut 000" collectionID="19" bitmapID="2" clutID="0"/>
+		<texture id="collection 019 bitmap 003 clut 000" collectionID="19" bitmapID="3" clutID="0"/>
+		<texture id="collection 019 bitmap 004 clut 000" collectionID="19" bitmapID="4" clutID="0"/>
+		<texture id="collection 019 bitmap 005 clut 000" collectionID="19" bitmapID="5" clutID="0"/>
+		<texture id="collection 019 bitmap 006 clut 000" collectionID="19" bitmapID="6" clutID="0"/>
+		<texture id="collection 019 bitmap 007 clut 000" collectionID="19" bitmapID="7" clutID="0"/>
+		<texture id="collection 019 bitmap 008 clut 000" collectionID="19" bitmapID="8" clutID="0"/>
+		<texture id="collection 019 bitmap 009 clut 000" collectionID="19" bitmapID="9" clutID="0"/>
+		<texture id="collection 019 bitmap 010 clut 000" collectionID="19" bitmapID="10" clutID="0"/>
+		<texture id="collection 019 bitmap 011 clut 000" collectionID="19" bitmapID="11" clutID="0"/>
+		<texture id="collection 019 bitmap 012 clut 000" collectionID="19" bitmapID="12" clutID="0"/>
+		<texture id="collection 019 bitmap 013 clut 000" collectionID="19" bitmapID="13" clutID="0"/>
+		<texture id="collection 019 bitmap 014 clut 000" collectionID="19" bitmapID="14" clutID="0"/>
+		<texture id="collection 019 bitmap 015 clut 000" collectionID="19" bitmapID="15" clutID="0"/>
+		<texture id="collection 019 bitmap 016 clut 000" collectionID="19" bitmapID="16" clutID="0"/>
+		<texture id="collection 019 bitmap 017 clut 000" collectionID="19" bitmapID="17" clutID="0"/>
+		<texture id="collection 019 bitmap 018 clut 000" collectionID="19" bitmapID="18" clutID="0"/>
+		<texture id="collection 019 bitmap 019 clut 000" collectionID="19" bitmapID="19" clutID="0"/>
+		<texture id="collection 019 bitmap 020 clut 000" collectionID="19" bitmapID="20" clutID="0"/>
+		<texture id="collection 019 bitmap 021 clut 000" collectionID="19" bitmapID="21" clutID="0"/>
+		<texture id="collection 019 bitmap 022 clut 000" collectionID="19" bitmapID="22" clutID="0"/>
+		<texture id="collection 019 bitmap 023 clut 000" collectionID="19" bitmapID="23" clutID="0"/>
+		<texture id="collection 019 bitmap 024 clut 000" collectionID="19" bitmapID="24" clutID="0"/>
+		<texture id="collection 019 bitmap 025 clut 000" collectionID="19" bitmapID="25" clutID="0"/>
+		<texture id="collection 019 bitmap 026 clut 000" collectionID="19" bitmapID="26" clutID="0"/>
+		<texture id="collection 019 bitmap 027 clut 000" collectionID="19" bitmapID="27" clutID="0"/>
+		<texture id="collection 019 bitmap 028 clut 000" collectionID="19" bitmapID="28" clutID="0"/>
+		<texture id="collection 019 bitmap 029 clut 000" collectionID="19" bitmapID="29" clutID="0"/>
+		<texture id="collection 020 bitmap 000 clut 000" collectionID="20" bitmapID="0" clutID="0"/>
+		<texture id="collection 020 bitmap 001 clut 000" collectionID="20" bitmapID="1" clutID="0"/>
+		<texture id="collection 020 bitmap 002 clut 000" collectionID="20" bitmapID="2" clutID="0"/>
+		<texture id="collection 020 bitmap 003 clut 000" collectionID="20" bitmapID="3" clutID="0"/>
+		<texture id="collection 020 bitmap 004 clut 000" collectionID="20" bitmapID="4" clutID="0"/>
+		<texture id="collection 020 bitmap 005 clut 000" collectionID="20" bitmapID="5" clutID="0"/>
+		<texture id="collection 020 bitmap 006 clut 000" collectionID="20" bitmapID="6" clutID="0"/>
+		<texture id="collection 020 bitmap 007 clut 000" collectionID="20" bitmapID="7" clutID="0"/>
+		<texture id="collection 020 bitmap 008 clut 000" collectionID="20" bitmapID="8" clutID="0"/>
+		<texture id="collection 020 bitmap 009 clut 000" collectionID="20" bitmapID="9" clutID="0"/>
+		<texture id="collection 020 bitmap 010 clut 000" collectionID="20" bitmapID="10" clutID="0"/>
+		<texture id="collection 020 bitmap 011 clut 000" collectionID="20" bitmapID="11" clutID="0"/>
+		<texture id="collection 020 bitmap 012 clut 000" collectionID="20" bitmapID="12" clutID="0"/>
+		<texture id="collection 020 bitmap 013 clut 000" collectionID="20" bitmapID="13" clutID="0"/>
+		<texture id="collection 020 bitmap 014 clut 000" collectionID="20" bitmapID="14" clutID="0"/>
+		<texture id="collection 020 bitmap 015 clut 000" collectionID="20" bitmapID="15" clutID="0"/>
+		<texture id="collection 020 bitmap 016 clut 000" collectionID="20" bitmapID="16" clutID="0"/>
+		<texture id="collection 020 bitmap 017 clut 000" collectionID="20" bitmapID="17" clutID="0"/>
+		<texture id="collection 020 bitmap 018 clut 000" collectionID="20" bitmapID="18" clutID="0"/>
+		<texture id="collection 020 bitmap 019 clut 000" collectionID="20" bitmapID="19" clutID="0"/>
+		<texture id="collection 020 bitmap 020 clut 000" collectionID="20" bitmapID="20" clutID="0"/>
+		<texture id="collection 020 bitmap 021 clut 000" collectionID="20" bitmapID="21" clutID="0"/>
+		<texture id="collection 020 bitmap 022 clut 000" collectionID="20" bitmapID="22" clutID="0"/>
+		<texture id="collection 020 bitmap 023 clut 000" collectionID="20" bitmapID="23" clutID="0"/>
+		<texture id="collection 020 bitmap 024 clut 000" collectionID="20" bitmapID="24" clutID="0"/>
+		<texture id="collection 020 bitmap 025 clut 000" collectionID="20" bitmapID="25" clutID="0"/>
+		<texture id="collection 020 bitmap 026 clut 000" collectionID="20" bitmapID="26" clutID="0"/>
+		<texture id="collection 020 bitmap 027 clut 000" collectionID="20" bitmapID="27" clutID="0"/>
+		<texture id="collection 020 bitmap 028 clut 000" collectionID="20" bitmapID="28" clutID="0"/>
+		<texture id="collection 020 bitmap 029 clut 000" collectionID="20" bitmapID="29" clutID="0"/>
+		<texture id="collection 020 bitmap 030 clut 000" collectionID="20" bitmapID="30" clutID="0"/>
+		<texture id="collection 020 bitmap 031 clut 000" collectionID="20" bitmapID="31" clutID="0"/>
+		<texture id="collection 020 bitmap 032 clut 000" collectionID="20" bitmapID="32" clutID="0"/>
+		<texture id="collection 020 bitmap 033 clut 000" collectionID="20" bitmapID="33" clutID="0"/>
+		<texture id="collection 020 bitmap 034 clut 000" collectionID="20" bitmapID="34" clutID="0"/>
+		<texture id="collection 021 bitmap 000 clut 000" collectionID="21" bitmapID="0" clutID="0"/>
+		<texture id="collection 021 bitmap 001 clut 000" collectionID="21" bitmapID="1" clutID="0"/>
+		<texture id="collection 021 bitmap 002 clut 000" collectionID="21" bitmapID="2" clutID="0"/>
+		<texture id="collection 021 bitmap 003 clut 000" collectionID="21" bitmapID="3" clutID="0"/>
+		<texture id="collection 021 bitmap 004 clut 000" collectionID="21" bitmapID="4" clutID="0"/>
+		<texture id="collection 021 bitmap 005 clut 000" collectionID="21" bitmapID="5" clutID="0"/>
+		<texture id="collection 021 bitmap 006 clut 000" collectionID="21" bitmapID="6" clutID="0"/>
+		<texture id="collection 021 bitmap 007 clut 000" collectionID="21" bitmapID="7" clutID="0"/>
+		<texture id="collection 021 bitmap 008 clut 000" collectionID="21" bitmapID="8" clutID="0"/>
+		<texture id="collection 021 bitmap 009 clut 000" collectionID="21" bitmapID="9" clutID="0"/>
+		<texture id="collection 021 bitmap 010 clut 000" collectionID="21" bitmapID="10" clutID="0"/>
+		<texture id="collection 021 bitmap 011 clut 000" collectionID="21" bitmapID="11" clutID="0"/>
+		<texture id="collection 021 bitmap 012 clut 000" collectionID="21" bitmapID="12" clutID="0"/>
+		<texture id="collection 021 bitmap 013 clut 000" collectionID="21" bitmapID="13" clutID="0"/>
+		<texture id="collection 021 bitmap 014 clut 000" collectionID="21" bitmapID="14" clutID="0"/>
+		<texture id="collection 021 bitmap 015 clut 000" collectionID="21" bitmapID="15" clutID="0"/>
+		<texture id="collection 021 bitmap 016 clut 000" collectionID="21" bitmapID="16" clutID="0"/>
+		<texture id="collection 021 bitmap 017 clut 000" collectionID="21" bitmapID="17" clutID="0"/>
+		<texture id="collection 021 bitmap 018 clut 000" collectionID="21" bitmapID="18" clutID="0"/>
+		<texture id="collection 021 bitmap 019 clut 000" collectionID="21" bitmapID="19" clutID="0"/>
+		<texture id="collection 021 bitmap 020 clut 000" collectionID="21" bitmapID="20" clutID="0"/>
+		<texture id="collection 021 bitmap 021 clut 000" collectionID="21" bitmapID="21" clutID="0"/>
+		<texture id="collection 021 bitmap 022 clut 000" collectionID="21" bitmapID="22" clutID="0"/>
+		<texture id="collection 021 bitmap 023 clut 000" collectionID="21" bitmapID="23" clutID="0"/>
+		<texture id="collection 021 bitmap 024 clut 000" collectionID="21" bitmapID="24" clutID="0"/>
+		<texture id="collection 021 bitmap 025 clut 000" collectionID="21" bitmapID="25" clutID="0"/>
+		<texture id="collection 021 bitmap 026 clut 000" collectionID="21" bitmapID="26" clutID="0"/>
+		<texture id="collection 021 bitmap 027 clut 000" collectionID="21" bitmapID="27" clutID="0"/>
+		<texture id="collection 021 bitmap 028 clut 000" collectionID="21" bitmapID="28" clutID="0"/>
+		<texture id="collection 021 bitmap 029 clut 000" collectionID="21" bitmapID="29" clutID="0"/>
+		<texture id="collection 027 bitmap 000 clut 000" collectionID="27" bitmapID="0" clutID="0"/>
+		<texture id="collection 028 bitmap 000 clut 000" collectionID="28" bitmapID="0" clutID="0"/>
+		<texture id="collection 029 bitmap 000 clut 000" collectionID="29" bitmapID="0" clutID="0"/>
+		<texture id="collection 030 bitmap 000 clut 000" collectionID="30" bitmapID="0" clutID="0"/>
+	</map>
+</mapPack>

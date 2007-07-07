@@ -1,0 +1,15 @@
+include COPYING
+include MANIFEST.in
+include *.lproj/*.nib/*.nib
+exclude *.lproj/*~.nib/*.nib
+include *.nib/*.nib
+exclude *~.nib/*.nib
+include *.plist
+include *.py
+include *.xcodeproj/project.pbxproj
+include *.svg
+include *.png
+include *.icns
+include build.sh
+include forgery.sh
+include sample_map.sceB

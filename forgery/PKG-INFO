@@ -1,0 +1,23 @@
+Metadata-Version: 1.0
+Name: Forgery
+Version: 0.1.0
+Summary: Forgery is the first cross-platform Aleph One map editor
+Home-page: http://forgery.sourceforge.net/
+Author: Ben Urban
+Author-email: benurban@users.sourceforge.net
+License: GPL-2
+Description: UNKNOWN
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Environment :: MacOS X
+Classifier: Environment :: Win32 (MS Windows)
+Classifier: Environment :: X11 Applications
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: License :; OSI Approved :: GNU General Public License (GPL)
+Classifier: Natural Language :: English
+Classifier: Operating System :: MacOS :: MacOS X
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: OS Independent
+Classifier: Operating System :: POSIX
+Classifier: Programming Language :: Python
+Classifier: Topic :: Games/Entertainment :: First Person Shooters
