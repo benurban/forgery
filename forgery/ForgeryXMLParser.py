@@ -26,6 +26,9 @@ import ForgeryElements
 
 import xml.sax, xml.sax.handler
 
+def capitalize(s):
+	return s[0].upper() + s[1:]
+
 class ForgeryXMLParser(xml.sax.handler.ContentHandler):
 	data = None
 	elementStack = None
@@ -41,7 +44,7 @@ class ForgeryXMLParser(xml.sax.handler.ContentHandler):
 	
 	def startElement(self, name, attrs):
 		try:
-			method = getattr(self, 'start' + name.capitalize() + 'Element')
+			method = getattr(self, 'start' + capitalize(name) + 'Element')
 		except AttributeError:
 			pass
 		else:
@@ -49,7 +52,7 @@ class ForgeryXMLParser(xml.sax.handler.ContentHandler):
 	
 	def endElement(self, name):
 		try:
-			method = getattr(self, 'end' + name.capitalize() + 'Element')
+			method = getattr(self, 'end' + capitalize(name) + 'Element')
 		except AttributeError:
 			pass
 		else:
@@ -145,7 +148,7 @@ class ForgeryXMLParser(xml.sax.handler.ContentHandler):
 		self.data.addElement(ForgeryElements.ForgeryLayer(elementID = 'layer 000'))
 		info = dict(attrs)
 		info['tag'] = 'map'
-		self.elementStack = [info]
+		self.elementStack.append(info)
 	
 	def endMapElement(self):
 		info = self.elementStack.pop()
