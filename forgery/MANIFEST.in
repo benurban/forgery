@@ -9,6 +9,7 @@ include *.py
 include *.xcodeproj/project.pbxproj
 include *.svg
 include *.png
+include info.tiff
 include *.icns
 include build.sh
 include forgery.sh
