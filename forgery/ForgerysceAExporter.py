@@ -27,7 +27,7 @@ def _indexer(code):
 	def indexer(self, elements):
 		elements = elements.items()
 		elements.sort()
-		self.[code] = [element for elementID, element in elements]
+		self[code] = [element for elementID, element in elements]
 	return indexer
 
 class ForgerysceAExporter(object):
@@ -35,37 +35,37 @@ class ForgerysceAExporter(object):
 	indexedData = None
 	
 	annotations = NOTE = property(
-		fget = lambda self, self.indexedData.__getitem__('NOTE'),
+		fget = lambda self: self.indexedData.__getitem__('NOTE'),
 		fset = lambda self, value: self.indexedData.__setitem__('NOTE', value),
 		fdel = lambda self: self.indexedData.__delitem__('NOTE'),
 	)
 	lights      = LITE = property(
-		fget = lambda self, self.indexedData.__getitem__('LITE'),
+		fget = lambda self: self.indexedData.__getitem__('LITE'),
 		fset = lambda self, value: self.indexedData.__setitem__('LITE', value),
 		fdel = lambda self: self.indexedData.__delitem__('LITE'),
 	)
 	lines       = LINS = property(
-		fget = lambda self, self.indexedData.__getitem__('LINS'),
+		fget = lambda self: self.indexedData.__getitem__('LINS'),
 		fset = lambda self, value: self.indexedData.__setitem__('LINS', value),
 		fdel = lambda self: self.indexedData.__delitem__('LINS'),
 	)
 	objects     = OBJS = property(
-		fget = lambda self, self.indexedData.__getitem__('OBJS'),
+		fget = lambda self: self.indexedData.__getitem__('OBJS'),
 		fset = lambda self, value: self.indexedData.__setitem__('OBJS', value),
 		fdel = lambda self: self.indexedData.__delitem__('OBJS'),
 	)
 	polygons    = POLY = property(
-		fget = lambda self, self.indexedData.__getitem__('POLY'),
+		fget = lambda self: self.indexedData.__getitem__('POLY'),
 		fset = lambda self, value: self.indexedData.__setitem__('POLY', value),
 		fdel = lambda self: self.indexedData.__delitem__('POLY'),
 	)
 	sides       = SIDS = property(
-		fget = lambda self, self.indexedData.__getitem__('SIDS'),
+		fget = lambda self: self.indexedData.__getitem__('SIDS'),
 		fset = lambda self, value: self.indexedData.__setitem__('SIDS', value),
 		fdel = lambda self: self.indexedData.__delitem__('SIDS'),
 	)
 	vertices    = PNTS = property(
-		fget = lambda self, self.indexedData.__getitem__('PNTS'),
+		fget = lambda self: self.indexedData.__getitem__('PNTS'),
 		fset = lambda self, value: self.indexedData.__setitem__('PNTS', value),
 		fdel = lambda self: self.indexedData.__delitem__('PNTS'),
 	)
