@@ -132,8 +132,8 @@ class ForgeryMap(Superclass):
 		result = []
 		result.append('<mapPack version="1">')
 		result.append('<map name="%s" displayName="%s">' % (
-			self.mapinfo.get('name', self.mapinfo.get('displayName', "<untitled map>")),
-			self.mapinfo.get('displayName', self.mapinfo.get('name', "<untitled map>")),
+			self.mapinfo.get('name', self.mapinfo.get('displayName', "untitled map")),
+			self.mapinfo.get('displayName', self.mapinfo.get('name', "untitled map")),
 		))
 		for key, value in vertices + lines + polygons + layers + surfaces + textures:
 			result.extend(value.toXML().split('\n'))
