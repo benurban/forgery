@@ -604,7 +604,7 @@ class ForgeryInspector(Superclass):
 			properties = {}
 		if sender.state():
 			self.openUndoGroup(u"Add Action")
-			self.data.addSurfaceAction(surface, action)
+			self.data.addSurfaceAction(surface, action, properties)
 		else:
 			self.openUndoGroup(u"Remove Action")
 			self.data.removeSurfaceAction(surface, action)
