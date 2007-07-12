@@ -26,9 +26,6 @@ import ForgeryElements
 
 import xml.sax, xml.sax.handler
 
-def capitalize(s):
-	return s[0].upper() + s[1:]
-
 class ForgeryXMLParser(xml.sax.handler.ContentHandler):
 	data = None
 	elementStack = None

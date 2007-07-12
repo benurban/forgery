@@ -29,6 +29,7 @@ __all__ = (
 	'roundDown',
 	'roundToNearest',
 	'angleBetween',
+	'capitalize',
 	'ID',
 )
 
@@ -115,6 +116,9 @@ The result is between -pi and pi."""
 			return -theta
 		else:
 			return theta
+
+def capitalize(s):
+	return s[0].upper() + s[1:]
 
 class ID(object):
 	
