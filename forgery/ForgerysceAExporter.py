@@ -17,11 +17,117 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
+from ForgeryCommon import *
+
 __all__ = (
 	'ForgerysceAExporter',
 )
 
+def _indexer(code):
+	def indexer(self, elements):
+		elements = elements.items()
+		elements.sort()
+		self.[code] = [element for elementID, element in elements]
+	return indexer
+
 class ForgerysceAExporter(object):
+	data = None
+	indexedData = None
+	
+	annotations = NOTE = property(
+		fget = lambda self, self.indexedData.__getitem__('NOTE'),
+		fset = lambda self, value: self.indexedData.__setitem__('NOTE', value),
+		fdel = lambda self: self.indexedData.__delitem__('NOTE'),
+	)
+	lights      = LITE = property(
+		fget = lambda self, self.indexedData.__getitem__('LITE'),
+		fset = lambda self, value: self.indexedData.__setitem__('LITE', value),
+		fdel = lambda self: self.indexedData.__delitem__('LITE'),
+	)
+	lines       = LINS = property(
+		fget = lambda self, self.indexedData.__getitem__('LINS'),
+		fset = lambda self, value: self.indexedData.__setitem__('LINS', value),
+		fdel = lambda self: self.indexedData.__delitem__('LINS'),
+	)
+	objects     = OBJS = property(
+		fget = lambda self, self.indexedData.__getitem__('OBJS'),
+		fset = lambda self, value: self.indexedData.__setitem__('OBJS', value),
+		fdel = lambda self: self.indexedData.__delitem__('OBJS'),
+	)
+	polygons    = POLY = property(
+		fget = lambda self, self.indexedData.__getitem__('POLY'),
+		fset = lambda self, value: self.indexedData.__setitem__('POLY', value),
+		fdel = lambda self: self.indexedData.__delitem__('POLY'),
+	)
+	sides       = SIDS = property(
+		fget = lambda self, self.indexedData.__getitem__('SIDS'),
+		fset = lambda self, value: self.indexedData.__setitem__('SIDS', value),
+		fdel = lambda self: self.indexedData.__delitem__('SIDS'),
+	)
+	vertices    = PNTS = property(
+		fget = lambda self, self.indexedData.__getitem__('PNTS'),
+		fset = lambda self, value: self.indexedData.__setitem__('PNTS', value),
+		fdel = lambda self: self.indexedData.__delitem__('PNTS'),
+	)
+	
+	def __init__(self, data):
+		self.data = data
+		self.indexData()
+	
+	def __getitem__(self, key):
+		return self.__getattr__(key)
+	
+	def __setitem__(self, key, value):
+		return self.__setattr__(key, value)
+	
+	def __delitem__(self, key):
+		return self.__delattr__(key)
+	
+	def indexData(self, data):
+		for polygon in data.polygons.itervalues():
+			polygon.findSides()
+		
+		self.indexedData = {}
+		for category, elements in data.iteritems():
+			indexer = getattr(self, 'index' + capitalize(category))
+			if callable(indexer):
+				indexer(elements)
+			else:
+				print "No indexer for %s" % (category, )
+		
+		self.indexSides(self.LINS)
+	
+	indexAnnotations = _indexer('NOTE')
+	indexLights      = _indexer('LITE')
+	indexLines       = _indexer('LINS')
+	indexObjects     = _indexer('OBJS')
+	indexPolygons    = _indexer('POLY')
+	indexVertices    = _indexer('PNTS')
+	
+	def indexSides(self, lines):
+		result = []
+		for line in lines:
+			if line.side0:
+				result.append(line.side0)
+			if line.side1:
+				result.append(line.side1)
+		self.SIDS = result
+	
+	def indexOfElement(self, element, code):
+		for result, e in enumerate(self[code]):
+			if e is element:
+				return result
+		else:
+			raise ValueError, element
+	
+	indexOfAnnotation = indexOfNOTE = (lambda self, element: indexOfElement(element, 'NOTE'))
+	indexOfLight      = indexOfLITE = (lambda self, element: indexOfElement(element, 'LITE'))
+	indexOfLine       = indexOfLINS = (lambda self, element: indexOfElement(element, 'LINS'))
+	indexOfObject     = indexOfOBJS = (lambda self, element: indexOfElement(element, 'OBJS'))
+	indexOfPolygon    = indexOfPOLY = (lambda self, element: indexOfElement(element, 'POLY'))
+	indexOfSide       = indexOfSIDS = (lambda self, element: indexOfElement(element, 'SIDS'))
+	indexOfVertex     = indexOfPNTS = (lambda self, element: indexOfElement(element, 'PNTS'))
+	
 	def writeNulls(self, length):
 		self.seek(length, 1)
 	
@@ -67,65 +173,56 @@ class ForgerysceAExporter(object):
 		self.writeInt32(offset)
 	
 	def writePNTSEntry(self, data):
-		vertices = list(data.vertices.itervalues())
-		if vertices:
-#			self.writeEntryHeader('PNTS', [mapDataToSave length], len(vertices) * 4, 0)
-			for vertex in vertices:
+		if self.vertices:
+#			self.writeEntryHeader('PNTS', [mapDataToSave length], len(self.vertices) * 4, 0)
+			for vertex in self.vertices:
 				self.writeInt16(int(vertex.x))
 				self.writeInt16(int(vertex.y))
 	
 	def writeLINSEntry(self, data):
-		lines = list(data.lines.itervalues())
-		if lines:
-#			self.writeEntryHeader('LINS', [mapDataToSave length], len(lines) * 32, 0)
-			for line in lines:
-				self.writeInt16(line.vertex0.index)
-				self.writeInt16(line.vertex1.index)
+		if self.lines:
+#			self.writeEntryHeader('LINS', [mapDataToSave length], len(self.lines) * 32, 0)
+			for line in self.lines:
+				self.writeInt16(self.indexOfVertex(line.vertex0))
+				self.writeInt16(self.indexOfVertex(line.vertex1.index))
 				self.writeInt16(line.flags)
 				self.writeInt16(line.length)
 				self.writeInt16(line.getHighestAdjacentFloor(data))
 				self.writeInt16(line.getLowestAdjacentCeiling(data))
-				self.writeInt16(line.getClockwisePolygonSideIndex(data))
-				self.writeInt16(line.getCounterclockwisePolygonSideIndex(data))
-				self.writeInt16(line.getClockwisePolygonOwner(data).index)
-				self.writeInt16(line.getCounterclockwisePolygonOwner(data).index)
+				self.writeInt16(self.indexOfSide(line.getClockwisePolygonSide(data)))
+				self.writeInt16(self.indexOfSide(line.getCounterclockwisePolygonSide(data)))
+				self.writeInt16(self.indexOfPolygon(line.getClockwisePolygonOwner(data)))
+				self.writeInt16(self.indexOfPolygon(line.getCounterclockwisePolygonOwner(data)))
 				self.writeNulls(12)
 	
 	def writePOLYEntry(self, data):
-		polygons = list(data.polygons.itervalues())
-		if polygons:
-#			self.writeEntryHeader('POLY', [mapDataToSave length], len(polygons) * 128, 0)
-			for polygon in polygons:
+		if self.polygons:
+#			self.writeEntryHeader('POLY', [mapDataToSave length], len(self.polygons) * 128, 0)
+			for polygon in self.polygons:
+				if len(polygon) > 8:
+					raise ForgeryExportError(self, polygon, "may not have more than 8 sides")
 				self.writeInt16(polygon.polygonType)
 				self.writeInt16(polygon.flags)
 				self.writeInt16(polygon.getPermutation())
 				
 				self.writeInt16(len(polygon))
 				
-				self.writeInt16(polygon[0].vertex0.index)
-				self.writeInt16(polygon[1].vertex0.index)
-				self.writeInt16(polygon[2].vertex0.index)
-				self.writeInt16(polygon[3].vertex0.index)
-				self.writeInt16(polygon[4].vertex0.index)
-				self.writeInt16(polygon[5].vertex0.index)
-				self.writeInt16(polygon[6].vertex0.index)
-				self.writeInt16(polygon[7].vertex0.index)
+				for line, side in zip(polygon, polygon.sides):
+					self.writeInt16(self.indexOfVertex(getattr(line, 'vertex' + str(side))))
+				self.writeBytes('\xFF\xFF' * (8 - len(polygon)))
 				
-				self.writeInt16(polygon[0].line.index)
-				self.writeInt16(polygon[1].line.index)
-				self.writeInt16(polygon[2].line.index)
-				self.writeInt16(polygon[3].line.index)
-				self.writeInt16(polygon[4].line.index)
-				self.writeInt16(polygon[5].line.index)
-				self.writeInt16(polygon[6].line.index)
-				self.writeInt16(polygon[7].line.index)
+				for line in polygon:
+					self.writeInt16(self.indexOfLine(line))
+				self.writeBytes('\xFF\xFF' * (8 - len(polygon)))
 				
 				self.writeInt16(polygon.floor.texture.index)
 				self.writeInt16(polygon.ceiling.texture.index)
-				self.writeInt16(polygon.floorHeight)
-				self.writeInt16(polygon.ceilingHeight)
-				self.writeInt16(polygon.floor.light.index)
-				self.writeInt16(polygon.ceiling.light.index)
+				self.checkInt16(int(polygon.floorHeight), polygon, "%%s's floor height %s")
+				self.writeInt16(int(polygon.floorHeight))
+				self.checkInt16(int(polygon.ceilingHeight), polygon, "%%s's ceiling height %s")
+				self.writeInt16(int(polygon.ceilingHeight))
+				self.writeInt16(self.indexOfLight(polygon.floor.light))
+				self.writeInt16(self.indexOfLight(polygon.ceiling.light))
 				
 				#self.writeInt32(int(polygon.area))
 				self.writeNulls(4)
@@ -137,17 +234,12 @@ class ForgerysceAExporter(object):
 				#self.writeInt16([polygon getPoint_exclusion_zone_count])
 				self.writeNulls(6)
 				
-				self.writeInt16(polygon.floor.transferMode)
+				self.writeInt16(polygon.floor.transferMode) # effect
 				self.writeInt16(polygon.ceiling.transferMode)
 				
-				#self.writeInt16(data.findPolygonWithSide(polygon[0].line.getOppositeSide(polygon[0])))
-				#self.writeInt16(data.findPolygonWithSide(polygon[1].line.getOppositeSide(polygon[1])))
-				#self.writeInt16(data.findPolygonWithSide(polygon[2].line.getOppositeSide(polygon[2])))
-				#self.writeInt16(data.findPolygonWithSide(polygon[3].line.getOppositeSide(polygon[3])))
-				#self.writeInt16(data.findPolygonWithSide(polygon[4].line.getOppositeSide(polygon[4])))
-				#self.writeInt16(data.findPolygonWithSide(polygon[5].line.getOppositeSide(polygon[5])))
-				#self.writeInt16(data.findPolygonWithSide(polygon[6].line.getOppositeSide(polygon[6])))
-				#self.writeInt16(data.findPolygonWithSide(polygon[7].line.getOppositeSide(polygon[7])))
+				#for line, side in zip(polygon, polygon.sides):
+				#	self.indexOfPolygon(self.data.polygonForSide(line, 1 - side))
+				#self.writeBytes('\xFF\xFF' * (8 - len(polygon)))
 				self.writeNulls(32)
 				
 				#self.writeInt16([polygon getFirst_neighbor_index])
@@ -158,14 +250,9 @@ class ForgerysceAExporter(object):
 				#self.writeInt16(polygon.center[1])
 				self.writeNulls(4)
 				
-				self.writeInt16(polygon[0].index)
-				self.writeInt16(polygon[1].index)
-				self.writeInt16(polygon[2].index)
-				self.writeInt16(polygon[3].index)
-				self.writeInt16(polygon[4].index)
-				self.writeInt16(polygon[5].index)
-				self.writeInt16(polygon[6].index)
-				self.writeInt16(polygon[7].index)
+				for line in polygon:
+					self.writeInt16(self.indexOfLine(line))
+				self.writeBytes('\xFF\xFF' * (8 - len(polygon)))
 				
 				self.writeInt16(int(polygon.floor.dx))
 				self.writeInt16(int(polygon.floor.dy))
@@ -173,8 +260,9 @@ class ForgerysceAExporter(object):
 				self.writeInt16(int(polygon.ceiling.dx))
 				self.writeInt16(int(polygon.ceiling.dy))
 				
-				self.writeInt16(polygon.media.index)
-				self.writeInt16(polygon.media.light.index)
+				#self.writeInt16(polygon.media.index)
+				#self.writeInt16(polygon.media.light.index)
+				self.writeNulls(4)
 				
 				#self.writeInt16([polygon getSound_source_indices])
 				self.writeNulls(2)
