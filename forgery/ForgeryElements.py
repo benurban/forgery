@@ -571,13 +571,13 @@ class ForgerySurface(ForgeryElement):
 		if self.texture:
 			result.append(self.texture.xmlReference())
 		for effect, data in self.effects.iteritems():
-			tag = '<effect name="%s"' % (effect, )
+			tag = '<effect kind="%s"' % (effect, )
 			for key, value in data.iteritems():
 				tag += ' %s="%s"' % (key, value)
 			tag += '/>'
 			result.append(tag)
 		for action, data in self.actions.iteritems():
-			tag = '<action name="%s"' % (action, )
+			tag = '<action kind="%s"' % (action, )
 			for key, value in data.iteritems():
 				tag += ' %s="%s"' % (key, value)
 			tag += '/>'
