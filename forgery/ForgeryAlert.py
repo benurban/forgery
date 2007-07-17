@@ -24,6 +24,8 @@ __all__ = (
 	'runWindowModalAlert',
 )
 
+import ForgeryApplication
+
 if usePyObjC:
 	
 	from Foundation import *
@@ -67,7 +69,7 @@ def runApplicationModalAlert(messageText, informativeText, buttons):
 	else: # this shouldn't be nearly this complex
 		
 		# the numbers in here come from Apple's HIG
-		dialog = wx.Dialog(self, style = 0)
+		dialog = wx.Dialog(ForgeryApplication.sharedApplication().frontDocument, style = 0)
 		try:
 			dialog.Centre(wx.BOTH)
 			#text = wx.TextCtrl(dialog, wx.NewId(), style = wx.TE_MULTILINE | wx.TE_READONLY | wx.TE_RICH | wx.TE_LEFT | wx.TE_BESTWRAP)
@@ -187,8 +189,8 @@ def buildSizers(direction, *items):
 		if item is None:
 			addStretchSpacer(result)
 		elif isinstance(item, (int, long)):
-			addStaticSizer(result, item)
-		elif hasattr(item, __iter__):
+			addStaticSpacer(result, item)
+		elif hasattr(item, '__iter__'):
 			if direction == wx.HORIZONTAL:
 				result.Add(buildSizers(wx.VERTICAL, *item))
 			else:
