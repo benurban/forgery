@@ -239,22 +239,6 @@ class ForgeryInspector(Superclass):
 				cls._sharedInspector = cls()
 		return cls._sharedInspector
 	
-	if not usePyObjC:
-		
-		def __init__(self):
-			super(ForgeryInspector, self).__init__(
-				None,
-				style = wx.STAY_ON_TOP | wx.CAPTION | wx.CLOSE_BOX,
-			)
-			self.Bind(wx.EVT_CLOSE, errorWrap(self.OnClose))
-			self.Bind(wx.EVT_MOVE, errorWrap(self.OnMoved))
-			self.SetCursor(wx.StockCursor(wx.CURSOR_ARROW))
-	
-	def init(self):
-		self = super(ForgeryInspector, self).initWithWindowNibName_(u"ForgeryInspector")
-		self.window().setBecomesKeyOnlyIfNeeded_(True)
-		return self
-	
 	def refresh(self):
 		self.document.view.refresh()
 	
@@ -306,13 +290,6 @@ class ForgeryInspector(Superclass):
 		else:
 			self.SetTitle(title)
 	
-	def OnClose(self, event):
-		if event.CanVeto() and self.IsShown():
-			self.hide()
-			event.Veto()
-		else:
-			self.Destroy()
-	
 	def show(self):
 		if usePyObjC:
 			self.showWindow_(self)
@@ -331,12 +308,6 @@ class ForgeryInspector(Superclass):
 		else:
 			self.MoveXY(x, y)
 	
-	def OnMoved(self, event):
-		self.moved()
-	
-	def windowDidMove_(self, notification):
-		self.moved()
-	
 	def moved(self):
 		myLeft, myTop, myRight, myBottom = self.getFrame()
 		itsLeft, itsTop, itsRight, itsBottom = self.document.getFrame()
@@ -352,39 +323,76 @@ class ForgeryInspector(Superclass):
 		self.update()
 	
 	def update(self):
-		if usePyObjC:
-			if not self.selection:
-				self.setTitle(u"Inspector")
+		if not self.selection:
+			self.setTitle(u"Inspector")
+			if usePyObjC:
 				self.idField.setStringValue_("")
 				self.idField.setEnabled_(False)
 				self.tabView.selectTabViewItemAtIndex_(0)
-			elif len(self.selection) >= 2:
-				self.setTitle(u"Inspector")
+			else:
+				try:
+					self.idField.ChangeValue("")
+				except AttributeError: # wx 2.6 does this
+					self.idField.SetValue("")
+				self.idField.SetEditable(False)
+				self.tabView.SetActivePage(ID.NO_SELECTION)
+		elif len(self.selection) >= 2:
+			self.setTitle(u"Inspector")
+			if usePyObjC:
 				self.idField.setStringValue_("")
 				self.idField.setEnabled_(False)
 				self.tabView.selectTabViewItemAtIndex_(1)
 			else:
-				selection = self.selectedElement
+				try:
+					self.idField.ChangeValue("")
+				except AttributeError: # wx 2.6 does this
+					self.idField.SetValue("")
+				self.idField.SetEditable(False)
+				self.tabView.SetActivePage(ID.MULTIPLE_SELECTION)
+		else:
+			selection = self.selectedElement
+			if usePyObjC:
 				self.idField.setStringValue_(str(selection.elementID))
 				self.idField.setEnabled_(True)
-				if isinstance(selection, ForgeryElements.ForgeryVertex):
-					self.setTitle(u"Vertex Inspector")
-					self.updateVertex(selection, self.vertex)
+			else:
+				try:
+					self.idField.ChangeValue(str(selection.elementID))
+				except AttributeError: # wx 2.6 does this
+					self.idField.SetValue(str(selection.elementID))
+				self.idField.SetEditable(True)
+			if isinstance(selection, ForgeryElements.ForgeryVertex):
+				self.setTitle(u"Vertex Inspector")
+				self.updateVertex(selection, self.vertex)
+				if usePyObjC:
 					self.tabView.selectTabViewItemAtIndex_(2)
-				elif isinstance(selection, ForgeryElements.ForgeryLine):
-					self.setTitle(u"Line Inspector")
-					self.updateLine(selection, self.line)
+				else:
+					self.tabView.SetActivePage(ID.VERTEX)
+			elif isinstance(selection, ForgeryElements.ForgeryLine):
+				self.setTitle(u"Line Inspector")
+				self.updateLine(selection, self.line)
+				if usePyObjC:
 					self.tabView.selectTabViewItemAtIndex_(3)
-				elif isinstance(selection, ForgeryElements.ForgeryPolygon):
-					self.setTitle(u"Polygon Inspector")
-					self.updatePolygon(selection, self.polygon)
+				else:
+					self.tabView.SetActivePage(ID.LINE)
+			elif isinstance(selection, ForgeryElements.ForgeryPolygon):
+				self.setTitle(u"Polygon Inspector")
+				self.updatePolygon(selection, self.polygon)
+				if usePyObjC:
 					self.tabView.selectTabViewItemAtIndex_(4)
-				#elif isinstance(selection, ForgeryElements.ForgeryObject):
-				#	self.setTitle(u"Object Inspector")
-				#	self.tabView.selectTabViewItemAtIndex_(5)
-				#elif isinstance(selection, ForgeryElements.ForgerySound):
-				#	self.setTitle(u"Sound Inspector")
-				#	self.tabView.selectTabViewItemAtIndex_(6)
+				else:
+					self.tabView.SetActivePage(ID.POLYGON)
+			#elif isinstance(selection, ForgeryElements.ForgeryObject):
+			#	self.setTitle(u"Object Inspector")
+			#	if usePyObjC:
+			#		self.tabView.selectTabViewItemAtIndex_(5)
+			#	else:
+			#		self.tabView.SetActivePage(ID.OBJECT)
+			#elif isinstance(selection, ForgeryElements.ForgerySound):
+			#	self.setTitle(u"Sound Inspector")
+			#	if usePyObjC:
+			#		self.tabView.selectTabViewItemAtIndex_(6)
+			#	else:
+			#		self.tabView.SetActivePage(ID.SOUND)
 		
 		self.updatePosition()
 	
@@ -392,6 +400,13 @@ class ForgeryInspector(Superclass):
 		if usePyObjC:
 			vertexUI['xField'].setDoubleValue_(vertex.x)
 			vertexUI['yField'].setDoubleValue_(vertex.y)
+		else:
+			try:
+				vertexUI['xField'].ChangeValue(str(vertex.x))
+				vertexUI['yField'].ChangeValue(str(vertex.y))
+			except AttributeError: # wx 2.6 does this
+				vertexUI['xField'].SetValue(str(vertex.x))
+				vertexUI['yField'].SetValue(str(vertex.y))
 	
 	def updateLine(self, line, lineUI):
 		if usePyObjC:
@@ -527,22 +542,48 @@ class ForgeryInspector(Superclass):
 	def closeUndoGroup(self, name = None):
 		return self.document.closeUndoGroup(name)
 	
-	def idChanged_(self, sender):
+	def idChanged(self, value):
 		selection = self.selectedElement
 		oldID = selection.elementID
 		category = selection.category
-		newID = sender.stringValue()
-		if newID and newID != oldID:
-			if newID in self.data[category]:
+		if value and value != oldID:
+			if value in self.data[category]:
 				# FIXME: beep
 				self.update()
 			else:
 				self.openUndoGroup(u"Change ID")
-				self.data.changeID(selection, newID)
+				self.data.changeID(selection, value)
 				self.closeUndoGroup()
-		else:
-			self.update()
+		#else:
+		#	self.update() # this causes infinite recursion in wx 2.6
 		self.refresh()
+	
+	def vertexXChanged(self, value):
+		vertex = self.selectedElement
+		self.openUndoGroup(u"Move Vertex '%s'" % (vertex.elementID, ))
+		self.data.moveVertex(vertex, (value - vertex.x, 0.0))
+		self.closeUndoGroup()
+		self.refresh()
+	
+	def vertexYChanged(self, value):
+		vertex = self.selectedElement
+		self.openUndoGroup(u"Move Vertex '%s'" % (vertex.elementID, ))
+		self.data.moveVertex(vertex, (0.0, value - vertex.y))
+		self.closeUndoGroup()
+		self.refresh()
+	
+	# PyObjC
+	
+	def init(self):
+		self = super(ForgeryInspector, self).initWithWindowNibName_(u"ForgeryInspector")
+		self.window().setBecomesKeyOnlyIfNeeded_(True)
+		return self
+	
+	def windowDidMove_(self, notification):
+		self.moved()
+	
+	def idChanged_(self, sender):
+		self.idChanged(sender.stringValue())
 	
 	def lineSolidChanged_(self, sender):
 		print "[%s lineSolidChanged:%s]" % (self, sender)
@@ -666,18 +707,449 @@ class ForgeryInspector(Superclass):
 		print "[%s surfaceLightChanged:%s]" % (self, sender)
 	
 	def vertexXChanged_(self, sender):
-		vertex = self.selectedElement
-		self.openUndoGroup(u"Move Vertex '%s'" % (vertex.elementID, ))
-		self.data.moveVertex(vertex, (sender.doubleValue() - vertex.x, 0.0))
-		self.closeUndoGroup()
-		self.refresh()
+		self.vertexXChanged(sender.doubleValue())
 	
 	def vertexYChanged_(self, sender):
-		vertex = self.selectedElement
-		self.openUndoGroup(u"Move Vertex '%s'" % (vertex.elementID, ))
-		self.data.moveVertex(vertex, (0.0, sender.doubleValue() - vertex.y))
-		self.closeUndoGroup()
-		self.refresh()
+		self.vertexYChanged(sender.doubleValue())
+	
+	# wxPython
+	
+	if not usePyObjC:
+		
+		sizer = property(
+			fget = lambda self: self.GetSizer(),
+			fset = lambda self, value: self.SetSizer(value),
+		)
+		tabView = None
+		vertexXField = None
+		vertexYField = None
+		lineVertex0Field = None
+		lineVertex1Field = None
+		lineSolidCheckbox = None
+		lineTransparentCheckbox = None
+		lineSide0PolygonField = None
+		lineSide0BottomDXSlider = None
+		lineSide0BottomDYSlider = None
+		lineSide0BottomTextureWell = None
+		lineSide0BottomLandscapeCheckbox = None
+		lineSide0BottomEffectMenu = None
+		lineSide0BottomEffectPropertiesButton = None
+		lineSide0BottomLightField = None
+		lineSide0BottomSwitchCheckbox = None
+		lineSide0BottomSwitchPropertiesButton = None
+		lineSide0BottomPatternBufferCheckbox = None
+		lineSide0BottomTerminalCheckbox = None
+		lineSide0BottomTerminalPropertiesButton = None
+		lineSide0BottomRechargerCheckbox = None
+		lineSide0BottomRechargerPropertiesButton = None
+		lineSide0MiddleDXSlider = None
+		lineSide0MiddleDYSlider = None
+		lineSide0MiddleTextureWell = None
+		lineSide0MiddleLandscapeCheckbox = None
+		lineSide0MiddleEffectMenu = None
+		lineSide0MiddleEffectPropertiesButton = None
+		lineSide0MiddleLightField = None
+		lineSide0MiddleSwitchCheckbox = None
+		lineSide0MiddleSwitchPropertiesButton = None
+		lineSide0MiddlePatternBufferCheckbox = None
+		lineSide0MiddleTerminalCheckbox = None
+		lineSide0MiddleTerminalPropertiesButton = None
+		lineSide0MiddleRechargerCheckbox = None
+		lineSide0MiddleRechargerPropertiesButton = None
+		lineSide0TopDXSlider = None
+		lineSide0TopDYSlider = None
+		lineSide0TopTextureWell = None
+		lineSide0TopLandscapeCheckbox = None
+		lineSide0TopEffectMenu = None
+		lineSide0TopEffectPropertiesButton = None
+		lineSide0TopLightField = None
+		lineSide0TopSwitchCheckbox = None
+		lineSide0TopSwitchPropertiesButton = None
+		lineSide0TopPatternBufferCheckbox = None
+		lineSide0TopTerminalCheckbox = None
+		lineSide0TopTerminalPropertiesButton = None
+		lineSide0TopRechargerCheckbox = None
+		lineSide0TopRechargerPropertiesButton = None
+		lineSide1PolygonField = None
+		lineSide1BottomDXSlider = None
+		lineSide1BottomDYSlider = None
+		lineSide1BottomTextureWell = None
+		lineSide1BottomLandscapeCheckbox = None
+		lineSide1BottomEffectMenu = None
+		lineSide1BottomEffectPropertiesButton = None
+		lineSide1BottomLightField = None
+		lineSide1BottomSwitchCheckbox = None
+		lineSide1BottomSwitchPropertiesButton = None
+		lineSide1BottomPatternBufferCheckbox = None
+		lineSide1BottomTerminalCheckbox = None
+		lineSide1BottomTerminalPropertiesButton = None
+		lineSide1BottomRechargerCheckbox = None
+		lineSide1BottomRechargerPropertiesButton = None
+		lineSide1MiddleDXSlider = None
+		lineSide1MiddleDYSlider = None
+		lineSide1MiddleTextureWell = None
+		lineSide1MiddleLandscapeCheckbox = None
+		lineSide1MiddleEffectMenu = None
+		lineSide1MiddleEffectPropertiesButton = None
+		lineSide1MiddleLightField = None
+		lineSide1MiddleSwitchCheckbox = None
+		lineSide1MiddleSwitchPropertiesButton = None
+		lineSide1MiddlePatternBufferCheckbox = None
+		lineSide1MiddleTerminalCheckbox = None
+		lineSide1MiddleTerminalPropertiesButton = None
+		lineSide1MiddleRechargerCheckbox = None
+		lineSide1MiddleRechargerPropertiesButton = None
+		lineSide1TopDXSlider = None
+		lineSide1TopDYSlider = None
+		lineSide1TopTextureWell = None
+		lineSide1TopLandscapeCheckbox = None
+		lineSide1TopEffectMenu = None
+		lineSide1TopEffectPropertiesButton = None
+		lineSide1TopLightField = None
+		lineSide1TopSwitchCheckbox = None
+		lineSide1TopSwitchPropertiesButton = None
+		lineSide1TopPatternBufferCheckbox = None
+		lineSide1TopTerminalCheckbox = None
+		lineSide1TopTerminalPropertiesButton = None
+		lineSide1TopRechargerCheckbox = None
+		lineSide1TopRechargerPropertiesButton = None
+		polygonTable = None
+		polygonLayerMenu = None
+		polygonLayerOffsetField = None
+		polygonLayerOffsetUnitsField = None
+		polygonFloorHeightField = None
+		polygonFloorHeightStepper = None
+		polygonFloorOffsetField = None
+		polygonFloorOffsetStepper = None
+		polygonFloorDXSlider = None
+		polygonFloorDYSlider = None
+		polygonFloorTextureWell = None
+		polygonFloorLandscapeCheckbox = None
+		polygonFloorEffectMenu = None
+		polygonFloorEffectPropertiesButton = None
+		polygonFloorLightField = None
+		polygonFloorSwitchCheckbox = None
+		polygonFloorSwitchPropertiesButton = None
+		polygonFloorPatternBufferCheckbox = None
+		polygonFloorTerminalCheckbox = None
+		polygonFloorTerminalPropertiesButton = None
+		polygonFloorRechargerCheckbox = None
+		polygonFloorRechargerPropertiesButton = None
+		polygonCeilingHeightField = None
+		polygonCeilingHeightStepper = None
+		polygonCeilingOffsetField = None
+		polygonCeilingOffsetStepper = None
+		polygonCeilingDXSlider = None
+		polygonCeilingDYSlider = None
+		polygonCeilingTextureWell = None
+		polygonCeilingLandscapeCheckbox = None
+		polygonCeilingEffectMenu = None
+		polygonCeilingEffectPropertiesButton = None
+		polygonCeilingLightField = None
+		polygonCeilingSwitchCheckbox = None
+		polygonCeilingSwitchPropertiesButton = None
+		polygonCeilingPatternBufferCheckbox = None
+		polygonCeilingTerminalCheckbox = None
+		polygonCeilingTerminalPropertiesButton = None
+		polygonCeilingRechargerCheckbox = None
+		polygonCeilingRechargerPropertiesButton = None
+		
+		def __init__(self):
+			super(ForgeryInspector, self).__init__(
+				None,
+				style = wx.STAY_ON_TOP | wx.CAPTION | wx.CLOSE_BOX,
+			)
+			self.Bind(wx.EVT_CLOSE, errorWrap(self.OnClose))
+			self.Bind(wx.EVT_MOVE, errorWrap(self.OnMoved))
+			self.CreateUI()
+			self.SetCursor(wx.StockCursor(wx.CURSOR_ARROW))
+	
+	def CreateUI(self):
+		# The numbers come from Apple's HIG
+		self.sizer = wx.BoxSizer(wx.VERTICAL)
+		addStaticSpacer(self.sizer, 10)
+		hsizer = wx.BoxSizer(wx.HORIZONTAL)
+		addStaticSpacer(hsizer, 10)
+		vsizer = wx.BoxSizer(wx.VERTICAL)
+		sizer = wx.BoxSizer(wx.HORIZONTAL)
+		addStretchSpacer(sizer)
+		addRightAlignedStaticText(sizer, self, "ID:")
+		addStaticSpacer(sizer, 8)
+		self.idField = addTextCtrl(sizer, self, self.OnIDChanged)
+		addStretchSpacer(sizer)
+		vsizer.Add(sizer)
+		addStaticSpacer(vsizer, 8)
+		self.tabView = TablessNotebook()
+		# NO_SELECTION
+		panel = wx.Panel(self, -1)
+		sizer = createCenteredText(panel, "Nothing Selected")
+		panel.SetSizer(sizer)
+		sizer.Fit(panel)
+		self.tabView[ID.NO_SELECTION] = panel
+		# MULTIPLE_SELECTION
+		panel = wx.Panel(self, -1)
+		sizer = createCenteredText(panel, "Multiple Objects Selected")
+		panel.SetSizer(sizer)
+		sizer.Fit(panel)
+		self.tabView[ID.MULTIPLE_SELECTION] = panel
+		# VERTEX
+		panel = wx.Panel(self, -1)
+		sizer = wx.FlexGridSizer(3)
+		addRightAlignedStaticText(sizer, panel, "X:")
+		addStaticSpacer(sizer, 8)
+		self.vertexXField = addTextCtrl(sizer, panel, self.OnVertexXChanged)
+		addStaticSpacer(sizer, 8)
+		addStaticSpacer(sizer, 8)
+		addStaticSpacer(sizer, 8)
+		addRightAlignedStaticText(sizer, panel, "Y:")
+		addStaticSpacer(sizer, 8)
+		self.vertexYField = addTextCtrl(sizer, panel, self.OnVertexYChanged)
+		panel.SetSizer(sizer)
+		sizer.Fit(panel)
+		self.tabView[ID.VERTEX] = panel
+		vsizer.Add(self.tabView)
+		hsizer.Add(vsizer)
+		addStaticSpacer(hsizer, 10)
+		self.sizer.Add(hsizer)
+		addStaticSpacer(self.sizer, 12)
+		self.sizer.Layout()
+		self.sizer.Fit(self)
+		self.update()
+	
+	def OnIDChanged(self, event):
+		self.idChanged(event.GetEventObject().GetValue())
+	
+	def OnVertexXChanged(self, event):
+		try:
+			value = float(event.GetEventObject().GetValue())
+		except ValueError:
+			# FIXME: beep
+			self.update()
+		else:
+			self.vertexXChanged(value)
+	
+	def OnVertexYChanged(self, event):
+		try:
+			value = float(event.GetEventObject().GetValue())
+		except ValueError:
+			# FIXME: beep
+			self.update()
+		else:
+			self.vertexYChanged(value)
+	
+	def OnClose(self, event):
+		if event.CanVeto() and self.IsShown():
+			self.hide()
+			event.Veto()
+		else:
+			self.Destroy()
+	
+	def OnMoved(self, event):
+		self.moved()
 
 def sharedInspector():
 	return ForgeryInspector.sharedInspector()
+
+if not usePyObjC:
+	
+	def addStaticText(sizer, parent, label, style):
+		result = wx.StaticText(
+			parent, -1,
+			label = label,
+			style = style,
+		)
+		sizer.Add(result)
+		return result
+	
+	def addCenteredStaticText(sizer, parent, label):
+		return addStaticText(sizer, parent, label, wx.ALIGN_CENTER)
+	
+	def addRightAlignedStaticText(sizer, parent, label):
+		return addStaticText(sizer, parent, label, wx.ALIGN_RIGHT)
+	
+	def addTextCtrl(sizer, parent, func):
+		result = wx.TextCtrl(
+			parent, -1,
+			style = wx.TE_PROCESS_ENTER,
+		)
+		result.Bind(wx.EVT_TEXT, errorWrap(func))
+		result.Bind(wx.EVT_TEXT_ENTER, errorWrap(func))
+		sizer.Add(result)
+		return result
+	
+	def createCenteredText(parent, text):
+		result = wx.BoxSizer(wx.VERTICAL)
+		addStretchSpacer(result)
+		addCenteredStaticText(result, parent, text)
+		addStretchSpacer(result)
+		return result
+	
+	class TablessNotebook(wx.PySizer):
+		pages = None
+		currentPage = None
+		
+		def __init__(self):
+			self.pages = {}
+			super(TablessNotebook, self).__init__()
+		
+		def CalcMin(self):
+			w, h = 0, 0
+			for page in self.itervalues():
+				pageSize = page.GetMinSize()
+				if pageSize == wx.DefaultSize:
+					pageSize = page.GetSize()
+				if pageSize.width > w:
+					w = pageSize.width
+				if pageSize.height > h:
+					h = pageSize.height
+			return wx.Size(w, h)
+		
+		def RecalcSizes(self):
+			size = self.GetSize()
+			position = self.GetPosition()
+			for page in self.itervalues():
+				page.SetSize(size)
+				page.SetPosition(position)
+		
+		def ActivePage(self):
+			return self.currentPage
+		
+		def SetActivePage(self, key):
+			for page in self.itervalues():
+				page.Hide()
+			self.Clear()
+			self[key].Show()
+			self.Add(self[key])
+		
+		def __setitem__(self, key, value):
+			if self.get(key) != value:
+				try:
+					del self[key]
+				except KeyError:
+					pass
+				if value:
+					self.pages.__setitem__(key, value)
+			if len(self) == 1 or self.ActivePage() not in self:
+				self.SetActivePage(self.keys()[0])
+			elif not self:
+				self.SetActivePage(None)
+		
+		def __getitem__(self, key):
+			return self.pages.__getitem__(key)
+		
+		def __delitem__(self, key):
+			self[key].Destroy()
+			return self.pages.__delitem__(key)
+		
+		def __contains__(self, key):
+			return self.pages.__contains__(key)
+		
+		def __iter__(self):
+			return self.pages.__iter__()
+		
+		def __len__(self):
+			return self.pages.__len__()
+		
+		def get(self, key, default = None):
+			return self.pages.get(key, default)
+		
+		def iterkeys(self):
+			return self.pages.iterkeys()
+		
+		def keys(self):
+			return self.pages.keys()
+		
+		def itervalues(self):
+			return self.pages.itervalues()
+		
+		def values(self):
+			return self.pages.values()
+		
+		def iteritems(self):
+			return self.pages.iteritems()
+		
+		def items(self):
+			return self.pages.items()
+	
+	#class TablessNotebook(wx.BookCtrlBase):
+	#	def Init(self):
+	#		self.m_selection = wx.NOT_FOUND
+	#	
+	#	def SetSelection(self, n):
+	#		return self.DoSetSelection(n, self.SetSelection_SendEvent)
+	#	
+	#	def ChangeSelection(self, n):
+	#		return self.DoSetSelection(n)
+	#	
+	#	def GetControllerSize(self):
+	#		return wx.Size()
+	#	
+	#	def HitTest(self, pt):
+	#		pagePos = wx.NOT_FOUND
+	#		flags = wx.BK_HITTEST_NOWHERE
+	#		if self.GetPageRect().Contains(pt):
+	#			flags |= wx.BK_HITTEST_ONPAGE
+	#		return pagePos, flags
+	#	
+	#	def CalcSizeFromPage(self, sizePage):
+	#		return sizePage
+	#	
+	#	def UpdateSelectedPage(self, newsel):
+	#		self.m_selection = newsel
+	#	
+	#	def GetSelection(self):
+	#		return self.m_selection
+	#	
+	#	def CreatePageChangingEvent(self):
+	#		return wx.NotebookEvent(wx.EVT_COMMAND_NOTEBOOK_PAGE_CHANGING, self.m_windowId)
+	#	
+	#	def MakeChangedEvent(self, event):
+	#		event.SetEventType(wx.EVT_COMMAND_NOTEBOOK_PAGE_CHANGED)
+	#	
+	#	def InsertPage(self, n, page, bSelect = False):
+	#		if not super(TablessNotebook, self).InsertPage(n, page, wx.EmptyString, bSelect, -1):
+	#			return False
+	#		if int(n) <= self.m_selection:
+	#			self.m_selection += 1
+	#		selNew = -1
+	#		if bSelect:
+	#			selNew = n
+	#		elif self.m_selection == -1:
+	#			selNew = 0
+	#		if selNew != self.m_selection:
+	#			page.Hide()
+	#		if selNew != -1:
+	#			self.SetSelection(selNew)
+	#		if self.GetPageCount() == 1:
+	#			sz = wx.SizeEvent(self.GetSize(), self.GetId())
+	#			self.GetEventHandler().ProcessEvent(sz)
+	#		return True
+	#	
+	#	def DoRemovePage(self, page):
+	#		page_count = self.GetPageCount()
+	#		win = super(TablessNotebook, self).DoRemovePage(page)
+	#		if win:
+	#			if self.m_selection >= int(page):
+	#				sel = self.m_selection - 1
+	#				if page_count == 1:
+	#					sel = wx.NOT_FOUND
+	#				elif page_count == 2 or sel == -1:
+	#					sel = 0
+	#				if self.m_selection == int(page):
+	#					self.m_selection = wx.NOT_FOUND
+	#				else:
+	#					self.m_selection -= 1
+	#				if sel != wx.NOT_FOUND and sel != m_selection:
+	#					self.SetSelection(sel)
+	#			if self.GetPageCount() == 0:
+	#				sz = wx.SizeEvent(self.GetSize(), self.GetId())
+	#				self.GetEventHandler().ProcessEvent(sz)
+	#		return win
+	#	
+	#	def DeleteAllPages(self):
+	#		if not super(TablessNotebook, self).DeleteAllPages():
+	#			return False
+	#		self.m_selection = -1
+	#		sz = wx.SizeEvent(self.GetSize(), self.GetId())
+	#		self.GetEventHandler().ProcessEvent(sz)
+	#		return True
