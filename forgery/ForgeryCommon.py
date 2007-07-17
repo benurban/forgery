@@ -120,6 +120,21 @@ The result is between -pi and pi."""
 def capitalize(s):
 	return s[0].upper() + s[1:]
 
+if not usePyObjC:
+	__all__ += ('addStaticSpacer', 'addStretchSpacer')
+	
+	def addStaticSpacer(sizer, size):
+		try:
+			return sizer.AddSpacer(size)
+		except TypeError: # wx 2.6 does this
+			return sizer.AddItem(wx.SizerItemSpacer(size, size, 0, 0, 0))
+	
+	def addStretchSpacer(sizer):
+		try:
+			return sizer.AddStretchSpacer()
+		except TypeError: # wx 2.6 does this
+			return sizer.AddItem(wx.SizerItemSpacer(0, 0, 1, 0, 0))
+
 class ID(object):
 	
 	if usePyObjC:

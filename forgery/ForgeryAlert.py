@@ -199,18 +199,6 @@ def buildSizers(direction, *items):
 			result.Add(item)
 	return result
 
-def addStaticSpacer(sizer, size):
-	try:
-		return sizer.AddSpacer(size)
-	except TypeError: # wx 2.6 does this
-		return sizer.AddItem(wx.SizerItemSpacer(size, size, 0, 0, 0))
-
-def addStretchSpacer(sizer):
-	try:
-		return sizer.AddStretchSpacer()
-	except TypeError: # wx 2.6 does this
-		return sizer.AddItem(wx.SizerItemSpacer(0, 0, 1, 0, 0))
-
 if usePyObjC:
 	class ForgeryWindowModalAlertDelegate(NSObject):
 		func = None
