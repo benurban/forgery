@@ -25,6 +25,7 @@ __all__ = (
 )
 
 import ForgeryApplication
+import os
 
 if usePyObjC:
 	
@@ -132,7 +133,11 @@ def runApplicationModalAlert(messageText, informativeText, buttons):
 			sizer = buildSizers(
 				wx.HORIZONTAL,
 				24,
-				64, # FIXME: application icon goes here
+				(
+					15,
+					wx.StaticBitmap(dialog, -1, wx.BitmapFromImage(wx.Image(os.path.join(resourcesDir, 'Forgery.png')).Scale(64, 64))),
+					20,
+				),
 				16,
 				(
 					15,
