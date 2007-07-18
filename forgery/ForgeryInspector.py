@@ -861,10 +861,10 @@ class ForgeryInspector(Superclass):
 			)
 			self.Bind(wx.EVT_CLOSE, errorWrap(self.OnClose))
 			self.Bind(wx.EVT_MOVE, errorWrap(self.OnMoved))
-			self.CreateUI()
+			self.BuildUI()
 			self.SetCursor(wx.StockCursor(wx.CURSOR_ARROW))
 	
-	def CreateUI(self):
+	def BuildUI(self):
 		# The numbers come from Apple's HIG
 		self.sizer = wx.BoxSizer(wx.VERTICAL)
 		addStaticSpacer(self.sizer, 10)
@@ -880,33 +880,13 @@ class ForgeryInspector(Superclass):
 		vsizer.Add(sizer)
 		addStaticSpacer(vsizer, 8)
 		self.tabView = TablessNotebook()
-		# NO_SELECTION
-		panel = wx.Panel(self, -1)
-		sizer = createCenteredText(panel, "Nothing Selected")
-		panel.SetSizer(sizer)
-		sizer.Fit(panel)
-		self.tabView[ID.NO_SELECTION] = panel
-		# MULTIPLE_SELECTION
-		panel = wx.Panel(self, -1)
-		sizer = createCenteredText(panel, "Multiple Objects Selected")
-		panel.SetSizer(sizer)
-		sizer.Fit(panel)
-		self.tabView[ID.MULTIPLE_SELECTION] = panel
-		# VERTEX
-		panel = wx.Panel(self, -1)
-		sizer = wx.FlexGridSizer(3)
-		addRightAlignedStaticText(sizer, panel, "X:")
-		addStaticSpacer(sizer, 8)
-		self.vertexXField = addTextCtrl(sizer, panel, self.OnVertexXChanged)
-		addStaticSpacer(sizer, 8)
-		addStaticSpacer(sizer, 8)
-		addStaticSpacer(sizer, 8)
-		addRightAlignedStaticText(sizer, panel, "Y:")
-		addStaticSpacer(sizer, 8)
-		self.vertexYField = addTextCtrl(sizer, panel, self.OnVertexYChanged)
-		panel.SetSizer(sizer)
-		sizer.Fit(panel)
-		self.tabView[ID.VERTEX] = panel
+		self.tabView[ID.NO_SELECTION] = self.BuildNoSelectionUI()
+		self.tabView[ID.MULTIPLE_SELECTION] = self.BuildMultipleSelectionUI()
+		self.tabView[ID.VERTEX] = self.BuildVertexUI()
+		self.tabView[ID.LINE] = self.BuildLineUI()
+		self.tabView[ID.POLYGON] = self.BuildPolygonUI()
+		self.tabView[ID.OBJECT] = self.BuildObjectUI()
+		self.tabView[ID.SOUND] = self.BuildSoundUI()
 		vsizer.Add(self.tabView)
 		hsizer.Add(vsizer)
 		addStaticSpacer(hsizer, 10)
@@ -915,6 +895,52 @@ class ForgeryInspector(Superclass):
 		self.sizer.Layout()
 		self.sizer.Fit(self)
 		self.update()
+	
+	def BuildNoSelectionUI(self):
+		result = wx.Panel(self, -1)
+		sizer = createCenteredText(result, "Nothing Selected")
+		result.SetSizer(sizer)
+		sizer.Fit(result)
+		return result
+	
+	def BuildMultipleSelectionUI(self):
+		result = wx.Panel(self, -1)
+		sizer = createCenteredText(result, "Multiple Objects Selected")
+		result.SetSizer(sizer)
+		sizer.Fit(result)
+		return result
+	
+	def BuildVertexUI(self):
+		result = wx.Panel(self, -1)
+		sizer = wx.FlexGridSizer(3)
+		addRightAlignedStaticText(sizer, result, "X:")
+		addStaticSpacer(sizer, 8)
+		self.vertexXField = addTextCtrl(sizer, result, self.OnVertexXChanged)
+		addStaticSpacer(sizer, 8)
+		addStaticSpacer(sizer, 8)
+		addStaticSpacer(sizer, 8)
+		addRightAlignedStaticText(sizer, result, "Y:")
+		addStaticSpacer(sizer, 8)
+		self.vertexYField = addTextCtrl(sizer, result, self.OnVertexYChanged)
+		result.SetSizer(sizer)
+		sizer.Fit(result)
+		return result
+	
+	def BuildLineUI(self):
+		# FIXME
+		return None
+	
+	def BuildPolygonUI(self):
+		# FIXME
+		return None
+	
+	def BuildObjectUI(self):
+		# FIXME
+		return None
+	
+	def BuildSoundUI(self):
+		# FIXME
+		return None
 	
 	def OnIDChanged(self, event):
 		self.idChanged(event.GetEventObject().GetValue())
