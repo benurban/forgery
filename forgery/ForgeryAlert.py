@@ -188,22 +188,6 @@ def addButton(dialog, sizer, buttonID, name = None):
 	sizer.AddButton(result)
 	return result
 
-def buildSizers(direction, *items):
-	result = wx.BoxSizer(direction)
-	for item in items:
-		if item is None:
-			addStretchSpacer(result)
-		elif isinstance(item, (int, long)):
-			addStaticSpacer(result, item)
-		elif hasattr(item, '__iter__'):
-			if direction == wx.HORIZONTAL:
-				result.Add(buildSizers(wx.VERTICAL, *item))
-			else:
-				result.Add(buildSizers(wx.HORIZONTAL, *item))
-		else:
-			result.Add(item)
-	return result
-
 if usePyObjC:
 	class ForgeryWindowModalAlertDelegate(NSObject):
 		func = None

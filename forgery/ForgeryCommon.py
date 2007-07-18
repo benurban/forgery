@@ -121,7 +121,7 @@ def capitalize(s):
 	return s[0].upper() + s[1:]
 
 if not usePyObjC:
-	__all__ += ('addStaticSpacer', 'addStretchSpacer')
+	__all__ += ('addStaticSpacer', 'addStretchSpacer', 'buildSizers')
 	
 	def addStaticSpacer(sizer, size):
 		try:
@@ -134,6 +134,22 @@ if not usePyObjC:
 			return sizer.AddStretchSpacer()
 		except TypeError: # wx 2.6 does this
 			return sizer.AddItem(wx.SizerItemSpacer(0, 0, 1, 0, 0))
+	
+	def buildSizers(direction, *items):
+		result = wx.BoxSizer(direction)
+		for item in items:
+			if item is None:
+				addStretchSpacer(result)
+			elif isinstance(item, (int, long)):
+				addStaticSpacer(result, item)
+			elif hasattr(item, '__iter__'):
+				if direction == wx.HORIZONTAL:
+					result.Add(buildSizers(wx.VERTICAL, *item))
+				else:
+					result.Add(buildSizers(wx.HORIZONTAL, *item))
+			else:
+				result.Add(item)
+		return result
 
 class ID(object):
 	
