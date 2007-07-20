@@ -147,26 +147,37 @@ if not usePyObjC:
 		# * * * * *
 		# 6 * 7 * 8
 		# The numbers represent the items; the *s represent 8x8 spacers
-		realColumns = 2 * columns - 1
-		result = wx.FlexGridSizer(realColumns)
-		for index, item in enumerate(items[:-1]):
+		#realColumns = 2 * columns - 1
+		#result = wx.FlexGridSizer(cols = realColumns)
+		#for index, item in enumerate(items[:-1]):
+		#	if isinstance(item, (int, long)):
+		#		addStaticSpacer(result, item)
+		#	elif isinstance(item, wx.Object):
+		#		result.Add(item)
+		#	else:
+		#		addStretchSpacer(result)
+		#	if (index + 1) % columns:
+		#		addStaticSpacer(result, 8)
+		#	else:
+		#		for i in xrange(realColumns):
+		#			addStaticSpacer(result, 8)
+		#if isinstance(items[-1], (int, long)):
+		#	addStaticSpacer(result, items[-1])
+		#elif isinstance(items[-1], wx.Object):
+		#	result.Add(items[-1])
+		#else:
+		#	addStretchSpacer(result)
+		result = wx.FlexGridSizer(
+			cols = columns,
+			hgap = 8, vgap = 8,
+		)
+		for item in items:
 			if isinstance(item, (int, long)):
 				addStaticSpacer(result, item)
 			elif isinstance(item, wx.Object):
 				result.Add(item)
 			else:
 				addStretchSpacer(result)
-			if (index + 1) % columns:
-				for i in xrange(realColumns):
-					addStaticSpacer(result, 8)
-			else:
-				addStaticSpacer(result, 8)
-		if isinstance(items[-1], (int, long)):
-			addStaticSpacer(result, items[-1])
-		elif isinstance(items[-1], wx.Object):
-			result.Add(items[-1])
-		else:
-			addStretchSpacer(result)
 		return result
 	
 	def buildSizers(direction, *items):
