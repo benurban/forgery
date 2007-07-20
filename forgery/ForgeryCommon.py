@@ -124,6 +124,7 @@ if not usePyObjC:
 	__all__ += (
 		'addStaticSpacer',
 		'addStretchSpacer',
+		'buildNonuniformGrid',
 		'buildSizers',
 	)
 	
@@ -138,6 +139,35 @@ if not usePyObjC:
 			return sizer.AddStretchSpacer()
 		except TypeError: # wx 2.6 does this
 			return sizer.AddItem(wx.SizerItemSpacer(0, 0, 1, 0, 0))
+	
+	def buildNonuniformGrid(columns, *items):
+		# 0 * 1 * 2
+		# * * * * *
+		# 3 * 4 * 5
+		# * * * * *
+		# 6 * 7 * 8
+		# The numbers represent the items; the *s represent 8x8 spacers
+		realColumns = 2 * columns - 1
+		result = wx.FlexGridSizer(realColumns)
+		for index, item in enumerate(items[:-1]):
+			if isinstance(item, (int, long)):
+				addStaticSpacer(result, item)
+			elif isinstance(item, wx.Object):
+				result.Add(item)
+			else:
+				addStretchSpacer(result)
+			if (index + 1) % columns:
+				for i in xrange(realColumns):
+					addStaticSpacer(result, 8)
+			else:
+				addStaticSpacer(result, 8)
+		if isinstance(items[-1], (int, long)):
+			addStaticSpacer(result, items[-1])
+		elif isinstance(items[-1], wx.Object):
+			result.Add(items[-1])
+		else:
+			addStretchSpacer(result)
+		return result
 	
 	def buildSizers(direction, *items):
 		result = wx.BoxSizer(direction)
