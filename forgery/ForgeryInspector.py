@@ -558,6 +558,12 @@ class ForgeryInspector(Superclass):
 		#	self.update() # this causes infinite recursion in wx 2.6
 		self.refresh()
 	
+	def lineSolidChanged(self, value):
+		print "%s.lineSolidChanged(%s)" % (self, value)
+	
+	def lineTransparentChanged(self, value):
+		print "%s.lineTransparentChanged(%s)" % (self, value)
+	
 	def vertexXChanged(self, value):
 		vertex = self.selectedElement
 		self.openUndoGroup(u"Move Vertex '%s'" % (vertex.elementID, ))
@@ -586,10 +592,10 @@ class ForgeryInspector(Superclass):
 		self.idChanged(sender.stringValue())
 	
 	def lineSolidChanged_(self, sender):
-		print "[%s lineSolidChanged:%s]" % (self, sender)
+		self.lineSolidChanged(sender.intValue())
 	
 	def lineTransparentChanged_(self, sender):
-		print "[%s lineTransparentChanged:%s]" % (self, sender)
+		self.lineTransparentChanged(sender.intValue())
 	
 	def polygonCeilingHeightChanged_(self, sender):
 		print "[%s polygonCeilingHeightChanged:%s]" % (self, sender)
@@ -934,21 +940,21 @@ class ForgeryInspector(Superclass):
 	def BuildLineUI(self):
 		result = wx.Panel(self, -1)
 		self.lineVertex0Field = createTextCtrl(result)
-		self.lineVertex0Field.SetEditable(False)
+		self.line['vertex0Field'].SetEditable(False)
 		self.lineVertex1Field = createTextCtrl(result)
-		self.lineVertex1Field.SetEditable(False)
+		self.line['vertex1Field'].SetEditable(False)
 		self.lineSolidCheckbox = createCheckbox(result, "Solid", self.OnLineSolidChanged)
 		self.lineTransparentCheckbox = createCheckbox(result, "Transparent", self.OnLineTransparentChanged)
 		sizer = buildNonuniformGrid(
 			2,
 			createRightAlignedStaticText(result, "First Vertex:"),
-			self.lineVertex0Field,
+			self.line['vertex0Field'],
 			createRightAlignedStaticText(result, "Second Vertex:"),
-			self.lineVertex1Field,
+			self.line['vertex1Field'],
 			None,
-			self.lineSolidCheckbox,
+			self.line['solidCheckbox'],
 			None,
-			self.lineTransparentCheckbox,
+			self.line['transparentCheckbox'],
 		)
 		result.SetSizer(sizer)
 		sizer.Layout()
@@ -967,8 +973,22 @@ class ForgeryInspector(Superclass):
 		# FIXME
 		return None
 	
+	def BuildSideUI(self, prefix, path):
+		# FIXME
+		return None
+	
+	def BuildSurfaceUI(self, prefix, path):
+		# FIXME
+		return None
+	
 	def OnIDChanged(self, event):
 		self.idChanged(event.GetEventObject().GetValue())
+	
+	def OnLineSolidChanged(self, event):
+		self.lineSolidChanged(event.GetEventObject().GetValue())
+	
+	def OnLineTransparentChanged(self, event):
+		self.lineTransparentChanged(event.GetEventObject().GetValue())
 	
 	def OnVertexXChanged(self, event):
 		try:
@@ -987,12 +1007,6 @@ class ForgeryInspector(Superclass):
 			self.update()
 		else:
 			self.vertexYChanged(value)
-	
-	def OnLineSolidChanged(self, event):
-		self.lineSolidChanged(event.GetEventObject().GetValue())
-	
-	def OnLineTransparentChanged(self, event):
-		self.lineTransparentChanged(event.GetEventObject().GetValue())
 	
 	def OnClose(self, event):
 		if event.CanVeto() and self.IsShown():
@@ -1056,6 +1070,15 @@ if not usePyObjC:
 			createCenteredStaticText(parent, text),
 			#None,
 		)
+	
+	def createCheckbox(parent, label, func = None):
+		result = wx.CheckBox(
+			parent, -1,
+			label,
+		)
+		if func:
+			result.Bind(wx.EVT_CHECKBOX, errorWrap(func))
+		return result
 	
 	class TablessNotebook(wx.PySizer):
 		pages = None
