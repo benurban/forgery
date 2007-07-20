@@ -865,20 +865,7 @@ class ForgeryInspector(Superclass):
 			self.SetCursor(wx.StockCursor(wx.CURSOR_ARROW))
 	
 	def BuildUI(self):
-		# The numbers come from Apple's HIG
-		self.sizer = wx.BoxSizer(wx.VERTICAL)
-		addStaticSpacer(self.sizer, 10)
-		hsizer = wx.BoxSizer(wx.HORIZONTAL)
-		addStaticSpacer(hsizer, 10)
-		vsizer = wx.BoxSizer(wx.VERTICAL)
-		sizer = wx.BoxSizer(wx.HORIZONTAL)
-		addStretchSpacer(sizer)
-		addRightAlignedStaticText(sizer, self, "ID:")
-		addStaticSpacer(sizer, 8)
-		self.idField = addTextCtrl(sizer, self, self.OnIDChanged)
-		addStretchSpacer(sizer)
-		vsizer.Add(sizer)
-		addStaticSpacer(vsizer, 8)
+		self.idField = createTextCtrl(self, self.OnIDChanged)
 		self.tabView = TablessNotebook()
 		self.tabView[ID.NO_SELECTION] = self.BuildNoSelectionUI()
 		self.tabView[ID.MULTIPLE_SELECTION] = self.BuildMultipleSelectionUI()
@@ -887,11 +874,27 @@ class ForgeryInspector(Superclass):
 		self.tabView[ID.POLYGON] = self.BuildPolygonUI()
 		self.tabView[ID.OBJECT] = self.BuildObjectUI()
 		self.tabView[ID.SOUND] = self.BuildSoundUI()
-		vsizer.Add(self.tabView)
-		hsizer.Add(vsizer)
-		addStaticSpacer(hsizer, 10)
-		self.sizer.Add(hsizer)
-		addStaticSpacer(self.sizer, 12)
+		# The numbers come from Apple's HIG
+		self.sizer = buildSizers(
+			wx.VERTICAL,
+			10,
+			(
+				10,
+				(
+					(
+						None,
+						createRightAlignedStaticText(self, "ID:"),
+						8,
+						self.idField,
+						None,
+					),
+					8,
+					self.tabView,
+				),
+				10,
+			),
+			12,
+		)
 		self.sizer.Layout()
 		self.sizer.Fit(self)
 		self.update()
@@ -900,6 +903,7 @@ class ForgeryInspector(Superclass):
 		result = wx.Panel(self, -1)
 		sizer = createCenteredText(result, "Nothing Selected")
 		result.SetSizer(sizer)
+		sizer.Layout()
 		sizer.Fit(result)
 		return result
 	
@@ -907,28 +911,49 @@ class ForgeryInspector(Superclass):
 		result = wx.Panel(self, -1)
 		sizer = createCenteredText(result, "Multiple Objects Selected")
 		result.SetSizer(sizer)
+		sizer.Layout()
 		sizer.Fit(result)
 		return result
 	
 	def BuildVertexUI(self):
 		result = wx.Panel(self, -1)
-		sizer = wx.FlexGridSizer(3)
-		addRightAlignedStaticText(sizer, result, "X:")
-		addStaticSpacer(sizer, 8)
-		self.vertexXField = addTextCtrl(sizer, result, self.OnVertexXChanged)
-		addStaticSpacer(sizer, 8)
-		addStaticSpacer(sizer, 8)
-		addStaticSpacer(sizer, 8)
-		addRightAlignedStaticText(sizer, result, "Y:")
-		addStaticSpacer(sizer, 8)
-		self.vertexYField = addTextCtrl(sizer, result, self.OnVertexYChanged)
+		self.vertexXField = createTextCtrl(result, self.OnVertexXChanged)
+		self.vertexYField = createTextCtrl(result, self.OnVertexYChanged)
+		sizer = buildNonuniformGrid(
+			2,
+			createRightAlignedStaticText(result, "X:"),
+			self.vertexXField,
+			createRightAlignedStaticText(result, "Y:"),
+			self.vertexYField,
+		)
 		result.SetSizer(sizer)
+		sizer.Layout()
 		sizer.Fit(result)
 		return result
 	
 	def BuildLineUI(self):
-		# FIXME
-		return None
+		result = wx.Panel(self, -1)
+		self.lineVertex0Field = createTextCtrl(result)
+		self.lineVertex0Field.SetEditable(False)
+		self.lineVertex1Field = createTextCtrl(result)
+		self.lineVertex1Field.SetEditable(False)
+		self.lineSolidCheckbox = createCheckbox(result, "Solid", self.OnLineSolidChanged)
+		self.lineTransparentCheckbox = createCheckbox(result, "Transparent", self.OnLineTransparentChanged)
+		sizer = buildNonuniformGrid(
+			2,
+			createRightAlignedStaticText(result, "First Vertex:"),
+			self.lineVertex0Field,
+			createRightAlignedStaticText(result, "Second Vertex:"),
+			self.lineVertex1Field,
+			None,
+			self.lineSolidCheckbox,
+			None,
+			self.lineTransparentCheckbox,
+		)
+		result.SetSizer(sizer)
+		sizer.Layout()
+		sizer.Fit(result)
+		return result
 	
 	def BuildPolygonUI(self):
 		# FIXME
@@ -963,6 +988,12 @@ class ForgeryInspector(Superclass):
 		else:
 			self.vertexYChanged(value)
 	
+	def OnLineSolidChanged(self, event):
+		self.lineSolidChanged(event.GetEventObject().GetValue())
+	
+	def OnLineTransparentChanged(self, event):
+		self.lineTransparentChanged(event.GetEventObject().GetValue())
+	
 	def OnClose(self, event):
 		if event.CanVeto() and self.IsShown():
 			self.hide()
@@ -978,37 +1009,53 @@ def sharedInspector():
 
 if not usePyObjC:
 	
-	def addStaticText(sizer, parent, label, style):
+	def createStaticText(parent, label, style):
 		result = wx.StaticText(
 			parent, -1,
 			label = label,
 			style = style,
 		)
+		return result
+	
+	def addStaticText(sizer, parent, label, style):
+		result = createStaticText(parent, label, style)
 		sizer.Add(result)
 		return result
+	
+	def createCenteredStaticText(parent, label):
+		return createStaticText(parent, label, wx.ALIGN_CENTER)
 	
 	def addCenteredStaticText(sizer, parent, label):
 		return addStaticText(sizer, parent, label, wx.ALIGN_CENTER)
 	
+	def createRightAlignedStaticText(parent, label):
+		return createStaticText(parent, label, wx.ALIGN_RIGHT)
+	
 	def addRightAlignedStaticText(sizer, parent, label):
 		return addStaticText(sizer, parent, label, wx.ALIGN_RIGHT)
 	
-	def addTextCtrl(sizer, parent, func):
+	def createTextCtrl(parent, func = None):
 		result = wx.TextCtrl(
 			parent, -1,
 			style = wx.TE_PROCESS_ENTER,
 		)
-		result.Bind(wx.EVT_TEXT, errorWrap(func))
-		result.Bind(wx.EVT_TEXT_ENTER, errorWrap(func))
+		if func:
+			result.Bind(wx.EVT_TEXT, errorWrap(func))
+			result.Bind(wx.EVT_TEXT_ENTER, errorWrap(func))
+		return result
+	
+	def addTextCtrl(sizer, parent, func = None):
+		result = createTextCtrl(parent, func)
 		sizer.Add(result)
 		return result
 	
 	def createCenteredText(parent, text):
-		result = wx.BoxSizer(wx.VERTICAL)
-		addStretchSpacer(result)
-		addCenteredStaticText(result, parent, text)
-		addStretchSpacer(result)
-		return result
+		return buildSizers(
+			wx.VERTICAL,
+			#None,
+			createCenteredStaticText(parent, text),
+			#None,
+		)
 	
 	class TablessNotebook(wx.PySizer):
 		pages = None
