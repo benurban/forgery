@@ -37,6 +37,7 @@ if usePyObjC:
 else:
 	
 	import wx
+	import os
 	
 	Superclass = wx.MiniFrame
 
@@ -239,6 +240,15 @@ class ForgeryInspector(Superclass):
 				cls._sharedInspector = cls()
 		return cls._sharedInspector
 	
+	def setAttribute(self, prefix, suffix, value):
+		return setattr(self, prefix + suffix, value)
+	
+	def getPath(self, path):
+		current = getattr(self, path[0])
+		for entry in path[1:]:
+			current = current[entry]
+		return current
+	
 	def refresh(self):
 		self.document.view.refresh()
 	
@@ -416,8 +426,17 @@ class ForgeryInspector(Superclass):
 			lineUI['vertex1Field'].setStringValue_(unicode(line.vertex1.elementID))
 			#NSButton lineSolidCheckbox
 			#NSButton lineTransparentCheckbox
-			for index, sideUI in enumerate(lineUI['side']):
-				self.updateSide(line, getattr(line, 'side' + str(index)), index, sideUI)
+		else:
+			try:
+				lineUI['vertex0Field'].ChangeValue(unicode(line.vertex0.elementID))
+				lineUI['vertex1Field'].ChangeValue(unicode(line.vertex1.elementID))
+			except AttributeError: # wx 2.6 does this
+				lineUI['vertex0Field'].SetValue(unicode(line.vertex0.elementID))
+				lineUI['vertex1Field'].SetValue(unicode(line.vertex1.elementID))
+			#wx.Checkbox lineSolidCheckbox
+			#wx.Checkbox lineTransparentCheckbox
+		for index, sideUI in enumerate(lineUI['side']):
+			self.updateSide(line, getattr(line, 'side' + str(index)), index, sideUI)
 	
 	def updatePolygon(self, polygon, polygonUI):
 		if usePyObjC:
@@ -441,25 +460,36 @@ class ForgeryInspector(Superclass):
 			# FIXME: layerUI['offsetUnitsField']
 	
 	def updateSide(self, line, side, index, sideUI):
-		if usePyObjC:
-			if side:
+		if side:
+			if usePyObjC:
 				sideUI['polygonField'].setEditable_(False) # can't set this in the NIB for some reason
 				sideUI['polygonField'].setEnabled_(True)
 				sideUI['polygonField'].setStringValue_(unicode(self.data.polygonForSide(line, index).elementID))
-				self.updateSurface(side.lowerSurface, sideUI['bottom'])
-				self.updateSurface(side.middleSurface, sideUI['middle'])
-				self.updateSurface(side.upperSurface, sideUI['top'])
 			else:
+				try:
+					sideUI['polygonField'].ChangeValue(unicode(self.data.polygonForSide(line, index).elementID))
+				except AttributeError: # wx 2.6 does this
+					sideUI['polygonField'].SetValue(unicode(self.data.polygonForSide(line, index).elementID))
+			self.updateSurface(side.lowerSurface, sideUI['bottom'])
+			self.updateSurface(side.middleSurface, sideUI['middle'])
+			self.updateSurface(side.upperSurface, sideUI['top'])
+		else:
+			if usePyObjC:
 				sideUI['polygonField'].setEditable_(False) # can't set this in the NIB for some reason
 				sideUI['polygonField'].setEnabled_(False)
 				sideUI['polygonField'].setStringValue_(u"")
-				self.updateSurface(None, sideUI['bottom'])
-				self.updateSurface(None, sideUI['middle'])
-				self.updateSurface(None, sideUI['top'])
+			else:
+				try:
+					sideUI['polygonField'].ChangeValue(u"")
+				except AttributeError: # wx 2.6 does this
+					sideUI['polygonField'].SetValue(u"")
+			self.updateSurface(None, sideUI['bottom'])
+			self.updateSurface(None, sideUI['middle'])
+			self.updateSurface(None, sideUI['top'])
 	
 	def updateSurface(self, surface, surfaceUI):
-		if usePyObjC:
-			if surface:
+		if surface:
+			if usePyObjC:
 				surfaceUI['dxSlider'].setEnabled_(True)
 				surfaceUI['dxSlider'].setDoubleValue_(surface.dx)
 				surfaceUI['dySlider'].setEnabled_(True)
@@ -513,6 +543,60 @@ class ForgeryInspector(Superclass):
 					surfaceUI['rechargerCheckbox'].setState_(False)
 				surfaceUI['rechargerPropertiesButton'].setEnabled_(True)
 			else:
+				surfaceUI['dxSlider'].Enable()
+				surfaceUI['dxSlider'].SetValue(int(surface.dx))
+				surfaceUI['dySlider'].Enable()
+				surfaceUI['dySlider'].SetValue(int(surface.dy))
+				surfaceUI['textureWell'].Enable()
+				surfaceUI['textureWell'].SetBitmapLabel(surface.image)
+				surfaceUI['landscapeCheckbox'].Enable()
+				if 'landscape' in surface.effects:
+					surfaceUI['landscapeCheckbox'].SetValue(True)
+				else:
+					surfaceUI['landscapeCheckbox'].SetValue(False)
+				surfaceUI['effectMenu'].Enable()
+				if 'pulsate' in surface.effects:
+					surfaceUI['effectMenu'].SetSelection(2)
+					surfaceUI['effectPropertiesButton'].Enable()
+				elif 'wobble' in surface.effects:
+					surfaceUI['effectMenu'].SetSelection(3)
+					surfaceUI['effectPropertiesButton'].Enable()
+				elif 'slide' in surface.effects:
+					surfaceUI['effectMenu'].SetSelection(4)
+					surfaceUI['effectPropertiesButton'].Enable()
+				elif 'wander' in surface.effects:
+					surfaceUI['effectMenu'].SetSelection(5)
+					surfaceUI['effectPropertiesButton'].Enable()
+				else:
+					surfaceUI['effectMenu'].SetSelection(0)
+					surfaceUI['effectPropertiesButton'].Disable()
+				surfaceUI['lightField'].Enable()
+				#wx.TextCtrl surfaceUI['lightField']
+				surfaceUI['switchCheckbox'].Enable()
+				if 'switch' in surface.actions:
+					surfaceUI['switchCheckbox'].SetValue(True)
+				else:
+					surfaceUI['switchCheckbox'].SetValue(False)
+				surfaceUI['switchPropertiesButton'].Enable()
+				surfaceUI['patternBufferCheckbox'].Enable()
+				if 'pattern buffer' in surface.actions:
+					surfaceUI['patternBufferCheckbox'].SetValue(True)
+				else:
+					surfaceUI['patternBufferCheckbox'].SetValue(False)
+				surfaceUI['terminalCheckbox'].Enable()
+				if 'terminal' in surface.actions:
+					surfaceUI['terminalCheckbox'].SetValue(True)
+				else:
+					surfaceUI['terminalCheckbox'].SetValue(False)
+				surfaceUI['terminalPropertiesButton'].Enable()
+				surfaceUI['rechargerCheckbox'].Enable()
+				if 'recharger' in surface.actions:
+					surfaceUI['rechargerCheckbox'].SetValue(True)
+				else:
+					surfaceUI['rechargerCheckbox'].SetValue(False)
+				surfaceUI['rechargerPropertiesButton'].Enable()
+		else:
+			if usePyObjC:
 				surfaceUI['dxSlider'].setEnabled_(False)
 				surfaceUI['dxSlider'].setDoubleValue_(0.0)
 				surfaceUI['dySlider'].setEnabled_(False)
@@ -535,12 +619,60 @@ class ForgeryInspector(Superclass):
 				surfaceUI['rechargerCheckbox'].setEnabled_(False)
 				surfaceUI['rechargerCheckbox'].setState_(False)
 				surfaceUI['rechargerPropertiesButton'].setEnabled_(False)
+			else:
+				surfaceUI['dxSlider'].Disable()
+				surfaceUI['dxSlider'].SetValue(0)
+				surfaceUI['dySlider'].Disable()
+				surfaceUI['dySlider'].SetValue(0)
+				surfaceUI['textureWell'].Disable()
+				surfaceUI['textureWell'].SetBitmapLabel(wx.EmptyBitmap(128, 128))
+				surfaceUI['landscapeCheckbox'].Disable()
+				surfaceUI['landscapeCheckbox'].SetValue(False)
+				surfaceUI['effectMenu'].Disable()
+				surfaceUI['effectMenu'].SetSelection(0)
+				surfaceUI['effectPropertiesButton'].Disable()
+				surfaceUI['lightField'].Disable()
+				try:
+					surfaceUI['lightField'].ChangeValue("")
+				except AttributeError: # wx 2.6 does this
+					surfaceUI['lightField'].SetValue("")
+				surfaceUI['switchCheckbox'].Disable()
+				surfaceUI['switchCheckbox'].SetValue(False)
+				surfaceUI['switchPropertiesButton'].Disable()
+				surfaceUI['patternBufferCheckbox'].Disable()
+				surfaceUI['patternBufferCheckbox'].SetValue(False)
+				surfaceUI['terminalCheckbox'].Disable()
+				surfaceUI['terminalCheckbox'].SetValue(False)
+				surfaceUI['terminalPropertiesButton'].Disable()
+				surfaceUI['rechargerCheckbox'].Disable()
+				surfaceUI['rechargerCheckbox'].SetValue(False)
+				surfaceUI['rechargerPropertiesButton'].Disable()
 	
 	def openUndoGroup(self, name = None):
 		return self.document.openUndoGroup(name)
 	
 	def closeUndoGroup(self, name = None):
 		return self.document.closeUndoGroup(name)
+	
+	def findSurfaceForUI(self, sender, uiName):
+		if sender is self.line['side'][0]['bottom'][uiName]:
+			return self.selectedElement.side0.lowerSurface
+		elif sender is self.line['side'][0]['middle'][uiName]:
+			return self.selectedElement.side0.middleSurface
+		elif sender is self.line['side'][0]['top'][uiName]:
+			return self.selectedElement.side0.upperSurface
+		elif sender is self.line['side'][1]['bottom'][uiName]:
+			return self.selectedElement.side1.lowerSurface
+		elif sender is self.line['side'][1]['middle'][uiName]:
+			return self.selectedElement.side1.middleSurface
+		elif sender is self.line['side'][1]['top'][uiName]:
+			return self.selectedElement.side1.upperSurface
+		elif sender is self.polygon['ceiling'][uiName]:
+			return self.selectedElement.ceiling
+		elif sender is self.polygon['floor'][uiName]:
+			return self.selectedElement.floor
+		else:
+			return None
 	
 	def idChanged(self, value):
 		selection = self.selectedElement
@@ -563,6 +695,34 @@ class ForgeryInspector(Superclass):
 	
 	def lineTransparentChanged(self, value):
 		print "%s.lineTransparentChanged(%s)" % (self, value)
+	
+	def surfaceDXChanged(self, surface, value):
+		# FIXME: The undo group should not start and end here
+		self.openUndoGroup(u"Move Texture")
+		self.data.setSurfaceOffset(surface, (value, surface.dy))
+		self.closeUndoGroup()
+		self.update()
+		self.refresh()
+	
+	def surfaceDYChanged(self, surface, value):
+		# FIXME: The undo group should not start and end here
+		self.openUndoGroup(u"Move Texture")
+		self.data.setSurfaceOffset(surface, (surface.dx, value))
+		self.closeUndoGroup()
+		self.update()
+		self.refresh()
+	
+	def surfaceLandscapeChanged(self, surface, value):
+		self.openUndoGroup(u"Toggle Landscape Mode")
+		if value:
+			self.data.addSurfaceEffect(surface, 'landscape', {})
+		else:
+			self.data.removeSurfaceEffect(surface, 'landscape')
+		self.closeUndoGroup()
+		self.update()
+	
+	def surfaceLightChanged(self, surface, value):
+		print "%s.surfaceLightChanged(%s, %s)" % (self, surface, value)
 	
 	def vertexXChanged(self, value):
 		vertex = self.selectedElement
@@ -612,41 +772,21 @@ class ForgeryInspector(Superclass):
 	def polygonLayerChanged_(self, sender):
 		print "[%s polygonLayerChanged:%s]" % (self, sender)
 	
-	def findSurfaceForUI_(self, sender, uiName):
-		if sender is self.line['side'][0]['bottom'][uiName]:
-			return self.selectedElement.side0.lowerSurface
-		elif sender is self.line['side'][0]['middle'][uiName]:
-			return self.selectedElement.side0.middleSurface
-		elif sender is self.line['side'][0]['top'][uiName]:
-			return self.selectedElement.side0.upperSurface
-		elif sender is self.line['side'][1]['bottom'][uiName]:
-			return self.selectedElement.side1.lowerSurface
-		elif sender is self.line['side'][1]['middle'][uiName]:
-			return self.selectedElement.side1.middleSurface
-		elif sender is self.line['side'][1]['top'][uiName]:
-			return self.selectedElement.side1.upperSurface
-		elif sender is self.polygon['ceiling'][uiName]:
-			return self.selectedElement.ceiling
-		elif sender is self.polygon['floor'][uiName]:
-			return self.selectedElement.floor
-		else:
-			return None
-	
 	def surfaceActionToggled_(self, sender):
 		if sender.tag() == ID.ACTION_SWITCH:
-			surface = self.findSurfaceForUI_(sender, 'switchCheckbox')
+			surface = self.findSurfaceForUI(sender, 'switchCheckbox')
 			action = 'switch'
 			properties = {}
 		elif sender.tag() == ID.ACTION_PATTERN_BUFFER:
-			surface = self.findSurfaceForUI_(sender, 'patternBufferCheckbox')
+			surface = self.findSurfaceForUI(sender, 'patternBufferCheckbox')
 			action = 'pattern buffer'
 			properties = {}
 		elif sender.tag() == ID.ACTION_TERMINAL:
-			surface = self.findSurfaceForUI_(sender, 'terminalCheckbox')
+			surface = self.findSurfaceForUI(sender, 'terminalCheckbox')
 			action = 'terminal'
 			properties = {}
 		elif sender.tag() == ID.ACTION_RECHARGER:
-			surface = self.findSurfaceForUI_(sender, 'rechargerCheckbox')
+			surface = self.findSurfaceForUI(sender, 'rechargerCheckbox')
 			action = 'recharger'
 			properties = {}
 		if sender.state():
@@ -662,25 +802,15 @@ class ForgeryInspector(Superclass):
 		print "[%s surfaceActionPropertiesClicked:%s]" % (self, sender)
 	
 	def surfaceDXChanged_(self, sender):
-		surface = self.findSurfaceForUI_(sender, 'dxSlider')
-		# FIXME: The undo group should not start and end here
-		self.openUndoGroup(u"Move Texture")
-		self.data.setSurfaceOffset(surface, (sender.doubleValue(), surface.dy))
-		self.closeUndoGroup()
-		self.update()
-		self.refresh()
+		surface = self.findSurfaceForUI(sender, 'dxSlider')
+		self.surfaceDXChanged(surface, sender.doubleValue())
 	
 	def surfaceDYChanged_(self, sender):
-		surface = self.findSurfaceForUI_(sender, 'dySlider')
-		# FIXME: The undo group should not start and end here
-		self.openUndoGroup(u"Move Texture")
-		self.data.setSurfaceOffset(surface, (surface.dx, sender.doubleValue()))
-		self.closeUndoGroup()
-		self.update()
-		self.refresh()
+		surface = self.findSurfaceForUI(sender, 'dySlider')
+		self.surfaceDYChanged(surface, sender.doubleValue())
 	
 	def surfaceEffectChanged_(self, sender):
-		surface = self.findSurfaceForUI_(sender, 'effectMenu')
+		surface = self.findSurfaceForUI(sender, 'effectMenu')
 		self.openUndoGroup(u"Change Effect")
 		for effect in surface.effects.keys():
 			if effect in ('pulsate', 'wobble', 'slide', 'wander'):
@@ -696,21 +826,15 @@ class ForgeryInspector(Superclass):
 		self.closeUndoGroup()
 		self.update()
 	
-	def surfaceEffectPropertiesClicked_(self, sender):
+	def surfaceEffectPropertiesClicked(self, sender):
 		print "[%s surfaceEffectPropertiesClicked:%s]" % (self, sender)
 	
 	def surfaceLandscapeChanged_(self, sender):
-		surface = self.findSurfaceForUI_(sender, 'landscapeCheckbox')
-		self.openUndoGroup(u"Toggle Landscape Mode")
-		if sender.state():
-			self.data.addSurfaceEffect(surface, 'landscape', {})
-		else:
-			self.data.removeSurfaceEffect(surface, 'landscape')
-		self.closeUndoGroup()
-		self.update()
+		surface = self.findSurfaceForUI(sender, 'landscapeCheckbox')
+		self.surfaceLandscapeChanged(surface, sender.state())
 	
 	def surfaceLightChanged_(self, sender):
-		print "[%s surfaceLightChanged:%s]" % (self, sender)
+		self.surfaceLightChanged(surface, sender.stringValue())
 	
 	def vertexXChanged_(self, sender):
 		self.vertexXChanged(sender.doubleValue())
@@ -940,21 +1064,42 @@ class ForgeryInspector(Superclass):
 	def BuildLineUI(self):
 		result = wx.Panel(self, -1)
 		self.lineVertex0Field = createTextCtrl(result)
-		self.line['vertex0Field'].SetEditable(False)
+		self.line['vertex0Field'].Disable()
 		self.lineVertex1Field = createTextCtrl(result)
-		self.line['vertex1Field'].SetEditable(False)
+		self.line['vertex1Field'].Disable()
 		self.lineSolidCheckbox = createCheckbox(result, "Solid", self.OnLineSolidChanged)
 		self.lineTransparentCheckbox = createCheckbox(result, "Transparent", self.OnLineTransparentChanged)
-		sizer = buildNonuniformGrid(
-			2,
-			createRightAlignedStaticText(result, "First Vertex:"),
-			self.line['vertex0Field'],
-			createRightAlignedStaticText(result, "Second Vertex:"),
-			self.line['vertex1Field'],
-			None,
-			self.line['solidCheckbox'],
-			None,
-			self.line['transparentCheckbox'],
+		notebook = wx.Notebook(result, -1, style = wx.BK_TOP)
+		notebook.AddPage(
+			self.BuildSideUI(
+				notebook,
+				'lineSide0',
+				('line', 'side', 0),
+			),
+			"First Side",
+		)
+		notebook.AddPage(
+			self.BuildSideUI(
+				notebook,
+				'lineSide1',
+				('line', 'side', 1),
+			),
+			"Second Side",
+		)
+		sizer = buildSizers(
+			wx.VERTICAL,
+			buildNonuniformGrid(
+				2,
+				createRightAlignedStaticText(result, "First Vertex:"),
+				self.line['vertex0Field'],
+				createRightAlignedStaticText(result, "Second Vertex:"),
+				self.line['vertex1Field'],
+				None,
+				self.line['solidCheckbox'],
+				None,
+				self.line['transparentCheckbox'],
+			),
+			notebook,
 		)
 		result.SetSizer(sizer)
 		sizer.Layout()
@@ -973,13 +1118,167 @@ class ForgeryInspector(Superclass):
 		# FIXME
 		return None
 	
-	def BuildSideUI(self, prefix, path):
-		# FIXME
-		return None
+	def BuildSideUI(self, parent, prefix, path):
+		result = wx.Panel(parent, -1)
+		self.setAttribute(prefix, 'PolygonField', createTextCtrl(result))
+		self.getPath(path)['polygonField'].Disable()
+		notebook = wx.Notebook(result, -1, style = wx.BK_LEFT)
+		notebook.AddPage(
+			self.BuildSurfaceUI(
+				notebook,
+				prefix + 'Top',
+				path + ('top', ),
+			),
+			"Top",
+		)
+		notebook.AddPage(
+			self.BuildSurfaceUI(
+				notebook,
+				prefix + 'Middle',
+				path + ('middle', ),
+			),
+			"Middle",
+		)
+		notebook.AddPage(
+			self.BuildSurfaceUI(
+				notebook,
+				prefix + 'Bottom',
+				path + ('bottom', ),
+			),
+			"Bottom",
+		)
+		sizer = buildSizers(
+			wx.HORIZONTAL,
+			8,
+			(
+				8,
+				(
+					createRightAlignedStaticText(result, "Polygon:"),
+					8,
+					self.getPath(path)['polygonField'],
+				),
+				8,
+				notebook,
+				8,
+			),
+			8,
+		)
+		result.SetSizer(sizer)
+		sizer.Layout()
+		sizer.Fit(result)
+		return result
 	
-	def BuildSurfaceUI(self, prefix, path):
-		# FIXME
-		return None
+	def BuildSurfaceUI(self, parent, prefix, path):
+		result = wx.Panel(parent, -1)
+		self.setAttribute(prefix, 'DXSlider', createSlider(
+			result,
+			0, 127, 9,
+			wx.SL_HORIZONTAL | wx.SL_BOTTOM | wx.SL_AUTOTICKS,
+			self.OnSurfaceDXChanged,
+		))
+		self.setAttribute(prefix, 'DYSlider', createSlider(
+			result,
+			0, 127, 9,
+			wx.SL_VERTICAL | wx.SL_LEFT | wx.SL_AUTOTICKS,
+			self.OnSurfaceDYChanged,
+		))
+		self.setAttribute(prefix, 'EffectMenu', wx.Choice(
+			result, -1,
+			wx.DefaultPosition,
+			wx.DefaultSize,
+			(
+				"Normal",
+				"",
+				"Pulsate",
+				"Slide",
+				"Wander",
+				"Wobble",
+			),
+		))
+		self.setAttribute(prefix, 'EffectPropertiesButton', createPropertiesButton(result))
+		self.setAttribute(prefix, 'LandscapeCheckbox', createCheckbox(
+			result,
+			"Landscape",
+			self.OnSurfaceLandscapeChanged,
+		))
+		self.setAttribute(prefix, 'LightField', createTextCtrl(
+			result,
+			self.OnSurfaceLightChanged,
+		))
+		self.setAttribute(prefix, 'PatternBufferCheckbox', createCheckbox(
+			result,
+			"Pattern Buffer",
+		))
+		self.setAttribute(prefix, 'RechargerCheckbox', createCheckbox(
+			result,
+			"Recharger",
+		))
+		self.setAttribute(prefix, 'RechargerPropertiesButton', createPropertiesButton(result))
+		self.setAttribute(prefix, 'SwitchCheckbox', createCheckbox(
+			result,
+			"Switch",
+		))
+		self.setAttribute(prefix, 'SwitchPropertiesButton', createPropertiesButton(result))
+		self.setAttribute(prefix, 'TerminalCheckbox', createCheckbox(
+			result,
+			"Terminal",
+		))
+		self.setAttribute(prefix, 'TerminalPropertiesButton', createPropertiesButton(result))
+		self.setAttribute(prefix, 'TextureWell', createTextureWell(
+			result,
+			ForgeryElements.ForgerySurface(None, None, ForgeryElements.ForgeryTexture('')).image, # this will be replaced when update() is called
+		))
+		sizer = buildSizers(
+			wx.HORIZONTAL,
+			20,
+			(
+				20,
+				buildNonuniformGrid(
+					3,
+					
+					self.getPath(path)['dySlider'],
+					self.getPath(path)['textureWell'],
+					None,
+					
+					None,
+					self.getPath(path)['dxSlider'],
+					None,
+					
+					None,
+					self.getPath(path)['landscapeCheckbox'],
+					None,
+					
+					createRightAlignedStaticText(result, "Effect:"),
+					self.getPath(path)['effectMenu'],
+					self.getPath(path)['effectPropertiesButton'],
+					
+					createRightAlignedStaticText(result, "Light:"),
+					self.getPath(path)['lightField'],
+					None,
+				),
+				buildNonuniformGrid(
+					5,
+					
+					self.getPath(path)['switchCheckbox'],
+					self.getPath(path)['switchPropertiesButton'],
+					None,
+					self.getPath(path)['patternBufferCheckbox'],
+					None,
+					
+					self.getPath(path)['terminalCheckbox'],
+					self.getPath(path)['terminalPropertiesButton'],
+					None,
+					self.getPath(path)['rechargerCheckbox'],
+					self.getPath(path)['rechargerPropertiesButton'],
+				),
+				20,
+			),
+			20,
+		)
+		result.SetSizer(sizer)
+		sizer.Layout()
+		sizer.Fit(result)
+		return result
 	
 	def OnIDChanged(self, event):
 		self.idChanged(event.GetEventObject().GetValue())
@@ -989,6 +1288,22 @@ class ForgeryInspector(Superclass):
 	
 	def OnLineTransparentChanged(self, event):
 		self.lineTransparentChanged(event.GetEventObject().GetValue())
+	
+	def OnSurfaceDXChanged(self, event):
+		surface = self.findSurfaceForUI(event.GetEventObject(), 'dxSlider')
+		self.surfaceDXChanged(surface, event.GetEventObject().GetValue())
+	
+	def OnSurfaceDYChanged(self, event):
+		surface = self.findSurfaceForUI(event.GetEventObject(), 'dySlider')
+		self.surfaceDYChanged(surface, event.GetEventObject().GetValue())
+	
+	def OnSurfaceLandscapeChanged(self, event):
+		surface = self.findSurfaceForUI(event.GetEventObject(), 'landscapeCheckbox')
+		self.surfaceLandscapeChanged(surface, event.GetEventObject().GetValue())
+	
+	def OnSurfaceLightChanged(self, event):
+		surface = self.findSurfaceForUI(event.GetEventObject(), 'lightField')
+		self.surfaceLightChanged(surface, event.GetEventObject().GetValue())
 	
 	def OnVertexXChanged(self, event):
 		try:
@@ -1078,6 +1393,47 @@ if not usePyObjC:
 		)
 		if func:
 			result.Bind(wx.EVT_CHECKBOX, errorWrap(func))
+		return result
+	
+	def createSlider(parent, minValue, maxValue, ticks = None, style = 0, func = None):
+		if style & wx.SL_VERTICAL:
+			size = wx.Size(16, maxValue - minValue + 1)
+			style |= wx.SL_INVERSE
+		else:
+			size = wx.Size(maxValue - minValue + 1, 16)
+		result = wx.Slider(
+			parent, -1,
+			value = int((minValue + maxValue) / 2),
+			minValue = minValue,
+			maxValue = maxValue,
+			size = size,
+			style = style,
+		)
+		if ticks:
+			tickFreq = (maxValue - minValue + 1) / (ticks - 1)
+			result.SetTickFreq(int(tickFreq), 1)
+		if func:
+			result.Bind(wx.EVT_SCROLL, errorWrap(func))
+		return result
+	
+	def createTextureWell(parent, bitmap, func = None):
+		result = wx.BitmapButton(
+			parent, -1,
+			bitmap,
+		)
+		# FIXME: Clicking the button should bring up a texture selector
+		if func:
+			result.Bind(wx.EVT_BUTTON, errorWrap(func))
+		return result
+	
+	def createPropertiesButton(parent, func = None):
+		result = wx.BitmapButton(
+			parent, -1,
+			wx.Bitmap(os.path.join(resourcesDir, 'info.tiff')),
+			style = wx.NO_BORDER,
+		)
+		if func:
+			result.Bind(wx.EVT_BUTTON, errorWrap(func))
 		return result
 	
 	class TablessNotebook(wx.PySizer):
