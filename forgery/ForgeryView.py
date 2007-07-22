@@ -371,6 +371,12 @@ class ForgeryView(Superclass):
 		self.draw()
 	
 	def OnMouseDown(self, event):
+		self.mouse0 = self.mouse1
+		self.mouse1 = ForgeryPoint.ForgeryPoint(
+			'clip',
+			self,
+			event.GetPosition(),
+		)
 		self.CaptureMouse()
 		self.currentMode.mouseDown((
 			event.CmdDown(),
@@ -379,6 +385,12 @@ class ForgeryView(Superclass):
 		))
 	
 	def OnMouseUp(self, event):
+		self.mouse0 = self.mouse1
+		self.mouse1 = ForgeryPoint.ForgeryPoint(
+			'clip',
+			self,
+			event.GetPosition(),
+		)
 		if self.HasCapture():
 			self.currentMode.mouseUp((
 				event.CmdDown(),
