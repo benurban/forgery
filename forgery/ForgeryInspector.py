@@ -36,7 +36,7 @@ if usePyObjC:
 	
 else:
 	
-	import wx
+	import wx, wx.grid
 	import os
 	
 	Superclass = wx.MiniFrame
@@ -344,7 +344,7 @@ class ForgeryInspector(Superclass):
 					self.idField.ChangeValue("")
 				except AttributeError: # wx 2.6 does this
 					self.idField.SetValue("")
-				self.idField.SetEditable(False)
+				self.idField.Disable()
 				self.tabView.SetActivePage(ID.NO_SELECTION)
 		elif len(self.selection) >= 2:
 			self.setTitle(u"Inspector")
@@ -357,7 +357,7 @@ class ForgeryInspector(Superclass):
 					self.idField.ChangeValue("")
 				except AttributeError: # wx 2.6 does this
 					self.idField.SetValue("")
-				self.idField.SetEditable(False)
+				self.idField.Disable()
 				self.tabView.SetActivePage(ID.MULTIPLE_SELECTION)
 		else:
 			selection = self.selectedElement
@@ -369,7 +369,7 @@ class ForgeryInspector(Superclass):
 					self.idField.ChangeValue(str(selection.elementID))
 				except AttributeError: # wx 2.6 does this
 					self.idField.SetValue(str(selection.elementID))
-				self.idField.SetEditable(True)
+				self.idField.Enable()
 			if isinstance(selection, ForgeryElements.ForgeryVertex):
 				self.setTitle(u"Vertex Inspector")
 				self.updateVertex(selection, self.vertex)
@@ -439,8 +439,8 @@ class ForgeryInspector(Superclass):
 			self.updateSide(line, getattr(line, 'side' + str(index)), index, sideUI)
 	
 	def updatePolygon(self, polygon, polygonUI):
+		polygon.findSides()
 		if usePyObjC:
-			self.updateLayer(polygon.layer, polygonUI['layer'])
 			polygonUI['floor']['heightField'].setDoubleValue_(polygon.floorHeight)
 			polygonUI['floor']['heightStepper'].setDoubleValue_(polygon.floorHeight)
 			polygonUI['floor']['offsetField'].setDoubleValue_(polygon.floorOffset)
@@ -449,15 +449,55 @@ class ForgeryInspector(Superclass):
 			polygonUI['ceiling']['heightStepper'].setDoubleValue_(polygon.ceilingHeight)
 			polygonUI['ceiling']['offsetField'].setDoubleValue_(polygon.ceilingOffset)
 			polygonUI['ceiling']['offsetStepper'].setDoubleValue_(polygon.ceilingOffset)
-			self.updateSurface(polygon.floor, polygonUI['floor'])
-			self.updateSurface(polygon.ceiling, polygonUI['ceiling'])
+		else:
+			polygonUI['floor']['heightField'].SetRange(-2147483648, int(polygon.ceilingHeight))
+			polygonUI['floor']['heightField'].SetValue(int(polygon.floorHeight))
+			polygonUI['floor']['offsetField'].SetRange(-2147483648, int(polygon.ceilingOffset))
+			polygonUI['floor']['offsetField'].SetValue(int(polygon.floorOffset))
+			polygonUI['ceiling']['heightField'].SetRange(int(polygon.floorHeight), 2147483647)
+			polygonUI['ceiling']['heightField'].SetValue(int(polygon.ceilingHeight))
+			polygonUI['ceiling']['offsetField'].SetRange(int(polygon.floorOffset), 2147483647)
+			polygonUI['ceiling']['offsetField'].SetValue(int(polygon.ceilingOffset))
+		self.updatePolygonTable(polygon, polygonUI['table'])
+		self.updateLayer(polygon.layer, polygonUI['layer'])
+		self.updateSurface(polygon.floor, polygonUI['floor'])
+		self.updateSurface(polygon.ceiling, polygonUI['ceiling'])
+	
+	def updatePolygonTable(self, polygon, tableUI):
+		table = [(getattr(line, 'vertex' + str(side)), line) for line, side in zip(polygon, polygon.sides)] # we're assuming that findSides() has already been called
+		if not usePyObjC:
+			tableRows = len(tuple(table))
+			tableUI.BeginBatch()
+			uiRows = tableUI.GetNumberRows()
+			if uiRows > tableRows:
+				tableUI.DeleteRows(tableRows, uiRows - tableRows)
+			elif uiRows < tableRows:
+				tableUI.InsertRows(uiRows, tableRows - uiRows)
+			for row, (vertex, line) in enumerate(table):
+				if vertex:
+					tableUI.SetCellValue(row, 0, unicode(vertex.elementID))
+				else: # this shuold never happen
+					tableUI.SetCellValue(row, 0, u"")
+				if line:
+					tableUI.SetCellValue(row, 1, unicode(line.elementID))
+				else: # this should never happen
+					tableUI.SetCellValue(row, 1, u"")
+			tableUI.EndBatch()
 	
 	def updateLayer(self, layer, layerUI):
 		if usePyObjC:
 			# FIXME: populate layerUI['menu']
 			layerUI['menu'].setStringValue_(unicode(layer.elementID))
-			layerUI['offsetField'].setDoubleValue_(layer.offset)
+			layerUI['offsetField'].setDoubleValue_(float(layer.offset) / float(WU))
 			# FIXME: layerUI['offsetUnitsField']
+		else:
+			layerUI['menu'].Clear()
+			layers = [unicode(elementID) for elementID in self.data.layers]
+			layers.sort()
+			layerUI['menu'].AppendItems(layers)
+			layerUI['menu'].SetStringSelection(unicode(layer.elementID))
+			layerUI['offsetField'].SetLabel(u"%1.2f" % (float(layer.offset) / float(WU), ))
+			layerUI['offsetUnitsField'].SetLabel(u"WU")
 	
 	def updateSide(self, line, side, index, sideUI):
 		if side:
@@ -556,16 +596,16 @@ class ForgeryInspector(Superclass):
 					surfaceUI['landscapeCheckbox'].SetValue(False)
 				surfaceUI['effectMenu'].Enable()
 				if 'pulsate' in surface.effects:
-					surfaceUI['effectMenu'].SetSelection(2)
+					surfaceUI['effectMenu'].SetSelection(1)
 					surfaceUI['effectPropertiesButton'].Enable()
 				elif 'wobble' in surface.effects:
-					surfaceUI['effectMenu'].SetSelection(3)
+					surfaceUI['effectMenu'].SetSelection(2)
 					surfaceUI['effectPropertiesButton'].Enable()
 				elif 'slide' in surface.effects:
-					surfaceUI['effectMenu'].SetSelection(4)
+					surfaceUI['effectMenu'].SetSelection(3)
 					surfaceUI['effectPropertiesButton'].Enable()
 				elif 'wander' in surface.effects:
-					surfaceUI['effectMenu'].SetSelection(5)
+					surfaceUI['effectMenu'].SetSelection(4)
 					surfaceUI['effectPropertiesButton'].Enable()
 				else:
 					surfaceUI['effectMenu'].SetSelection(0)
@@ -691,10 +731,46 @@ class ForgeryInspector(Superclass):
 		self.refresh()
 	
 	def lineSolidChanged(self, value):
-		print "%s.lineSolidChanged(%s)" % (self, value)
+		print "%s.lineSolidChanged(%r)" % (self, value)
 	
 	def lineTransparentChanged(self, value):
-		print "%s.lineTransparentChanged(%s)" % (self, value)
+		print "%s.lineTransparentChanged(%r)" % (self, value)
+	
+	def polygonCeilingHeightChanged(self, value):
+		print "%s.polygonCeilingHeightChanged(%r)" % (self, value)
+	
+	def polygonCeilingOffsetChanged(self, value):
+		print "%s.polygonCeilingOffsetChanged(%r)" % (self, value)
+	
+	def polygonFloorHeightChanged(self, value):
+		print "%s.polygonFloorHeightChanged(%r)" % (self, value)
+	
+	def polygonFloorOffsetChanged(self, value):
+		print "%s.polygonFloorOffsetChanged(%r)" % (self, value)
+	
+	def polygonLayerChanged(self, value):
+		print "%s.polygonLayerChanged(%r)" % (self, value)
+	
+	def surfaceActionPropertiesClicked(self, surface, action):
+		print "%s.surfaceActionPropertiesClicked(%s, %r)" % (self, surface, action)
+	
+	def surfaceActionToggled(self, surface, action, value):
+		if action == 'switch':
+			properties = {}
+		elif action == 'pattern buffer':
+			properties = {}
+		elif action == 'terminal':
+			properties = {}
+		elif action == 'recharger':
+			properties = {}
+		if value:
+			self.openUndoGroup(u"Add Action")
+			self.data.addSurfaceAction(surface, action, properties)
+		else:
+			self.openUndoGroup(u"Remove Action")
+			self.data.removeSurfaceAction(surface, action)
+		self.closeUndoGroup()
+		self.update()
 	
 	def surfaceDXChanged(self, surface, value):
 		# FIXME: The undo group should not start and end here
@@ -712,6 +788,27 @@ class ForgeryInspector(Superclass):
 		self.update()
 		self.refresh()
 	
+	def surfaceEffectChanged(self, surface, effect):
+		self.openUndoGroup(u"Change Effect")
+		for key in surface.effects.keys():
+			if key in ('pulsate', 'wobble', 'slide', 'wander'):
+				self.data.removeSurfaceEffect(surface, key)
+		if effect == 'pulsate':
+			properties = {}
+		elif effect == 'wobble':
+			properties = {}
+		elif effect == 'slide':
+			properties = {}
+		elif effect == 'wander':
+			properties = {}
+		if effect in ('pulsate', 'wobble', 'slide', 'wander'):
+			self.data.addSurfaceEffect(surface, effect, properties)
+		self.closeUndoGroup()
+		self.update()
+	
+	def surfaceEffectPropertiesClicked(self, surface, effect):
+		print "%s.surfaceEffectPropertiesClicked(%s, %r)" % (self, surface, effect)
+	
 	def surfaceLandscapeChanged(self, surface, value):
 		self.openUndoGroup(u"Toggle Landscape Mode")
 		if value:
@@ -722,7 +819,7 @@ class ForgeryInspector(Superclass):
 		self.update()
 	
 	def surfaceLightChanged(self, surface, value):
-		print "%s.surfaceLightChanged(%s, %s)" % (self, surface, value)
+		print "%s.surfaceLightChanged(%s, %r)" % (self, surface, value)
 	
 	def vertexXChanged(self, value):
 		vertex = self.selectedElement
@@ -758,48 +855,46 @@ class ForgeryInspector(Superclass):
 		self.lineTransparentChanged(sender.intValue())
 	
 	def polygonCeilingHeightChanged_(self, sender):
-		print "[%s polygonCeilingHeightChanged:%s]" % (self, sender)
+		self.polygonCeilingHeightChanged(sender.doubleValue())
 	
 	def polygonCeilingOffsetChanged_(self, sender):
-		print "[%s polygonCeilingOffsetChanged:%s]" % (self, sender)
+		self.polygonCeilingOffsetChanged(sender.doubleValue())
 	
 	def polygonFloorHeightChanged_(self, sender):
-		print "[%s polygonFloorHeightChanged:%s]" % (self, sender)
+		self.polygonFloorHeightChanged(sender.doubleValue())
 	
 	def polygonFloorOffsetChanged_(self, sender):
-		print "[%s polygonFloorOffsetChanged:%s]" % (self, sender)
+		self.polygonFloorOffsetChanged(sender.doubleValue())
 	
 	def polygonLayerChanged_(self, sender):
-		print "[%s polygonLayerChanged:%s]" % (self, sender)
+		self.polygonLayerChanged(sender.stringValue())
+	
+	def surfaceActionPropertiesClicked_(self, sender):
+		if sender.tag() == ID.ACTION_SWITCH:
+			surface = self.findSurfaceForUI(sender, 'switchPropertiesButton')
+			action = 'switch'
+		elif sender.tag() == ID.ACTION_TERMINAL:
+			surface = self.findSurfaceForUI(sender, 'terminalPropertiesButton')
+			action = 'terminal'
+		elif sender.tag() == ID.ACTION_RECHARGER:
+			surface = self.findSurfaceForUI(sender, 'rechargerPropertiesButton')
+			action = 'recharger'
+		self.surfaceActionPropertiesClicked(surface, action)
 	
 	def surfaceActionToggled_(self, sender):
 		if sender.tag() == ID.ACTION_SWITCH:
 			surface = self.findSurfaceForUI(sender, 'switchCheckbox')
 			action = 'switch'
-			properties = {}
 		elif sender.tag() == ID.ACTION_PATTERN_BUFFER:
 			surface = self.findSurfaceForUI(sender, 'patternBufferCheckbox')
 			action = 'pattern buffer'
-			properties = {}
 		elif sender.tag() == ID.ACTION_TERMINAL:
 			surface = self.findSurfaceForUI(sender, 'terminalCheckbox')
 			action = 'terminal'
-			properties = {}
 		elif sender.tag() == ID.ACTION_RECHARGER:
 			surface = self.findSurfaceForUI(sender, 'rechargerCheckbox')
 			action = 'recharger'
-			properties = {}
-		if sender.state():
-			self.openUndoGroup(u"Add Action")
-			self.data.addSurfaceAction(surface, action, properties)
-		else:
-			self.openUndoGroup(u"Remove Action")
-			self.data.removeSurfaceAction(surface, action)
-		self.closeUndoGroup()
-		self.update()
-	
-	def surfaceActionPropertiesClicked_(self, sender):
-		print "[%s surfaceActionPropertiesClicked:%s]" % (self, sender)
+		self.surfaceActionToggled(surface, action, sender.state())
 	
 	def surfaceDXChanged_(self, sender):
 		surface = self.findSurfaceForUI(sender, 'dxSlider')
@@ -811,23 +906,23 @@ class ForgeryInspector(Superclass):
 	
 	def surfaceEffectChanged_(self, sender):
 		surface = self.findSurfaceForUI(sender, 'effectMenu')
-		self.openUndoGroup(u"Change Effect")
-		for effect in surface.effects.keys():
-			if effect in ('pulsate', 'wobble', 'slide', 'wander'):
-				self.data.removeSurfaceEffect(surface, effect)
 		if sender.selectedItem().tag() == ID.EFFECT_PULSATE:
-			self.data.addSurfaceEffect(surface, 'pulsate', {})
+			effect = 'pulsate'
 		elif sender.selectedItem().tag() == ID.EFFECT_WOBBLE:
-			self.data.addSurfaceEffect(surface, 'wobble', {})
+			effect = 'wobble'
 		elif sender.selectedItem().tag() == ID.EFFECT_SLIDE:
-			self.data.addSurfaceEffect(surface, 'slide', {})
+			effect = 'slide'
 		elif sender.selectedItem().tag() == ID.EFFECT_WANDER:
-			self.data.addSurfaceEffect(surface, 'wander', {})
-		self.closeUndoGroup()
-		self.update()
+			effect = 'wander'
+		elif sender.selectedItem().tag() == ID.EFFECT_NORMAL:
+			effect = None
+		self.surfaceEffectChanged(surface, effect)
 	
-	def surfaceEffectPropertiesClicked(self, sender):
-		print "[%s surfaceEffectPropertiesClicked:%s]" % (self, sender)
+	def surfaceEffectPropertiesClicked_(self, sender):
+		surface = self.findSurfaceForUI(sender, 'effectPropertiesButton')
+		# FIXME
+		effect = None
+		self.surfaceEffectPropertiesClicked(surface, effect)
 	
 	def surfaceLandscapeChanged_(self, sender):
 		surface = self.findSurfaceForUI(sender, 'landscapeCheckbox')
@@ -1031,7 +1126,10 @@ class ForgeryInspector(Superclass):
 	
 	def BuildNoSelectionUI(self):
 		result = wx.Panel(self, -1)
-		sizer = createCenteredText(result, "Nothing Selected")
+		sizer = createCenteredText(
+			result,
+			u"Nothing Selected",
+		)
 		result.SetSizer(sizer)
 		sizer.Layout()
 		sizer.Fit(result)
@@ -1039,7 +1137,10 @@ class ForgeryInspector(Superclass):
 	
 	def BuildMultipleSelectionUI(self):
 		result = wx.Panel(self, -1)
-		sizer = createCenteredText(result, "Multiple Objects Selected")
+		sizer = createCenteredText(
+			result,
+			u"Multiple Objects Selected",
+		)
 		result.SetSizer(sizer)
 		sizer.Layout()
 		sizer.Fit(result)
@@ -1047,14 +1148,21 @@ class ForgeryInspector(Superclass):
 	
 	def BuildVertexUI(self):
 		result = wx.Panel(self, -1)
-		self.vertexXField = createTextCtrl(result, self.OnVertexXChanged)
-		self.vertexYField = createTextCtrl(result, self.OnVertexYChanged)
+		self.vertexXField = createTextCtrl(
+			result,
+			self.OnVertexXChanged,
+		)
+		self.vertexYField = createTextCtrl(
+			result,
+			self.OnVertexYChanged,
+		)
+		vertexUI = self.vertex
 		sizer = buildNonuniformGrid(
 			2,
-			createRightAlignedStaticText(result, "X:"),
-			self.vertexXField,
-			createRightAlignedStaticText(result, "Y:"),
-			self.vertexYField,
+			createRightAlignedStaticText(result, u"X:"),
+			vertexUI['xField'],
+			createRightAlignedStaticText(result, u"Y:"),
+			vertexUI['yField'],
 		)
 		result.SetSizer(sizer)
 		sizer.Layout()
@@ -1064,11 +1172,17 @@ class ForgeryInspector(Superclass):
 	def BuildLineUI(self):
 		result = wx.Panel(self, -1)
 		self.lineVertex0Field = createTextCtrl(result)
-		self.line['vertex0Field'].Disable()
 		self.lineVertex1Field = createTextCtrl(result)
-		self.line['vertex1Field'].Disable()
-		self.lineSolidCheckbox = createCheckbox(result, "Solid", self.OnLineSolidChanged)
-		self.lineTransparentCheckbox = createCheckbox(result, "Transparent", self.OnLineTransparentChanged)
+		self.lineSolidCheckbox = createCheckbox(
+			result,
+			"Solid",
+			self.OnLineSolidChanged,
+		)
+		self.lineTransparentCheckbox = createCheckbox(
+			result,
+			"Transparent",
+			self.OnLineTransparentChanged,
+		)
 		notebook = wx.Notebook(result, -1, style = wx.BK_TOP)
 		notebook.AddPage(
 			self.BuildSideUI(
@@ -1076,7 +1190,7 @@ class ForgeryInspector(Superclass):
 				'lineSide0',
 				('line', 'side', 0),
 			),
-			"First Side",
+			u"First Side",
 		)
 		notebook.AddPage(
 			self.BuildSideUI(
@@ -1084,20 +1198,23 @@ class ForgeryInspector(Superclass):
 				'lineSide1',
 				('line', 'side', 1),
 			),
-			"Second Side",
+			u"Second Side",
 		)
+		lineUI = self.line
+		lineUI['vertex0Field'].Disable()
+		lineUI['vertex1Field'].Disable()
 		sizer = buildSizers(
 			wx.VERTICAL,
 			buildNonuniformGrid(
 				2,
-				createRightAlignedStaticText(result, "First Vertex:"),
-				self.line['vertex0Field'],
-				createRightAlignedStaticText(result, "Second Vertex:"),
-				self.line['vertex1Field'],
+				createRightAlignedStaticText(result, u"First Vertex:"),
+				lineUI['vertex0Field'],
+				createRightAlignedStaticText(result, u"Second Vertex:"),
+				lineUI['vertex1Field'],
 				None,
-				self.line['solidCheckbox'],
+				lineUI['solidCheckbox'],
 				None,
-				self.line['transparentCheckbox'],
+				lineUI['transparentCheckbox'],
 			),
 			notebook,
 		)
@@ -1107,8 +1224,54 @@ class ForgeryInspector(Superclass):
 		return result
 	
 	def BuildPolygonUI(self):
-		# FIXME
-		return None
+		result = wx.Panel(self, -1)
+		self.polygonTable = createPolygonTable(
+			result,
+			# self.OnPolygonTableDoubleClicked,
+		)
+		self.polygonLayerMenu = createPopupMenu(
+			result,
+			(),
+			self.OnPolygonLayerChanged,
+		)
+		self.polygonLayerOffsetField = createStaticText(result, u"0.00", 0)
+		self.polygonLayerOffsetUnitsField = createStaticText(result, u"WU", 0)
+		notebook = wx.Notebook(result, -1, style = wx.BK_TOP)
+		notebook.AddPage(
+			self.BuildSurfaceUI(
+				notebook,
+				'polygonFloor',
+				('polygon', 'floor'),
+			),
+			u"Floor",
+		)
+		notebook.AddPage(
+			self.BuildSurfaceUI(
+				notebook,
+				'polygonCeiling',
+				('polygon', 'ceiling'),
+			),
+			u"Ceiling",
+		)
+		polygonUI = self.polygon
+		layerUI = polygonUI['layer']
+		sizer = buildSizers(
+			wx.VERTICAL,
+			polygonUI['table'],
+			8,
+			(
+				layerUI['menu'],
+				8,
+				layerUI['offsetField'],
+				8,
+				layerUI['offsetUnitsField'],
+			),
+			notebook,
+		)
+		result.SetSizer(sizer)
+		sizer.Layout()
+		sizer.Fit(result)
+		return result
 	
 	def BuildObjectUI(self):
 		# FIXME
@@ -1129,7 +1292,7 @@ class ForgeryInspector(Superclass):
 				prefix + 'Top',
 				path + ('top', ),
 			),
-			"Top",
+			u"Top",
 		)
 		notebook.AddPage(
 			self.BuildSurfaceUI(
@@ -1137,7 +1300,7 @@ class ForgeryInspector(Superclass):
 				prefix + 'Middle',
 				path + ('middle', ),
 			),
-			"Middle",
+			u"Middle",
 		)
 		notebook.AddPage(
 			self.BuildSurfaceUI(
@@ -1145,17 +1308,18 @@ class ForgeryInspector(Superclass):
 				prefix + 'Bottom',
 				path + ('bottom', ),
 			),
-			"Bottom",
+			u"Bottom",
 		)
+		sideUI = self.getPath(path)
 		sizer = buildSizers(
 			wx.HORIZONTAL,
 			8,
 			(
 				8,
 				(
-					createRightAlignedStaticText(result, "Polygon:"),
+					createRightAlignedStaticText(result, u"Polygon:"),
 					8,
-					self.getPath(path)['polygonField'],
+					sideUI['polygonField'],
 				),
 				8,
 				notebook,
@@ -1170,6 +1334,15 @@ class ForgeryInspector(Superclass):
 	
 	def BuildSurfaceUI(self, parent, prefix, path):
 		result = wx.Panel(parent, -1)
+		if prefix.startswith('polygon'):
+			self.setAttribute(prefix, 'HeightField', createSpinCtrl(
+				result,
+				getattr(self, 'On' + capitalize(prefix) + 'HeightChanged'),
+			))
+			self.setAttribute(prefix, 'OffsetField', createSpinCtrl(
+				result,
+				getattr(self, 'On' + capitalize(prefix) + 'OffsetChanged'),
+			))
 		self.setAttribute(prefix, 'DXSlider', createSlider(
 			result,
 			0, 127, 9,
@@ -1182,23 +1355,24 @@ class ForgeryInspector(Superclass):
 			wx.SL_VERTICAL | wx.SL_LEFT | wx.SL_AUTOTICKS,
 			self.OnSurfaceDYChanged,
 		))
-		self.setAttribute(prefix, 'EffectMenu', wx.Choice(
-			result, -1,
-			wx.DefaultPosition,
-			wx.DefaultSize,
+		self.setAttribute(prefix, 'EffectMenu', createPopupMenu(
+			result,
 			(
-				"Normal",
-				"",
-				"Pulsate",
-				"Slide",
-				"Wander",
-				"Wobble",
+				u"Normal",
+				u"Pulsate",
+				u"Slide",
+				u"Wander",
+				u"Wobble",
 			),
+			self.OnSurfaceEffectChanged,
 		))
-		self.setAttribute(prefix, 'EffectPropertiesButton', createPropertiesButton(result))
+		self.setAttribute(prefix, 'EffectPropertiesButton', createPropertiesButton(
+			result,
+			self.OnSurfaceEffectPropertiesClicked,
+		))
 		self.setAttribute(prefix, 'LandscapeCheckbox', createCheckbox(
 			result,
-			"Landscape",
+			u"Landscape",
 			self.OnSurfaceLandscapeChanged,
 		))
 		self.setAttribute(prefix, 'LightField', createTextCtrl(
@@ -1207,73 +1381,101 @@ class ForgeryInspector(Superclass):
 		))
 		self.setAttribute(prefix, 'PatternBufferCheckbox', createCheckbox(
 			result,
-			"Pattern Buffer",
+			u"Pattern Buffer",
+			self.OnSurfaceActionToggled,
 		))
 		self.setAttribute(prefix, 'RechargerCheckbox', createCheckbox(
 			result,
-			"Recharger",
+			u"Recharger",
+			self.OnSurfaceActionToggled,
 		))
-		self.setAttribute(prefix, 'RechargerPropertiesButton', createPropertiesButton(result))
+		self.setAttribute(prefix, 'RechargerPropertiesButton', createPropertiesButton(
+			result,
+			self.OnSurfaceActionPropertiesClicked,
+		))
 		self.setAttribute(prefix, 'SwitchCheckbox', createCheckbox(
 			result,
-			"Switch",
+			u"Switch",
+			self.OnSurfaceActionToggled,
 		))
-		self.setAttribute(prefix, 'SwitchPropertiesButton', createPropertiesButton(result))
+		self.setAttribute(prefix, 'SwitchPropertiesButton', createPropertiesButton(
+			result,
+			self.OnSurfaceActionPropertiesClicked,
+		))
 		self.setAttribute(prefix, 'TerminalCheckbox', createCheckbox(
 			result,
-			"Terminal",
+			u"Terminal",
+			self.OnSurfaceActionToggled,
 		))
-		self.setAttribute(prefix, 'TerminalPropertiesButton', createPropertiesButton(result))
+		self.setAttribute(prefix, 'TerminalPropertiesButton', createPropertiesButton(
+			result,
+			self.OnSurfaceActionPropertiesClicked,
+		))
 		self.setAttribute(prefix, 'TextureWell', createTextureWell(
 			result,
 			ForgeryElements.ForgerySurface(None, None, ForgeryElements.ForgeryTexture('')).image, # this will be replaced when update() is called
+			# self.OnSurfaceTextureChanged,
 		))
-		sizer = buildSizers(
-			wx.HORIZONTAL,
+		surfaceUI = self.getPath(path)
+		sizers = [
 			20,
-			(
+			[
 				20,
 				buildNonuniformGrid(
 					3,
 					
-					self.getPath(path)['dySlider'],
-					self.getPath(path)['textureWell'],
+					surfaceUI['dySlider'],
+					surfaceUI['textureWell'],
 					None,
 					
 					None,
-					self.getPath(path)['dxSlider'],
+					surfaceUI['dxSlider'],
 					None,
 					
 					None,
-					self.getPath(path)['landscapeCheckbox'],
+					surfaceUI['landscapeCheckbox'],
 					None,
 					
-					createRightAlignedStaticText(result, "Effect:"),
-					self.getPath(path)['effectMenu'],
-					self.getPath(path)['effectPropertiesButton'],
+					createRightAlignedStaticText(result, u"Effect:"),
+					surfaceUI['effectMenu'],
+					surfaceUI['effectPropertiesButton'],
 					
-					createRightAlignedStaticText(result, "Light:"),
-					self.getPath(path)['lightField'],
+					createRightAlignedStaticText(result, u"Light:"),
+					surfaceUI['lightField'],
 					None,
 				),
 				buildNonuniformGrid(
 					5,
 					
-					self.getPath(path)['switchCheckbox'],
-					self.getPath(path)['switchPropertiesButton'],
+					surfaceUI['switchCheckbox'],
+					surfaceUI['switchPropertiesButton'],
 					None,
-					self.getPath(path)['patternBufferCheckbox'],
+					surfaceUI['patternBufferCheckbox'],
 					None,
 					
-					self.getPath(path)['terminalCheckbox'],
-					self.getPath(path)['terminalPropertiesButton'],
+					surfaceUI['terminalCheckbox'],
+					surfaceUI['terminalPropertiesButton'],
 					None,
-					self.getPath(path)['rechargerCheckbox'],
-					self.getPath(path)['rechargerPropertiesButton'],
+					surfaceUI['rechargerCheckbox'],
+					surfaceUI['rechargerPropertiesButton'],
 				),
 				20,
-			),
+			],
 			20,
+		]
+		if path[0] == 'polygon':
+			sizers[1].insert(1, (
+				createRightAlignedStaticText(result, u"Height:"),
+				8,
+				surfaceUI['heightField'],
+				None,
+				createRightAlignedStaticText(result, u"Offset:"),
+				8,
+				surfaceUI['offsetField'],
+			))
+		sizer = buildSizers(
+			wx.HORIZONTAL,
+			*sizers
 		)
 		result.SetSizer(sizer)
 		sizer.Layout()
@@ -1289,6 +1491,50 @@ class ForgeryInspector(Superclass):
 	def OnLineTransparentChanged(self, event):
 		self.lineTransparentChanged(event.GetEventObject().GetValue())
 	
+	def OnPolygonCeilingHeightChanged(self, event):
+		self.polygonCeilingHeightChanged(event.GetEventObject().GetValue())
+	
+	def OnPolygonCeilingOffsetChanged(self, event):
+		self.polygonCeilingOffsetChanged(event.GetEventObject().GetValue())
+	
+	def OnPolygonFloorHeightChanged(self, event):
+		self.polygonFloorHeightChanged(event.GetEventObject().GetValue())
+	
+	def OnPolygonFloorOffsetChanged(self, event):
+		self.polygonFloorOffsetChanged(event.GetEventObject().GetValue())
+	
+	def OnPolygonLayerChanged(self, event):
+		self.polygonLayerChanged(event.GetEventObject().GetStringSelection())
+	
+	def OnSurfaceActionPropertiesClicked(self, event):
+		print "%s.OnSurfaceActionPropertiesClicked(%s)" % (self, event)
+		#if sender.tag() == ID.ACTION_SWITCH:
+		#	surface = self.findSurfaceForUI(sender, 'switchPropertiesButton')
+		#	action = 'switch'
+		#elif sender.tag() == ID.ACTION_TERMINAL:
+		#	surface = self.findSurfaceForUI(sender, 'terminalPropertiesButton')
+		#	action = 'terminal'
+		#elif sender.tag() == ID.ACTION_RECHARGER:
+		#	surface = self.findSurfaceForUI(sender, 'rechargerPropertiesButton')
+		#	action = 'recharger'
+		#self.surfaceActionPropertiesClicked(surface, action)
+	
+	def OnSurfaceActionToggled(self, event):
+		print "%s.OnSurfaceActionToggled(%s)" % (self, event)
+		#if sender.tag() == ID.ACTION_SWITCH:
+		#	surface = self.findSurfaceForUI(sender, 'switchCheckbox')
+		#	action = 'switch'
+		#elif sender.tag() == ID.ACTION_PATTERN_BUFFER:
+		#	surface = self.findSurfaceForUI(sender, 'patternBufferCheckbox')
+		#	action = 'pattern buffer'
+		#elif sender.tag() == ID.ACTION_TERMINAL:
+		#	surface = self.findSurfaceForUI(sender, 'terminalCheckbox')
+		#	action = 'terminal'
+		#elif sender.tag() == ID.ACTION_RECHARGER:
+		#	surface = self.findSurfaceForUI(sender, 'rechargerCheckbox')
+		#	action = 'recharger'
+		#self.surfaceActionToggled(surface, action, sender.state())
+	
 	def OnSurfaceDXChanged(self, event):
 		surface = self.findSurfaceForUI(event.GetEventObject(), 'dxSlider')
 		self.surfaceDXChanged(surface, event.GetEventObject().GetValue())
@@ -1296,6 +1542,28 @@ class ForgeryInspector(Superclass):
 	def OnSurfaceDYChanged(self, event):
 		surface = self.findSurfaceForUI(event.GetEventObject(), 'dySlider')
 		self.surfaceDYChanged(surface, event.GetEventObject().GetValue())
+	
+	def OnSurfaceEffectChanged(self, event):
+		print "%s.OnSurfaceEffectChanged(%s)" % (self, event)
+		surface = self.findSurfaceForUI(event.GetEventObject(), 'effectMenu')
+		#if sender.selectedItem().tag() == ID.EFFECT_PULSATE:
+		#	effect = 'pulsate'
+		#elif sender.selectedItem().tag() == ID.EFFECT_WOBBLE:
+		#	effect = 'wobble'
+		#elif sender.selectedItem().tag() == ID.EFFECT_SLIDE:
+		#	effect = 'slide'
+		#elif sender.selectedItem().tag() == ID.EFFECT_WANDER:
+		#	effect = 'wander'
+		#elif sender.selectedItem().tag() == ID.EFFECT_NORMAL:
+		#	effect = None
+		#self.surfaceEffectChanged(surface, effect)
+	
+	def OnSurfaceEffectPropertiesClicked(self, event):
+		print "%s.OnSurfaceEffectPropertiesClicked(%s)" % (self, event)
+		surface = self.findSurfaceForUI(event.GetEventObject(), 'effectPropertiesButton')
+		# FIXME
+		effect = None
+		self.surfaceEffectPropertiesClicked(surface, effect)
 	
 	def OnSurfaceLandscapeChanged(self, event):
 		surface = self.findSurfaceForUI(event.GetEventObject(), 'landscapeCheckbox')
@@ -1434,6 +1702,37 @@ if not usePyObjC:
 		)
 		if func:
 			result.Bind(wx.EVT_BUTTON, errorWrap(func))
+		return result
+	
+	def createPolygonTable(parent):
+		result = wx.grid.Grid(parent, -1)
+		result.CreateGrid(4, 2)
+		result.BeginBatch()
+		result.EnableEditing(False)
+		result.SetColLabelValue(0, "Vertices")
+		result.SetColLabelValue(1, "Lines")
+		result.SetRowLabelSize(0)
+		result.SetColLabelSize(15)
+		result.EndBatch()
+		return result
+	
+	def createPopupMenu(parent, items = (), func = None):
+		result = wx.Choice(
+			parent, -1,
+			wx.DefaultPosition,
+			wx.DefaultSize,
+			items,
+		)
+		if func:
+			result.Bind(wx.EVT_CHOICE, errorWrap(func))
+		return result
+	
+	def createSpinCtrl(parent, func = None):
+		result = wx.SpinCtrl(
+			parent, -1,
+		)
+		if func:
+			result.Bind(wx.EVT_SPINCTRL, errorWrap(func))
 		return result
 	
 	class TablessNotebook(wx.PySizer):
