@@ -144,6 +144,9 @@ class ForgeryAction(object):
 	
 	def findChildren(self, data):
 		return
+	
+	def toXML(self):
+		return '<%s kind="%s" event="%s"/>' % (self.xmlClass, self.kind, self.event)
 
 class ForgerySwitchAction(ForgeryAction):
 	kind = 'switch'
@@ -674,8 +677,8 @@ class ForgerySurface(ForgeryElement):
 		result.append(repr(self.textureStyle))
 		result.append(repr(self.dx))
 		result.append(repr(self.dy))
-		result.append(repr(repr(self.effects)))
-		result.append(repr(repr(self.actions)))
+		result.append(repr(self.effects))
+		result.append(repr(self.actions))
 		return '(' + ', '.join(result) + ')'
 	
 	def getChildren(self, data):
@@ -710,26 +713,9 @@ class ForgerySurface(ForgeryElement):
 				tag += ' %s="%s"' % (key, value)
 			tag += '/>'
 			result.append(tag)
-		action = self.actions.get('switch')
-		if action:
-			if 'event' in action:
-				result.append('<action kind="switch" event="%s">' % (action['event'], ))
-			else:
-				result.append('<action kind="switch">')
-			for element, state in action['elements']:
-				result.append(element.xmlReference(state = state))
-			result.append('</action>')
-		if 'pattern buffer' in self.actions:
-			result.append('<action kind="pattern buffer"/>')
-		if 'terminal' in self.actions:
-			result.append('<action kind="terminal"/>')
-		action = self.actions.get('recharger')
-		if action:
-			tag = '<action kind="recharger"'
-			for key, value in action.iteritems():
-				tag += ' %s="%s"' % (key, value)
-			tag += '/>'
-			result.append(tag)
+		for kind in self.actions.itervalues():
+			for action in kind.itervalues():
+				result.append(action.toXML())
 		if self.light or self.texture or self.effects or self.actions:
 			result.append('</%s>' % (self.xmlClass, ))
 		return '\n'.join(result)
