@@ -108,8 +108,8 @@ class ForgeryPreferences(ForgeryDocumentPreferences):
 	snapToGrid = True
 	vertexColor = (255.0 / 255.0, 0.0 / 255.0, 0.0 / 255.0)
 	windowPosition = None
-	#windowSize = (514, 456)
-	windowSize = (272, 272)
+	windowSize = (514, 456)
+	#windowSize = (272, 272)
 	zoomFactor = 16.0
 	
 	def createDocument(self, data):
