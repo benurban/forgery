@@ -60,17 +60,46 @@ class ForgeryXMLParser(xml.sax.handler.ContentHandler):
 	def startActionElement(self, attrs):
 		info = dict(attrs)
 		info['tag'] = 'action'
+		if info['kind'] == 'switch':
+			info['elements'] = []
 		self.elementStack.append(info)
 	
 	def endActionElement(self):
 		info = self.elementStack.pop()
 		parent = self.elementStack[-1]
 		if info['tag'] != 'action':
-			raise ValueError, "Expected </%s> here" % info['tag']
+			raise ValueError, "Expected </%s> here" % (info['tag'], )
 		if parent['tag'] == 'surface':
-			parent['actions'][info['kind']] = dict(info)
-			del parent['actions'][info['kind']]['tag']
-			del parent['actions'][info['kind']]['kind']
+			event = info.get('event', 'actionButton')
+			if event in ('actionButton', 'walkOnPolygon', 'walkOffPolygon', 'floatOverPolygon', 'floatOffPolygon', 'enterState', 'leaveState'):
+				if info['kind'] == 'switch':
+					parent['actions'].append(ForgeryElements.ForgerySwitchAction(
+						event = info.get('event', 'actionButton'),
+						*info['elements']
+					))
+				elif info['kind'] == 'pattern buffer':
+					parent['actions'].append(ForgeryElements.ForgeryPatternBufferAction(
+						event = info.get('event', 'actionButton'),
+					))
+				elif info['kind'] == 'terminal':
+					parent['actions'].append(ForgeryElements.ForgeryTerminalAction(
+						event = info.get('event', 'actionButton'),
+					))
+				elif info['kind'] == 'recharger':
+					parent['actions'].append(ForgeryElements.ForgeryRechargerAction(
+						shieldRate = info.get('shieldRate', 0.0),
+						oxygenRate = info.get('oxygenRate', 0.0),
+						shieldLimit = info.get('shieldLimit'),
+						oxygenLimit = info.get('oxygenLimit'),
+						event = info.get('event', 'actionButton'),
+					))
+				else:
+					raise ValueError, "<action> tags must have a kind attribute matching one of: \"switch\", \"pattern buffer\", \"terminal\", or \"recharger\""
+			else:
+				raise ValueError, "<action> tag event attributes must match one of: \"actionButton\", \"walkOnPolygon\", \"walkOffPolygon\", \"floatOverPolygon\", \"floatOffPolygon\", \"enterState\", or \"leaveState\""
+		#	parent['actions'][info['kind']] = dict(info)
+		#	del parent['actions'][info['kind']]['tag']
+		#	del parent['actions'][info['kind']]['kind']
 		else:
 			raise ValueError, "<action> tags can only be children of <surface> tags"
 	
@@ -199,13 +228,21 @@ class ForgeryXMLParser(xml.sax.handler.ContentHandler):
 					lines = info['lines'],
 					floorOffset = float(info.get('floorOffset', '0')),
 					floor = info['surfaces'].get('floor', None),
-					ceilingOffset = float(info.get('ceilingOffset', '1')),
+					ceilingOffset = float(info.get('ceilingOffset', '1024')),
 					ceiling = info['surfaces'].get('ceiling', None),
 				))
 			else:
 				raise ValueError, "A polygon must have at least 3 lines"
+		elif parent['tag'] == 'action':
+			if parent['kind'] == 'switch':
+				if set(info) == set(('id', 'lines', 'state', 'surfaces', 'tag')) and not info['lines'] and not info['surfaces']:
+					parent['elements'].append((info['id'], info['state']))
+				else:
+					raise ValueError, "State change tags must not have any children or attributes other than id and state"
+			else:
+				raise ValueError, "<polygon> tags cannot be children of non-switch <action> tags"
 		else:
-			raise ValueError, "<polygon> tags can only be children of <map> tags"
+			raise ValueError, "<polygon> tags can only be children of <map> tags and <action> tags"
 	
 	def startSideElement(self, attrs):
 		info = dict(attrs)
@@ -234,12 +271,12 @@ class ForgeryXMLParser(xml.sax.handler.ContentHandler):
 		info['tag'] = 'surface'
 		info['light'] = None
 		info['texture'] = None
-		info['textureStyle'] = attrs.get('textureStyle', None)
+		info['textureStyle'] = attrs.get('textureStyle')
 		info['dx'] = int(attrs.get('dx', 0))
 		info['dy'] = int(attrs.get('dy', 0))
-		info['location'] = attrs.get('location', None)
+		info['location'] = attrs.get('location')
 		info['effects'] = {}
-		info['actions'] = {}
+		info['actions'] = []
 		self.elementStack.append(info)
 	
 	def endSurfaceElement(self):
@@ -250,6 +287,11 @@ class ForgeryXMLParser(xml.sax.handler.ContentHandler):
 		if parent['tag'] == 'map':
 			if info['location']:
 				raise ValueError, "A surface definition must not specify a location"
+			actions = {}
+			for action in info['actions']:
+				if action.kind not in actions:
+					actions[action.kind] = {}
+				actions[action.kind][action.event] = action
 			self.data.addElement(ForgeryElements.ForgerySurface(
 				elementID = info['id'],
 				light = info['light'] or 'light 020',
@@ -258,7 +300,7 @@ class ForgeryXMLParser(xml.sax.handler.ContentHandler):
 				dx = info['dx'],
 				dy = info['dy'],
 				effects = info['effects'],
-				actions = info['actions'],
+				actions = actions,
 			))
 		elif parent['tag'] in ('side', 'polygon'):
 			if info['light'] or info['texture'] or info['textureStyle'] or info['dx'] or info['dy']:
@@ -266,8 +308,16 @@ class ForgeryXMLParser(xml.sax.handler.ContentHandler):
 			if not info['location']:
 				raise ValueError, "A surface reference must specify a location"
 			parent['surfaces'][info['location']] = info['id']
+		elif parent['tag'] == 'action':
+			if parent['kind'] == 'switch':
+				if set(info) == set(('actions', 'dx', 'dy', 'effects', 'id', 'light', 'location', 'state', 'tag', 'texture', 'textureStyle')) and not info['actions'] and not info['dx'] and not info['dy'] and not info['effects'] and not info['light'] and not info['location'] and not info['texture'] and not info['textureStyle']:
+					parent['elements'].append((info['id'], info['state']))
+				else:
+					raise ValueError, "State change tags must not have any children or attributes other than id and state"
+			else:
+				raise ValueError, "<surface> tags cannot be children of non-switch <action> tags"
 		else:
-			raise ValueError, "<surface> tags can only be children of <map>, <side>, and <polygon> tags"
+			raise ValueError, "<surface> tags can only be children of <map>, <action>, <side>, and <polygon> tags"
 	
 	def startTextureElement(self, attrs):
 		info = dict(attrs)

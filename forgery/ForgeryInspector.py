@@ -424,8 +424,8 @@ class ForgeryInspector(Superclass):
 			lineUI['vertex0Field'].setStringValue_(unicode(line.vertex0.elementID))
 			lineUI['vertex1Field'].setEditable_(False) # can't set this in the NIB for some reason
 			lineUI['vertex1Field'].setStringValue_(unicode(line.vertex1.elementID))
-			#NSButton lineSolidCheckbox
-			#NSButton lineTransparentCheckbox
+			# FIXME: NSButton lineSolidCheckbox
+			# FIXME: NSButton lineTransparentCheckbox
 		else:
 			try:
 				lineUI['vertex0Field'].ChangeValue(unicode(line.vertex0.elementID))
@@ -433,8 +433,8 @@ class ForgeryInspector(Superclass):
 			except AttributeError: # wx 2.6 does this
 				lineUI['vertex0Field'].SetValue(unicode(line.vertex0.elementID))
 				lineUI['vertex1Field'].SetValue(unicode(line.vertex1.elementID))
-			#wx.Checkbox lineSolidCheckbox
-			#wx.Checkbox lineTransparentCheckbox
+			# FIXME: wx.Checkbox lineSolidCheckbox
+			# FIXME: wx.Checkbox lineTransparentCheckbox
 		for index, sideUI in enumerate(lineUI['side']):
 			self.updateSide(line, getattr(line, 'side' + str(index)), index, sideUI)
 	
@@ -485,15 +485,18 @@ class ForgeryInspector(Superclass):
 			tableUI.EndBatch()
 	
 	def updateLayer(self, layer, layerUI):
+		layers = [unicode(elementID) for elementID in self.data.layers]
+		layers.sort()
 		if usePyObjC:
-			# FIXME: populate layerUI['menu']
-			layerUI['menu'].setStringValue_(unicode(layer.elementID))
+			while layerUI['menu'].menu().numberOfItems():
+				layerUI['menu'].menu().removeItemAtIndex_(0)
+			for elementID in layers:
+				layerUI['menu'].menu().addItemWithTitle_action_keyEquivalent_(elementID, None, '')
+			layerUI['menu'].selectItemWithTitle_(unicode(layer.elementID))
 			layerUI['offsetField'].setDoubleValue_(float(layer.offset) / float(WU))
 			# FIXME: layerUI['offsetUnitsField']
 		else:
 			layerUI['menu'].Clear()
-			layers = [unicode(elementID) for elementID in self.data.layers]
-			layers.sort()
 			layerUI['menu'].AppendItems(layers)
 			layerUI['menu'].SetStringSelection(unicode(layer.elementID))
 			layerUI['offsetField'].SetLabel(u"%1.2f" % (float(layer.offset) / float(WU), ))
@@ -558,7 +561,7 @@ class ForgeryInspector(Superclass):
 					surfaceUI['effectMenu'].selectItemWithTag_(ID.EFFECT_NORMAL)
 					surfaceUI['effectPropertiesButton'].setEnabled_(False)
 				surfaceUI['lightField'].setEnabled_(True)
-				#NSTokenField surfaceUI['lightField']
+				# FIXME: NSTokenField surfaceUI['lightField']
 				surfaceUI['switchCheckbox'].setEnabled_(True)
 				if 'switch' in surface.actions:
 					surfaceUI['switchCheckbox'].setState_(True)
@@ -611,7 +614,7 @@ class ForgeryInspector(Superclass):
 					surfaceUI['effectMenu'].SetSelection(0)
 					surfaceUI['effectPropertiesButton'].Disable()
 				surfaceUI['lightField'].Enable()
-				#wx.TextCtrl surfaceUI['lightField']
+				# FIXME: wx.TextCtrl surfaceUI['lightField']
 				surfaceUI['switchCheckbox'].Enable()
 				if 'switch' in surface.actions:
 					surfaceUI['switchCheckbox'].SetValue(True)
@@ -648,6 +651,7 @@ class ForgeryInspector(Superclass):
 				surfaceUI['effectMenu'].selectItemWithTag_(ID.EFFECT_NORMAL)
 				surfaceUI['effectPropertiesButton'].setEnabled_(False)
 				surfaceUI['lightField'].setEnabled_(False)
+				surfaceUI['lightField'].setStringValue_(u"")
 				surfaceUI['switchCheckbox'].setEnabled_(False)
 				surfaceUI['switchCheckbox'].setState_(False)
 				surfaceUI['switchPropertiesButton'].setEnabled_(False)
@@ -731,44 +735,64 @@ class ForgeryInspector(Superclass):
 		self.refresh()
 	
 	def lineSolidChanged(self, value):
+		# FIXME
 		print "%s.lineSolidChanged(%r)" % (self, value)
 	
 	def lineTransparentChanged(self, value):
+		# FIXME
 		print "%s.lineTransparentChanged(%r)" % (self, value)
 	
 	def polygonCeilingHeightChanged(self, value):
-		print "%s.polygonCeilingHeightChanged(%r)" % (self, value)
+		# FIXME: The undo group should not start and end here
+		polygon = self.selectedElement
+		self.openUndoGroup(u"Change Ceiling Height")
+		self.data.setPolygonOffset(polygon, 'ceiling', value - polygon.layer.offset)
+		self.closeUndoGroup()
+		self.update()
 	
 	def polygonCeilingOffsetChanged(self, value):
-		print "%s.polygonCeilingOffsetChanged(%r)" % (self, value)
+		# FIXME: The undo group should not start and end here
+		polygon = self.selectedElement
+		self.openUndoGroup(u"Change Ceiling Offset")
+		self.data.setPolygonOffset(polygon, 'ceiling', value)
+		self.closeUndoGroup()
+		self.update()
 	
 	def polygonFloorHeightChanged(self, value):
-		print "%s.polygonFloorHeightChanged(%r)" % (self, value)
+		# FIXME: The undo group should not start and end here
+		polygon = self.selectedElement
+		self.openUndoGroup(u"Change Floor Height")
+		self.data.setPolygonOffset(polygon, 'floor', value - polygon.layer.offset)
+		self.closeUndoGroup()
+		self.update()
 	
 	def polygonFloorOffsetChanged(self, value):
-		print "%s.polygonFloorOffsetChanged(%r)" % (self, value)
+		# FIXME: The undo group should not start and end here
+		polygon = self.selectedElement
+		self.openUndoGroup(u"Change Floor Offset")
+		self.data.setPolygonOffset(polygon, 'floor', value)
+		self.closeUndoGroup()
+		self.update()
 	
 	def polygonLayerChanged(self, value):
-		print "%s.polygonLayerChanged(%r)" % (self, value)
+		polygon = self.selectedElement
+		layer = self.data.layers[value]
+		self.openUndoGroup(u"Change Layer")
+		self.data.setPolygonLayer(polygon, layer)
+		self.closeUndoGroup()
+		self.update()
 	
 	def surfaceActionPropertiesClicked(self, surface, action):
+		# FIXME
 		print "%s.surfaceActionPropertiesClicked(%s, %r)" % (self, surface, action)
 	
 	def surfaceActionToggled(self, surface, action, value):
-		if action == 'switch':
-			properties = {}
-		elif action == 'pattern buffer':
-			properties = {}
-		elif action == 'terminal':
-			properties = {}
-		elif action == 'recharger':
-			properties = {}
 		if value:
 			self.openUndoGroup(u"Add Action")
-			self.data.addSurfaceAction(surface, action, properties)
+			self.data.addSurfaceActionKind(surface, action)
 		else:
 			self.openUndoGroup(u"Remove Action")
-			self.data.removeSurfaceAction(surface, action)
+			self.data.delSurfaceActionKind(surface, action)
 		self.closeUndoGroup()
 		self.update()
 	
@@ -792,7 +816,7 @@ class ForgeryInspector(Superclass):
 		self.openUndoGroup(u"Change Effect")
 		for key in surface.effects.keys():
 			if key in ('pulsate', 'wobble', 'slide', 'wander'):
-				self.data.removeSurfaceEffect(surface, key)
+				self.data.delSurfaceEffect(surface, key)
 		if effect == 'pulsate':
 			properties = {}
 		elif effect == 'wobble':
@@ -807,6 +831,7 @@ class ForgeryInspector(Superclass):
 		self.update()
 	
 	def surfaceEffectPropertiesClicked(self, surface, effect):
+		# FIXME
 		print "%s.surfaceEffectPropertiesClicked(%s, %r)" % (self, surface, effect)
 	
 	def surfaceLandscapeChanged(self, surface, value):
@@ -819,6 +844,7 @@ class ForgeryInspector(Superclass):
 		self.update()
 	
 	def surfaceLightChanged(self, surface, value):
+		# FIXME
 		print "%s.surfaceLightChanged(%s, %r)" % (self, surface, value)
 	
 	def vertexXChanged(self, value):
@@ -867,7 +893,7 @@ class ForgeryInspector(Superclass):
 		self.polygonFloorOffsetChanged(sender.doubleValue())
 	
 	def polygonLayerChanged_(self, sender):
-		self.polygonLayerChanged(sender.stringValue())
+		self.polygonLayerChanged(sender.titleOfSelectedItem())
 	
 	def surfaceActionPropertiesClicked_(self, sender):
 		if sender.tag() == ID.ACTION_SWITCH:

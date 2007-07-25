@@ -20,14 +20,19 @@
 from ForgeryCommon import *
 
 __all__ = (
+	'ForgeryAction',
 	'ForgeryElement',
-	'ForgeryMoveableElement',
 	'ForgeryLayer',
 	'ForgeryLight',
 	'ForgeryLine',
+	'ForgeryMoveableElement',
+	'ForgeryPatternBufferAction',
 	'ForgeryPolygon',
+	'ForgeryRechargerAction',
 	'ForgerySide',
 	'ForgerySurface',
+	'ForgerySwitchAction',
+	'ForgeryTerminalAction',
 	'ForgeryTexture',
 	'ForgeryVertex',
 	'uniqueID',
@@ -84,10 +89,12 @@ class ForgeryElement(object):
 		result.append('<%s id="%s"/>' % (self.xmlClass, self.elementID))
 		return '\n'.join(result)
 	
-	def xmlReference(self):
-		result = []
-		result.append('<%s id="%s"/>' % (self.xmlClass, self.elementID))
-		return '\n'.join(result)
+	def xmlReference(self, **extraAttributes):
+		result = '<%s id="%s"' % (self.xmlClass, self.elementID)
+		for name, value in extraAttributes.iteritems():
+			result += ' %s="%s"' % (name, value)
+		result += '/>'
+		return result
 	
 	def getParents(self):
 		return self.parents.itervalues()
@@ -113,6 +120,133 @@ class ForgeryMoveableElement(ForgeryElement):
 	
 	def getAllVertexAncestors(self):
 		return set()
+
+class ForgeryAction(object):
+	kinds = {}
+	kind = None
+	event = 'actionButton'
+	xmlClass = u'action'
+	
+	@classmethod
+	def __new__(cls, kind, *posArgs, **kwdArgs):
+		cls = ForgeryAction.kinds.get(kind, cls)
+		return object.__new__(cls)
+	
+	def __init__(self, event = 'actionButton'):
+		super(ForgeryAction, self).__init__()
+		self.event = event
+	
+	def __repr__(self):
+		return '%s.%s%s' % (__name__, self.__class__.__name__, self.getParams())
+	
+	def getParams(self):
+		return repr((self.event, ))
+	
+	def findChildren(self, data):
+		return
+
+class ForgerySwitchAction(ForgeryAction):
+	kind = 'switch'
+	stateChanges = None
+	
+	def __init__(self, event = 'actionButton', *stateChanges):
+		super(ForgerySwitchAction, self).__init__(event)
+		self.stateChanges = list(stateChanges)
+	
+	def findChildren(self, data):
+		for i, (element, state) in enumerate(self.stateChanges):
+			if not isinstance(element, (ForgeryElement, ForgerySide)):
+				(tag, elementID) = element
+				category = {
+					'annotation': 'annotations',
+					'layer':      'layers',
+					'light':      'lights',
+					'line':       'lines',
+					'media':      'media',
+					'object':     'objects',
+					'polygon':    'polygons',
+					'surface':    'surfaces',
+					'texture':    'textures',
+					'vertex':     'vertices',
+				}[tag]
+				self.stateChanges[i] = (data[category][elementID], state)
+	
+	def getParams(self):
+		result = []
+		result.append(repr(self.event))
+		if not self.stateChanges:
+			result.append('()')
+		elif len(self.stateChanges) == 1:
+			result.append('((self[%r][%r]' % (self.stateChanges[0][0].category, self.stateChanges[0][0].elementID))
+			result.append('%r))' % (self.stateChanges[0][1], ))
+		else:
+			result.append('((self[%r][%r]' % (self.stateChanges[0][0].category, self.stateChanges[0][0].elementID))
+			result.append('%r)' % (self.stateChanges[0][1], ))
+			for element, state in self.stateChanges[1:-1]:
+				result.append('(self[%r][%r]' % (element.category, element.elementID))
+				result.append('%r)' % (state, ))
+			result.append('(self[%r][%r]' % (self.stateChanges[-1][0].category, self.stateChanges[-1][0].elementID))
+			result.append('%r))' % (self.stateChanges[-1][1], ))
+		return '(' + ', '.join(result) + ')'
+	
+	def toXML(self):
+		result = []
+		tag = '<%s kind="%s" event="%s"' % (self.xmlClass, self.kind, self.event)
+		if self.stateChanges:
+			tag += '>'
+			result.append(tag)
+			for element, state in self.stateChanges:
+				result.append(element.xmlReference(state = state))
+		else:
+			tag += '/>'
+			result.append(tag)
+		return '\n'.join(result)
+ForgeryAction.kinds[ForgerySwitchAction.kind] = ForgerySwitchAction
+
+class ForgeryPatternBufferAction(ForgeryAction):
+	kind = 'pattern buffer'
+ForgeryAction.kinds[ForgeryPatternBufferAction.kind] = ForgeryPatternBufferAction
+
+class ForgeryTerminalAction(ForgeryAction):
+	kind = 'terminal'
+ForgeryAction.kinds[ForgeryTerminalAction.kind] = ForgeryTerminalAction
+
+class ForgeryRechargerAction(ForgeryAction):
+	kind = 'recharger'
+	shieldRate = 0.0
+	oxygenRate = 0.0
+	shieldLimit = None
+	oxygenLimit = None
+	
+	def __init__(self, shieldRate = 0.0, oxygenRate = 0.0, shieldLimit = None, oxygenLimit = None, event = 'actionButton'):
+		super(ForgeryRechargerAction, self).__init__(event)
+		self.shieldRate = shieldRate
+		self.oxygenRate = oxygenRate
+		self.shieldLimit = shieldLimit
+		self.oxygenLimit = oxygenLimit
+	
+	def getParams(self):
+		result = []
+		result.append(repr(self.shieldRate))
+		result.append(repr(self.oxygenRate))
+		result.append(repr(self.shieldLimit))
+		result.append(repr(self.oxygenLimit))
+		result.append(repr(self.event))
+		return '(' + ', '.join(result) + ')'
+	
+	def toXML(self):
+		result = '<%s kind="%s" event="%s"' % (self.xmlClass, self.kind, self.event)
+		if self.shieldRate:
+			result += ' shieldRate="%s"' % (self.shieldRate, )
+		if self.oxygenRate:
+			result += ' oxygenRate="%s"' % (self.oxygenRate, )
+		if self.shieldLimit is not None:
+			result += ' shieldLimit="%s"' % (self.shieldLimit, )
+		if self.oxygenLimit is not None:
+			result += ' oxygenLimit="%s"' % (self.oxygenLimit, )
+		result += '/>'
+		return result
+ForgeryAction.kinds[ForgeryRechargerAction.kind] = ForgeryRechargerAction
 
 class ForgeryLayer(ForgeryElement):
 	offset = 0
@@ -418,9 +552,9 @@ class ForgeryPolygon(ForgeryMoveableElement):
 		result = []
 		result.append('<%s id="%s" layer="%s" floorOffset="%s" ceilingOffset="%s">' % (self.xmlClass, self.elementID, self.layer.elementID, self.floorOffset, self.ceilingOffset))
 		if self.floor:
-			result.append(self.floor.xmlReference('floor'))
+			result.append(self.floor.xmlReference(location = 'floor'))
 		if self.ceiling:
-			result.append(self.ceiling.xmlReference('ceiling'))
+			result.append(self.ceiling.xmlReference(location = 'ceiling'))
 		for l in self:
 			result.append(l.xmlReference())
 		result.append('</%s>' % (self.xmlClass, ))
@@ -478,11 +612,11 @@ class ForgerySide(object):
 		if self.upperSurface or self.middleSurface or self.lowerSurface:
 			result.append('<side index="%s">' % (index, ))
 			if self.upperSurface:
-				result.append(self.upperSurface.xmlReference('upperSurface'))
+				result.append(self.upperSurface.xmlReference(location = 'upperSurface'))
 			if self.middleSurface:
-				result.append(self.middleSurface.xmlReference('middleSurface'))
+				result.append(self.middleSurface.xmlReference(location = 'middleSurface'))
 			if self.lowerSurface:
-				result.append(self.lowerSurface.xmlReference('lowerSurface'))
+				result.append(self.lowerSurface.xmlReference(location = 'lowerSurface'))
 			result.append('</side>')
 		else:
 			result.append('<side index="%s"/>' % (index, ))
@@ -576,19 +710,28 @@ class ForgerySurface(ForgeryElement):
 				tag += ' %s="%s"' % (key, value)
 			tag += '/>'
 			result.append(tag)
-		for action, data in self.actions.iteritems():
-			tag = '<action kind="%s"' % (action, )
-			for key, value in data.iteritems():
+		action = self.actions.get('switch')
+		if action:
+			if 'event' in action:
+				result.append('<action kind="switch" event="%s">' % (action['event'], ))
+			else:
+				result.append('<action kind="switch">')
+			for element, state in action['elements']:
+				result.append(element.xmlReference(state = state))
+			result.append('</action>')
+		if 'pattern buffer' in self.actions:
+			result.append('<action kind="pattern buffer"/>')
+		if 'terminal' in self.actions:
+			result.append('<action kind="terminal"/>')
+		action = self.actions.get('recharger')
+		if action:
+			tag = '<action kind="recharger"'
+			for key, value in action.iteritems():
 				tag += ' %s="%s"' % (key, value)
 			tag += '/>'
 			result.append(tag)
 		if self.light or self.texture or self.effects or self.actions:
 			result.append('</%s>' % (self.xmlClass, ))
-		return '\n'.join(result)
-	
-	def xmlReference(self, location):
-		result = []
-		result.append('<%s id="%s" location="%s"/>' % (self.xmlClass, self.elementID, location))
 		return '\n'.join(result)
 	
 	def texturesUpdated(self, data):
@@ -758,11 +901,6 @@ class ForgeryTexture(ForgeryElement):
 			result.append('<%s id="%s" collectionID="%s" bitmapID="%s" clutID="%s"/>' % (self.xmlClass, self.elementID, self.collectionID, self.bitmapID, self.clutID))
 		else:
 			result.append('<%s id="%s"/>' % (self.xmlClass, self.elementID))
-		return '\n'.join(result)
-	
-	def xmlReference(self):
-		result = []
-		result.append('<%s id="%s"/>' % (self.xmlClass, self.elementID))
 		return '\n'.join(result)
 	
 	def generateThumbnail(self):

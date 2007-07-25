@@ -304,18 +304,32 @@ class ForgeryMap(Superclass):
 			self.undoableAction('self.delLineSurface(self.lines[%r], %r, %r)' % (line.elementID, side, which))
 		setattr(line.sides[side], which + 'Surface', surface)
 	
+	def setPolygonCeilingOffset(self, polygon, offset):
+		self.setPolygonOffset(polygon, 'ceiling', offset)
+	
+	def setPolygonFloorOffset(self, polygon, offset):
+		self.setPolygonOffset(polygon, 'floor', offset)
+	
+	def setPolygonLayer(self, polygon, layer):
+		self.undoableAction('self.setPolygonLayer(self.polygons[%r], self.layers[%r])' % (polygon.elementID, polygon.layer.elementID))
+		polygon.layer = layer
+	
+	def setPolygonOffset(self, polygon, which, offset):
+		self.undoableAction('self.setPolygonOffset(self.polygons[%r], %r, %r)' % (polygon.elementID, which, getattr(polygon.elementID, which + 'Offset')))
+		setattr(polygon, which + 'Offset', offset)
+	
 	def delPolygonSurface(self, polygon, which):
-		return self.setPolygonSurface(polygon, which, None)
+		self.setPolygonSurface(polygon, which, None)
 	
 	def setPolygonSurface(self, polygon, which, surface):
 		if getattr(polygon, which):
-			self.undoableAction('self.setPolygonSurface(self.polygon[%r], %r, self.surfaces[%r])' % (polygon.elementID, which, getattr(polygon, which).elementID))
+			self.undoableAction('self.setPolygonSurface(self.polygons[%r], %r, self.surfaces[%r])' % (polygon.elementID, which, getattr(polygon, which).elementID))
 		elif surface: # otherwise the unnecessary deletions keep building up in the undo stacks
-			self.undoableAction('self.delLineSurface(self.polygon[%r], %r)' % (polygon.elementID, which))
+			self.undoableAction('self.delPolygonSurface(self.polygons[%r], %r)' % (polygon.elementID, which))
 		setattr(polygon, which, surface)
 	
 	def delSurfaceTexture(self, surface):
-		return self.setSurfaceTexture(surface, '')
+		self.setSurfaceTexture(surface, '')
 	
 	def setSurfaceTexture(self, surface, texture):
 		self.undoableAction('self.setSurfaceTexture(self.surfaces[%r], self.textures[%r])' % (surface.elementID, surface.texture.elementID))
@@ -326,29 +340,41 @@ class ForgeryMap(Superclass):
 		surface.dx = dx
 		surface.dy = dy
 	
-	def addSurfaceAction(self, surface, action, properties):
-		if action in surface.actions:
-			self.undoableAction('self.addSurfaceAction(self.surfaces[%r], %r %r)' % (surface.elementID, action, surface.actions[action]))
-			surface.actions[action] = properties
+	def addSurfaceAction(self, surface, action):
+		if action.kind not in surface.actions:
+			self.addSurfaceActionKind(surface, action.kind)
+		if action.event in surface.actions[action.kind]:
+			self.undoableAction('self.addSurfaceAction(self.surfaces[%r], %r)' % (surface.elementID, surface.actions[action.kind][action.event]))
 		else:
-			self.undoableAction('self.removeSurfaceAction(self.surfaces[%r], %r)' % (surface.elementID, action))
-			surface.actions[action] = properties
+			self.undoableAction('self.delSurfaceAction(self.surfaces[%r], self.surfaces[%r].actions[%r][%r])' % (surface.elementID, surface.elementID, action.kind, action.event))
+		surface.actions[action.kind][action.event] = action
 	
-	def removeSurfaceAction(self, surface, action):
-		if action in surface.actions:
-			self.undoableAction('self.addSurfaceAction(self.surfaces[%r], %r, %r)' % (surface.elementID, action, surface.actions[action]))
-			del surface.actions[action]
+	def delSurfaceAction(self, surface, action):
+		self.undoableAction('self.addSurfaceAction(self.surfaces[%r], %r)' % (surface.elementID, action))
+		del surface.actions[action.kind][action.event]
+	
+	def addSurfaceActionKind(self, surface, kind):
+		if kind not in surface.actions:
+			self.undoableAction('self.delSurfaceActionKind(self.surfaces[%r], %r)' % (surface.elementID, kind))
+			surface.actions[kind] = {}
+	
+	def delSurfaceActionKind(self, surface, kind):
+		if kind in surface.actions:
+			for action in surface.actions[kind].values():
+				self.delSurfaceAction(surface, action)
+			self.undoableAction('self.addSurfaceActionKind(self.surfaces[%r], %r)' % (surface.elementID, kind))
+			del surface.actions[kind]
 		else:
-			print "Action %r not found on surface %r" % (action, surface)
+			print "Action kind %r not found on surface %r" % (kind, surface)
 	
 	def addSurfaceEffect(self, surface, effect, properties):
 		if effect in surface.effects:
 			self.undoableAction('self.addSurfaceEffect(self.surfaces[%r], %r, %r)' % (surface.elementID, effect, surface.effects[effect]))
 		else:
-			self.undoableAction('self.removeSurfaceEffect(self.surfaces[%r], %r)' % (surface.elementID, effect))
+			self.undoableAction('self.delSurfaceEffect(self.surfaces[%r], %r)' % (surface.elementID, effect))
 			surface.effects[effect] = properties
 	
-	def removeSurfaceEffect(self, surface, effect):
+	def delSurfaceEffect(self, surface, effect):
 		if effect in surface.effects:
 			self.undoableAction('self.addSurfaceEffect(self.surfaces[%r], %r, %r)' % (surface.elementID, effect, surface.effects[effect]))
 			del surface.effects[effect]
