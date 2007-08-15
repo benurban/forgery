@@ -476,7 +476,7 @@ class ForgeryInspector(Superclass):
 			for row, (vertex, line) in enumerate(table):
 				if vertex:
 					tableUI.SetCellValue(row, 0, unicode(vertex.elementID))
-				else: # this shuold never happen
+				else: # this should never happen
 					tableUI.SetCellValue(row, 0, u"")
 				if line:
 					tableUI.SetCellValue(row, 1, unicode(line.elementID))
