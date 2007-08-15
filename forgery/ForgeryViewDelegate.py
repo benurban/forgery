@@ -52,6 +52,7 @@ class ForgeryViewDelegate(Superclass):
 	gridColor = property(fget = lambda self: self.preferences and self.preferences.gridColor)
 	gridSpacing = property(fget = lambda self: self.preferences and self.preferences.gridSpacing)
 	internalLineColor = property(fget = lambda self: self.preferences and self.preferences.internalLineColor)
+	invalidLineColor = property(fget = lambda self: self.preferences and self.preferences.invalidLineColor)
 	vertexColor = property(fget = lambda self: self.preferences and self.preferences.vertexColor)
 	
 	center = property(fget = lambda self: self.view.center)
@@ -165,8 +166,12 @@ class ForgeryViewDelegate(Superclass):
 		glEnd()
 	
 	def drawLines(self):
+		glLineWidth(1.0)
 		glBegin(GL_LINES)
-		for l in self.data.lines.values():
+		invalidLines = []
+		for l in self.data.lines.itervalues():
+			if not l.isValid(self.data):
+				invalidLines.append(l)
 			if l.side0:
 				glColor3f(*self.internalLineColor)
 			else:
@@ -177,8 +182,14 @@ class ForgeryViewDelegate(Superclass):
 			else:
 				glColor3f(*self.externalLineColor)
 			glVertex2f(l.x1, l.y1)
-			#l.drawSelf()
 		glEnd()
+		glLineWidth(3.0)
+		glBegin(GL_LINES)
+		glColor4f(*self.invalidLineColor)
+		for l in invalidLines:
+			l.drawSelf()
+		glEnd()
+		glLineWidth(1.0)
 	
 	def drawVertices(self):
 		glPointSize(2.0)
