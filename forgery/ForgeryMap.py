@@ -315,7 +315,7 @@ class ForgeryMap(Superclass):
 		polygon.layer = layer
 	
 	def setPolygonOffset(self, polygon, which, offset):
-		self.undoableAction('self.setPolygonOffset(self.polygons[%r], %r, %r)' % (polygon.elementID, which, getattr(polygon.elementID, which + 'Offset')))
+		self.undoableAction('self.setPolygonOffset(self.polygons[%r], %r, %r)' % (polygon.elementID, which, getattr(polygon, which + 'Offset')))
 		setattr(polygon, which + 'Offset', offset)
 	
 	def delPolygonSurface(self, polygon, which):
