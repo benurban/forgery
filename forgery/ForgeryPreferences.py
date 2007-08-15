@@ -98,7 +98,7 @@ class ForgeryPreferences(ForgeryDocumentPreferences):
 	inspectorIsVisible = True
 	inspectorPosition = None
 	internalLineColor = (0.0 / 255.0, 200.0 / 255.0, 197.0 / 255.0)
-	invalidLineColor = (255.0 / 255.0, 0.0 / 255.0, 0.0 / 255.0)
+	invalidLineColor = (255.0 / 255.0, 0.0 / 255.0, 0.0 / 255.0, 255.0 / 255.0)
 	layerChangeAltersHeights = True
 	paletteIsDocked = True
 	paletteIsVisible = True
