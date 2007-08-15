@@ -390,6 +390,24 @@ class ForgeryLine(ForgeryMoveableElement):
 		else:
 			return math.sqrt((x - x0) * (x - x0) + (y - y0) * (y - y0))
 	
+	def isValid(self, data):
+		if not len(self):
+			return False
+		else:
+			polygons = self.getChildren(data)
+			[polygon.findSides() for polygon in polygons]
+			for polygon0 in polygons:
+				i0 = list(polygon0).index(self)
+				for polygon1 in polygons:
+					if polygon0 is polygon1:
+						continue
+					else:
+						i1 = list(polygon1).index(self)
+						if polygon0.sides[i0] == polygon1.sides[i1]:
+							return False
+			else:
+				return True
+	
 	def addSide(self, index, *posArgs, **kwdArgs):
 		if index:
 			self.side1 = ForgerySide(*posArgs, **kwdArgs)
