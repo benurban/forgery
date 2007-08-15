@@ -504,15 +504,20 @@ class ForgeryInspector(Superclass):
 	
 	def updateSide(self, line, side, index, sideUI):
 		if side:
+			polygon = self.data.polygonForSide(line, index)
+			try:
+				polygon = unicode(polygon.elementID)
+			except AttributeError: # this will happen for invalid lines
+				polygon = u""
 			if usePyObjC:
 				sideUI['polygonField'].setEditable_(False) # can't set this in the NIB for some reason
 				sideUI['polygonField'].setEnabled_(True)
-				sideUI['polygonField'].setStringValue_(unicode(self.data.polygonForSide(line, index).elementID))
+				sideUI['polygonField'].setStringValue_(polygon)
 			else:
 				try:
-					sideUI['polygonField'].ChangeValue(unicode(self.data.polygonForSide(line, index).elementID))
+					sideUI['polygonField'].ChangeValue(polygon)
 				except AttributeError: # wx 2.6 does this
-					sideUI['polygonField'].SetValue(unicode(self.data.polygonForSide(line, index).elementID))
+					sideUI['polygonField'].SetValue(polygon)
 			self.updateSurface(side.lowerSurface, sideUI['bottom'])
 			self.updateSurface(side.middleSurface, sideUI['middle'])
 			self.updateSurface(side.upperSurface, sideUI['top'])
