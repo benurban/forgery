@@ -420,6 +420,18 @@ class ForgeryLine(ForgeryMoveableElement):
 		else:
 			self.side0 = None
 	
+	def switchSide(self, index):
+		side = 'side' + str(index)
+		otherSide = 'side' + str(1 - index)
+		if getattr(self, otherSide):
+			if getattr(self, side): # there is a conflict
+				pass # this will allow the side data to be kept when the conflict is resolved
+			else:
+				pass
+		else:
+			setattr(self, otherSide, getattr(self, side))
+			setattr(self, side, None)
+	
 	def getAllVertexAncestors(self):
 		result = set()
 		result.update(self.vertex0.getAllVertexAncestors())
@@ -527,7 +539,7 @@ class ForgeryPolygon(ForgeryMoveableElement):
 			v0, v1 = v1, v0
 		v2 = (self.parents[1].vertex0 in (v0, v1)) and self.parents[1].vertex1 or self.parents[1].vertex0
 		if angleBetween((v1.x - v0.x, v1.y - v0.y), (v2.x - v1.x, v2.y - v1.y)) > 0.0:
-			self.parents.reverse()
+			self.reverse()
 		# the polygon is now clockwise
 		if self.parents[0].vertex0 is self.parents[1].vertex0 or \
 		   self.parents[0].vertex0 is self.parents[1].vertex1:
@@ -542,6 +554,21 @@ class ForgeryPolygon(ForgeryMoveableElement):
 			else:
 				self.sides.append(1)
 				v = l.vertex0
+	
+	def reverse(self):
+		if self.parents[0].vertex0 is self.parents[1].vertex0 or \
+		   self.parents[0].vertex0 is self.parents[1].vertex1:
+			v = self.parents[0].vertex1
+		else:
+			v = self.parents[0].vertex0
+		for l in self.parents:
+			if v is l.vertex0:
+				l.switchSide(0)
+				v = l.vertex1
+			else:
+				l.switchSide(1)
+				v = l.vertex0
+		self.parents.reverse()
 	
 	def getVertices(self):
 		self.findSides()
