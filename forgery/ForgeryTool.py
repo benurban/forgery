@@ -47,6 +47,7 @@ class ForgeryTool(object):
 	gridSpacing = property(fget = lambda self: self.preferences.gridSpacing)
 	view = property(fget = lambda self: self.document.view)
 	viewDelegate = property(fget = lambda self: self.view.delegate)
+	realGridSpacing = property(fget = lambda self: self.viewDelegate.realGridSpacing)
 	toolData = property(fget = lambda self: self.viewDelegate._toolData)
 	mouse0 = property(fget = lambda self: self.view.mouse0)
 	mouse1 = property(fget = lambda self: self.view.mouse1)

@@ -218,7 +218,7 @@ class ForgerySelectTool(ForgeryTool.ForgeryTool):
 		pos0 = self.mouse0.convertTo('object')
 		pos1 = self.mouse1.convertTo('object')
 		if self.snapToGrid:
-			gridSpacing = float(WU) / float(self.gridSpacing)
+			gridSpacing = self.realGridSpacing
 			pos0 = ForgeryPoint.ForgeryPoint(
 				pos0.coordinates,
 				pos0.view,
@@ -275,7 +275,7 @@ class ForgerySelectTool(ForgeryTool.ForgeryTool):
 			pos0 = self.clickOrigin
 			pos1 = self.mouse1.convertTo('object')
 			if self.snapToGrid:
-				gridSpacing = float(WU) / float(self.gridSpacing)
+				gridSpacing = self.realGridSpacing
 				pos0 = ForgeryPoint.ForgeryPoint(
 					pos0.coordinates,
 					pos0.view,

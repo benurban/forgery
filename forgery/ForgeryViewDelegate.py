@@ -66,6 +66,14 @@ class ForgeryViewDelegate(Superclass):
 	sizeInPixels = property(fget = lambda self: self.view.sizeInPixels)
 	zoomFactor = property(fget = lambda self: self.view.zoomFactor)
 	
+	realGridSpacing = property(fget = lambda self: self.__getRealGridSpacing())
+	
+	def __getRealGridSpacing(self):
+		result = float(WU) / float(self.gridSpacing)
+		if self.zoomFactor > 16.0:
+			result *= self.zoomFactor / 16.0
+		return result
+	
 	if not usePyObjC:
 		def __init__(self, document):
 			super(ForgeryViewDelegate, self).__init__()
@@ -122,7 +130,7 @@ class ForgeryViewDelegate(Superclass):
 			xmin, ymax = self.scrollMin.asObject
 			xmax, ymin = self.scrollMax.asObject
 		
-		gridSpacing = float(WU) / float(self.gridSpacing)
+		gridSpacing = self.realGridSpacing
 		gridMinorXmin = roundDown(xmin, gridSpacing) - gridSpacing
 		gridMinorXmax = roundUp(xmax, gridSpacing) + gridSpacing
 		gridMinorYmin = roundDown(ymin, gridSpacing) - gridSpacing

@@ -63,7 +63,7 @@ class ForgeryLineTool(ForgeryTool.ForgeryTool):
 		self.modifiers = modifiers
 		pos = self.mouse1.convertTo('object')
 		if self.snapToGrid:
-			gridSpacing = float(WU) / float(self.gridSpacing)
+			gridSpacing = self.realGridSpacing
 			pos = ForgeryPoint.ForgeryPoint(
 				pos.coordinates,
 				pos.view,
@@ -88,7 +88,7 @@ class ForgeryLineTool(ForgeryTool.ForgeryTool):
 	def mouseDragged(self, modifiers):
 		pos = self.mouse1.convertTo('object')
 		if self.snapToGrid:
-			gridSpacing = float(WU) / float(self.gridSpacing)
+			gridSpacing = self.realGridSpacing
 			pos = ForgeryPoint.ForgeryPoint(
 				pos.coordinates,
 				pos.view,
