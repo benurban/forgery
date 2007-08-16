@@ -423,20 +423,19 @@ class ForgeryMap(Superclass):
 		# This algorithm was blatantly stolen from Pfhorge, and then heavily pythonified and simplified.
 		for polygon in self.polygons.itervalues():
 			if (x, y) in polygon:
-				raise Exception, "There is already a polygon there"
+				raise ForgerySpaceOccupiedError(polygon)
 		
 		intersections = []
 		for l in self.lines.itervalues():
-			if not l.side0 or not l.side1:
-				x0, y0 = l.x0, l.y0
-				x1, y1 = l.x1, l.y1
-				dx, dy = l.dx, l.dy
-				if y0 < y < y1 or y1 < y < y0:
-					distance = (y0 - y) * dx / dy - (x0 - x)
-					if distance > 0:
-						intersections.append((distance, l))
+			x0, y0 = l.x0, l.y0
+			x1, y1 = l.x1, l.y1
+			dx, dy = l.dx, l.dy
+			if y0 < y < y1 or y1 < y < y0:
+				distance = (y0 - y) * dx / dy - (x0 - x)
+				if distance > 0:
+					intersections.append((distance, l))
 		if not intersections:
-			raise Exception, "Could not find any lines that intersect the projected line"
+			raise ForgeryNoPolygonFoundError
 		intersections.sort()
 		intersections = [l for distance, l in intersections]
 		
@@ -467,21 +466,11 @@ class ForgeryMap(Superclass):
 					
 					connectedLines = tuple(self.linesWithVertex(vertex1))
 					
-					if len(connectedLines) < 2:
-						raise Exception, "Encountered a dead end"
-					
 					for l in connectedLines:
-						if l.side0 and l.side1:
-							# Should we check this in the final lines instead?
-							continue
-						
 						if l is line0:
 							continue
 						
 						if l in lines[1:]: # if it's lines[0], we're making sure the polygon is closed
-							continue
-						
-						if not len(l):
 							continue
 						
 						v = (vertex1 is l.vertex0) and l.vertex1 or l.vertex0
@@ -496,7 +485,7 @@ class ForgeryMap(Superclass):
 							thetaMin = theta
 					
 					if not line1: # did not find a line that met the requirements
-					    raise Exception, "Encountered a dead end"
+					    raise ForgeryDeadEndError(line0, vertex1)
 					
 					vertex0, vertex1, vertex2 = vertex1, vertex2, None
 					line0, line1 = line1, None
@@ -505,22 +494,29 @@ class ForgeryMap(Superclass):
 						if lines[0] is line0:
 							break
 						else:
-						    raise Exception, "The polygon did not close, or two lines share the same vertices"
+						    raise ForgeryOpenPolygonError(line0)
 					else:
 						lines.append(line0)
 						if vertices[0] is not vertex1:
 							vertices.append(vertex1)
 				
+				for l in lines:
+					if not len(l):
+						raise ForgeryZeroLengthLineError(l)
+					if l.side0 and l.side1:
+						raise ForgerySideConflictError(l)
+					if not l.isValid(self):
+						raise ForgeryInvalidLineError(l)
 				result = ForgeryElements.ForgeryPolygon(
 					ForgeryElements.uniqueID('polygon %03d', self.polygons.keys()),
 					self.currentLayer,
 					lines,
 				)
 				if (x, y) not in result:
-					raise Exception, "The fill point is not inside the new polygon"
+					raise ForgeryPointOutsidePolygonError
 				else:
 					return result
-			except Exception, e:
+			except ForgeryFillError, e:
 				if not firstException:
 					firstException = e
 		raise firstException

@@ -31,6 +31,17 @@ __all__ = (
 	'angleBetween',
 	'capitalize',
 	'ID',
+	'ForgeryError',
+	'ForgeryBadDataError',
+	'ForgeryFillError',
+	'ForgerySpaceOccupiedError',
+	'ForgeryNoPolygonFoundError',
+	'ForgeryDeadEndError',
+	'ForgeryOpenPolygonError',
+	'ForgeryInvalidLineError',
+	'ForgeryZeroLengthLineError',
+	'ForgerySideConflictError',
+	'ForgeryPointOutsidePolygonError',
 )
 
 try:
@@ -356,3 +367,44 @@ class ID(object):
 		ACTION_PATTERN_BUFFER  = wx.ID_HIGHEST + 0x0782
 		ACTION_TERMINAL        = wx.ID_HIGHEST + 0x0783
 		ACTION_RECHARGER       = wx.ID_HIGHEST + 0x0784
+
+class ForgeryError(Exception):
+	pass
+
+class ForgeryBadDataError(ForgeryError):
+	pass
+
+class ForgeryFillError(ForgeryError):
+	pass
+
+class ForgerySpaceOccupiedError(ForgeryFillError):
+	def __init__(self, polygon):
+		super(ForgerySpaceOccupiedError, self).__init__("Polygon '%s' is already there" % (polygon.elementID, ))
+
+class ForgeryNoPolygonFoundError(ForgeryFillError):
+	def __init__(self):
+		super(ForgeryNoPolygonFoundError, self).__init__("Could not find any lines that intersect the projection")
+
+class ForgeryDeadEndError(ForgeryFillError):
+	def __init__(self, line, vertex):
+		super(ForgeryDeadEndError, self).__init__("Encountered a dead end\nfollowing line '%s' to vertex '%s'" % (line.elementID, vertex.elementID))
+
+class ForgeryOpenPolygonError(ForgeryFillError):
+	def __init__(self, line):
+		super(ForgeryOpenPolygonError, self).__init__("The polygon did not close, or two lines share the same vertices\nline '%s' appears to be the cause" % (line0.elementID, ))
+
+class ForgeryInvalidLineError(ForgeryBadDataError, ForgeryFillError):
+	def __init__(self, line):
+		super(ForgeryInvalidLineError, self).__init__("Line '%s' is invalid" % (line.elementID, ))
+
+class ForgeryZeroLengthLineError(ForgeryInvalidLineError):
+	def __init__(self, line):
+		super(ForgeryInvalidLineError, self).__init__("Line '%s' has zero length" % (line.elementID, ))
+
+class ForgerySideConflictError(ForgeryInvalidLineError):
+	def __init__(self, line):
+		super(ForgeryInvalidLineError, self).__init__("Line '%s' already has two sides" % (line.elementID, ))
+
+class ForgeryPointOutsidePolygonError(ForgeryFillError):
+	def __init__(self):
+		super(ForgeryPointOutsidePolygonError, self).__init__("The fill point is not inside the new polygon")
