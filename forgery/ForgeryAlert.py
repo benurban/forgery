@@ -1,11 +1,11 @@
 # ForgeryAlert.py
 # Forgery
 
-# Copyright (c) 2007 by Ben Urban <benurban@users.sourceforge.net>.
+# Copyright (c) 2007-2011 by Ben Urban <benurban@users.sourceforge.net>.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
+# the Free Software Foundation; either version 3 of the License, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
@@ -18,6 +18,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 from ForgeryCommon import *
+from tracer import traced
 
 __all__ = (
 	'runApplicationModalAlert',
@@ -180,23 +181,29 @@ def runWindowModalAlert(window, alertFunc, messageText, informativeText, buttons
 	else:
 		alertFunc(runApplicationModalAlert(messageText, informativeText, buttons))
 
-def addButton(dialog, sizer, buttonID, name = None):
-	if not name:
-		name = buttonText[buttonID]
-	result = wx.Button(dialog, buttonID, name)
-	result.Bind(wx.EVT_BUTTON, lambda event: dialog.EndModal(buttonID))
-	sizer.AddButton(result)
-	return result
-
 if usePyObjC:
+	
 	class ForgeryWindowModalAlertDelegate(NSObject):
 		func = None
 		
+		@traced
 		def initWithFunc_(self, func):
 			self = super(ForgeryWindowModalAlertDelegate, self).init()
-			self.func = func
+			if self:
+				self.func = func
 			return self
 		
+		@traced
 		def alertDidEnd_returnCode_contextInfo_(self, alert, result, context):
 			alert.window().orderOut_(alert)
 			self.func(result)
+	
+else:
+	
+	def addButton(dialog, sizer, buttonID, name = None):
+		if not name:
+			name = buttonText[buttonID]
+		result = wx.Button(dialog, buttonID, name)
+		result.Bind(wx.EVT_BUTTON, lambda event: dialog.EndModal(buttonID))
+		sizer.AddButton(result)
+		return result

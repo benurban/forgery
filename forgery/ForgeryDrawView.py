@@ -1,13 +1,13 @@
-#!/usr/bin/env python2.5
+#!/usr/bin/env python
 
 # ForgeryDrawView.py
 # Forgery
 
-# Copyright (c) 2007 by Ben Urban <benurban@users.sourceforge.net>.
+# Copyright (c) 2007-2011 by Ben Urban <benurban@users.sourceforge.net>.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
+# the Free Software Foundation; either version 3 of the License, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
@@ -30,22 +30,18 @@ import ForgeryElements, ForgeryViewDelegate
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
-if usePyObjC:
-	
-	from PyObjCTools import NibClassBuilder
-	
-	Superclass = NibClassBuilder.AutoBaseClass
-	
-else:
-	
-	Superclass = ForgeryViewDelegate.ForgeryViewDelegate
+from tracer import traced
 
-class ForgeryDrawView(Superclass):
+class ForgeryDrawView(ForgeryViewDelegate.ForgeryViewDelegate):
 	drawHooks = None
 	concaveTexture = None
 	
-	platformEdgeColor = property(fget = lambda self: self.preferences and self.preferences.platformEdgeColor)
-	polygonColor = property(fget = lambda self: self.preferences and self.preferences.polygonColor)
+	@property
+	def platformEdgeColor(self):
+		return self.preferences.platformEdgeColor
+	@property
+	def polygonColor(self):
+		return self.preferences.polygonColor
 	
 	# Shared
 	
@@ -54,15 +50,17 @@ class ForgeryDrawView(Superclass):
 		
 		for hook in self.drawHooks:
 			hook()
-
+	
+	@traced
 	def addDrawHook(self, hook):
 		self.drawHooks.append(hook)
 	
+	@traced
 	def removeDrawHook(self, hook):
 		try:
 			del self.drawHooks[self.drawHooks.index(hook)]
 		except ValueError:
-			print "Can't find draw hook %r" % (hook, )
+			print u"Can't find draw hook %r" % (hook, )
 	
 	def loadTexture(self):
 		if not self.concaveTexture:
@@ -119,18 +117,18 @@ class ForgeryDrawView(Superclass):
 		glVertex2f(*tuple(player + (size, -size)))
 		glEnd()
 	
-	# PyObjC
-	
-	def init(self):
-		self = super(ForgeryDrawView, self).init()
-		self.drawHooks = []
-		self.addDrawHook(self.drawData)
-		self.addDrawHook(self.drawPlayerPos)
-		return self
-	
-	# wxPython
-	
-	if not usePyObjC:
+	if usePyObjC:
+		
+		@traced
+		def init(self):
+			self = super(ForgeryDrawView, self).init()
+			if self:
+				self.drawHooks = []
+				self.addDrawHook(self.drawData)
+				self.addDrawHook(self.drawPlayerPos)
+			return self
+		
+	else:
 		
 		def __init__(self, document):
 			super(ForgeryDrawView, self).__init__(document)

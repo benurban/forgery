@@ -1,11 +1,11 @@
 # ForgeryUndoManager.py
 # Forgery
 
-# Copyright (c) 2007 by Ben Urban <benurban@users.sourceforge.net>.
+# Copyright (c) 2007-2011 by Ben Urban <benurban@users.sourceforge.net>.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
+# the Free Software Foundation; either version 3 of the License, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
@@ -23,60 +23,44 @@ __all__ = (
 	'ForgeryUndoManager',
 )
 
-import ForgeryElements
-
 if usePyObjC:
 	
 	from Foundation import *
 	from AppKit import *
 	import objc
-	from PyObjCTools import NibClassBuilder
-	
-	Superclass = NibClassBuilder.AutoBaseClass
-	
-else:
-	
-	Superclass = object
 
-class ForgeryUndoManager(Superclass):
+class ForgeryUndoManager(NSObject if usePyObjC else object):
 	undoStack = None
 	redoStack = None
 	isUndoing = False
 	isRedoing = False
-	if usePyObjC:
-		data = objc.ivar('data')
-	else:
-		data = None
 	
-	activeStack = property(fget = lambda self: self.__getActiveStack())
+	@property
+	def activeStack(self):
+		if self.isUndoing:
+			return self.redoStack
+		else:
+			return self.undoStack
+	
 	top = property(
 		fget = lambda self: self.activeStack.__getitem__(-1),
 		fset = lambda self, value: self.activeStack.__setitem__(-1, value),
 		fdel = lambda self: self.activeStack.__delitem__(-1),
 	)
 	
-	def __getActiveStack(self):
-		if self.isUndoing:
-			return self.redoStack
-		else:
-			return self.undoStack
-	
-	if not usePyObjC:
-		def __init__(self, data):
+	if usePyObjC:
+		
+		def init(self):
+			self = super(ForgeryUndoManager, self).init()
+			if self:
+				self.flush()
+			return self
+		
+	else:
+		
+		def __init__(self):
 			super(ForgeryUndoManager, self).__init__()
-			self.data = data
 			self.flush()
-	
-	def init(self):
-		self = super(ForgeryUndoManager, self).init()
-		self.flush()
-		return self
-	
-	def initWithData_(self, data):
-		self = super(ForgeryUndoManager, self).init()
-		self.data = data
-		self.flush()
-		return self
 	
 	def flush(self):
 		self.undoStack = []
@@ -85,8 +69,11 @@ class ForgeryUndoManager(Superclass):
 		self.isRedoing = False
 		if usePyObjC:
 			import ForgeryApplication
-			if ForgeryApplication.sharedApplication().documents:
-				ForgeryApplication.sharedApplication().frontDocument.updateChangeCount_(NSChangeCleared)
+			if ForgeryApplication.sharedApplication() and ForgeryApplication.sharedApplication().documents:
+				try:
+					ForgeryApplication.sharedApplication().frontDocument.updateChangeCount_(NSChangeCleared)
+				except TypeError: # this happens when a document is being loaded, when no other documents are open (frontDocument is a generator)
+					pass
 	
 	def undoGroupIsOpen(self):
 		try:
@@ -120,58 +107,38 @@ class ForgeryUndoManager(Superclass):
 			else: # no actions to undo
 				del self.top
 	
-	def undoableAction(self, action):
-		self.top[2].append(action)
+	def undoableAction(self, undofunc, params):
+		self.top[2].append((undofunc, params))
 	
 	def setUndoGroupName(self, name):
 		self.top[1] = name
 	
 	def undo(self):
 		openCount, name, actions = self.undoStack[-1]
-		environment = {
-			'self': self.data,
-			'ForgeryElements': ForgeryElements,
-		}
 		self.isUndoing = True
 		self.openUndoGroup(name)
 		try:
-			try:
-				for action in actions[::-1]:
-					exec action in environment
-			except:
-				print actions
-				print action
-				raise
-			else:
-				if usePyObjC:
-					import ForgeryApplication
-					ForgeryApplication.sharedApplication().frontDocument.updateChangeCount_(NSChangeUndone)
-				del self.undoStack[-1]
+			for undofunc, params in reversed(actions):
+				undofunc(*params)
+			if usePyObjC:
+				import ForgeryApplication
+				ForgeryApplication.sharedApplication().frontDocument.updateChangeCount_(NSChangeUndone)
+			del self.undoStack[-1]
 		finally:
 			self.closeUndoGroup(name)
 			self.isUndoing = False
 	
 	def redo(self):
 		openCount, name, actions = self.redoStack[-1]
-		environment = {
-			'self': self.data,
-			'ForgeryElements': ForgeryElements,
-		}
 		self.isRedoing = True
 		self.openUndoGroup(name)
 		try:
-			try:
-				for action in actions[::-1]:
-					exec action in environment
-			except:
-				print actions
-				print action
-				raise
-			else:
-				if usePyObjC:
-					import ForgeryApplication
-					ForgeryApplication.sharedApplication().frontDocument.updateChangeCount_(NSChangeDone)
-				del self.redoStack[-1]
+			for undofunc, params in reversed(actions):
+				undofunc(*params)
+			if usePyObjC:
+				import ForgeryApplication
+				ForgeryApplication.sharedApplication().frontDocument.updateChangeCount_(NSChangeDone)
+			del self.redoStack[-1]
 		finally:
 			self.closeUndoGroup(name)
 			self.isRedoing = False

@@ -1,11 +1,11 @@
 # ForgeryElements.py
 # Forgery
 
-# Copyright (c) 2007 by Ben Urban <benurban@users.sourceforge.net>.
+# Copyright (c) 2007-2011 by Ben Urban <benurban@users.sourceforge.net>.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
+# the Free Software Foundation; either version 3 of the License, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
@@ -72,7 +72,8 @@ class ForgeryElement(object):
 		return "<%s id %r: %s>" % (self.__class__.__name__, self.elementID, self.parents)
 	
 	def __repr__(self):
-		return '%s.%s%s' % (__name__, self.__class__.__name__, self.getParams())
+		return str(self)
+		#return '%s.%s%s' % (__name__, self.__class__.__name__, self.getParams())
 	
 	def getParams(self):
 		return '(%r)' % (self.elementID, )
@@ -105,7 +106,7 @@ class ForgeryElement(object):
 		try:
 			parents = other.getParents()
 		except AttributeError:
-			print "%r has no getParents method" % other
+			print u"%r has no getParents method" % (other, )
 			return False
 		for obj in parents:
 			if self is obj or self.isAncestor(obj):
@@ -128,9 +129,9 @@ class ForgeryAction(object):
 	xmlClass = u'action'
 	
 	@classmethod
-	def __new__(cls, kind, *posArgs, **kwdArgs):
-		cls = ForgeryAction.kinds.get(kind, cls)
-		return object.__new__(cls)
+	def __new__(Class, kind, *posArgs, **kwdArgs):
+		Class = Class.kinds.get(kind, Class)
+		return object.__new__(Class)
 	
 	def __init__(self, event = 'actionButton'):
 		super(ForgeryAction, self).__init__()
@@ -310,7 +311,9 @@ class ForgeryLine(ForgeryMoveableElement):
 	dy = property(fget = lambda self: self.y1 - self.y0)
 	side0 = None
 	side1 = None
-	sides = property(fget = lambda self: (self.side0, self.side1))
+	@property
+	def sides(self):
+		return (self.side0, self.side1)
 	parentCategories = {
 		'vertex0': 'vertices',
 		'vertex1': 'vertices',
@@ -447,7 +450,10 @@ class ForgeryPolygon(ForgeryMoveableElement):
 	xmlClass = u'polygon'
 	category = 'polygons'
 	sides = None
-	vertices = property(fget = lambda self: self.getVertices())
+	@property
+	def vertices(self):
+		self.findSides()
+		return [l.vertex1 if s else l.vertex0 for l, s in zip(self, self.sides)]
 	floorHeight = property(
 		fget = lambda self: self.layer.offset + self.floorOffset,
 		fset = lambda self, value: setattr(self, 'floorOffset', self.layer.offset - value),
@@ -570,10 +576,6 @@ class ForgeryPolygon(ForgeryMoveableElement):
 				v = l.vertex0
 		self.parents.reverse()
 	
-	def getVertices(self):
-		self.findSides()
-		return [s and l.vertex1 or l.vertex0 for l, s in zip(self, self.sides)]
-	
 	def isConvex(self):
 		vertices = self.vertices
 		for A, B, C in zip(vertices[0:] + vertices[:0], vertices[1:] + vertices[:1], vertices[2:] + vertices[:2]):
@@ -583,14 +585,11 @@ class ForgeryPolygon(ForgeryMoveableElement):
 			return True
 	
 	def area(self):
-		vertices = self.vertices
+		vertices = list(self.vertices)
 		vertices.reverse() # area formula is for a counterclockwise polygon
 		# formula obtained from http://en.wikipedia.org/wiki/Polygon#Area
 		length = len(vertices)
-		result = 0.0
-		for i, v in enumerate(vertices):
-			result += v.x * (vertices[(i + 1) % length].y - vertices[i - 1].y)
-		result /= 2.0
+		result = sum(v.x * (vertices[(i + 1) % length].y - vertices[i - 1].y) for i, v in enumerate(vertices)) / 2.0
 		return result
 	
 	def volume(self):
@@ -854,13 +853,23 @@ class ForgeryTexture(ForgeryElement):
 	thumbnailSize = 32
 	_thumbnail = None
 	_image = None
-	thumbnail = property(fget = lambda self: self.generateThumbnail())
-	image = property(fget = lambda self: self.generateImage())
-	isBlank = property(fget = lambda self: (self.filename, self.collectionID, self.bitmapID, self.clutID) == (None, None, None))
+	@property
+	def thumbnail(self):
+		return self.generateThumbnail()
+	@property
+	def image(self):
+		return self.generateImage()
+	@property
+	def isBlank(self):
+		return (self.filename, self.collectionID, self.bitmapID, self.clutID) == (None, None, None, None)
 	if usePyObjC:
-		size = property(fget = lambda self: (self.image.size().width, self.image.size().height))
+		@property
+		def size(self):
+			return (self.image.size().width, self.image.size().height)
 	else:
-		size = property(fget = lambda self: (self.image.GetWidth(), self.image.GetHeight()))
+		@property
+		def size(self):
+			return (self.image.GetWidth(), self.image.GetHeight())
 	
 	parentCategories = {
 	}
@@ -912,9 +921,9 @@ class ForgeryTexture(ForgeryElement):
 		if self.collectionID is not None:
 			result.append('collection = %r' % (self.collectionID, ))
 		if self.bitmapID is not None:
-			result.append('index = %r' % (self.bitmapID, ))
+			result.append('bitmapID = %r' % (self.bitmapID, ))
 		if self.clutID is not None:
-			result.append('index = %r' % (self.clutID, ))
+			result.append('clutID = %r' % (self.clutID, ))
 		return '(' + ', '.join(result) + ')'
 	
 	def getChildren(self, data):
@@ -1002,8 +1011,7 @@ class ForgeryTexture(ForgeryElement):
 			data = str(rep.bitmapData())
 		else:
 			image = self.image.Mirror(horizontally = False) # wxImage coordinates are flipped vertically
-			data = image.GetData()
-			data = list(data)
+			data = list(image.GetData())
 			rdata = data[0::3]
 			gdata = data[1::3]
 			bdata = data[2::3]

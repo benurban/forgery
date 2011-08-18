@@ -1,11 +1,11 @@
 # ForgeryPoint.py
 # Forgery
 
-# Copyright (c) 2007 by Ben Urban <benurban@users.sourceforge.net>.
+# Copyright (c) 2007-2011 by Ben Urban <benurban@users.sourceforge.net>.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
+# the Free Software Foundation; either version 3 of the License, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
@@ -46,18 +46,34 @@ class ForgeryPoint(object):
 	view = None
 	x = None
 	y = None
-	r2 = property(fget = lambda self: self._getR2())
-	r = property(fget = lambda self: math.sqrt(self.r2))
-	theta = property(fget = lambda self: math.atan2(self.y, self.x))
+	@property
+	def r2(self):
+		return self.x * self.x + self.y * self.y
+	@property
+	def r(self):
+		return math.sqrt(self.r2)
+	@property
+	def theta(self):
+		return math.atan2(self.y, self.x)
 	coordinates = property(
 		fget = lambda self: self.possibleCoordinates[self.coordinatesIndex],
 		fset = lambda self, value: setattr(self, 'coordinatesIndex', list(self.possibleCoordinates).index(value)),
 	)
-	asScreen = property(fget = lambda self: self.convertToScreen())
-	asWindow = property(fget = lambda self: self.convertToWindow())
-	asClip = property(fget = lambda self: self.convertToClip())
-	asView = property(fget = lambda self: self.convertToView())
-	asObject = property(fget = lambda self: self.convertToObject())
+	@property
+	def asScreen(self):
+		return self.convertTo('screen')
+	@property
+	def asWindow(self):
+		return self.convertTo('window')
+	@property
+	def asClip(self):
+		return self.convertTo('clip')
+	@property
+	def asView(self):
+		return self.convertTo('view')
+	@property
+	def asObject(self):
+		return self.convertTo('object')
 	
 	def __init__(self, coordinates, view = None, x = None, y = None):
 		if isinstance(coordinates, ForgeryPoint):
@@ -65,9 +81,9 @@ class ForgeryPoint(object):
 				view = coordinates.view
 				x, y = coordinates.x, coordinates.y
 				coordinates = coordinates.coordinates
-			elif y is None:
+			elif y is not None:
 				raise TypeError, "__init__() takes exactly 2 arguments (5 given)"
-			elif x is None:
+			elif x is not None:
 				raise TypeError, "__init__() takes exactly 2 arguments (4 given)"
 			else:
 				raise TypeError, "__init__() takes exactly 2 arguments (3 given)"
@@ -172,26 +188,8 @@ class ForgeryPoint(object):
 	def __div__(self, other):
 		return self.__class__(self).__idiv__(other)
 	
-	def _getR2(self):
-		return self.x * self.x + self.y * self.y
-	
 	def scale(self, (sx, sy)):
 		return self.__class__(self.coordinates, self.view, self.x * sx, self.y * sy)
-	
-	def convertToScreen(self):
-		return self.convertTo('screen')
-	
-	def convertToWindow(self):
-		return self.convertTo('window')
-	
-	def convertToClip(self):
-		return self.convertTo('clip')
-	
-	def convertToView(self):
-		return self.convertTo('view')
-	
-	def convertToObject(self):
-		return self.convertTo('object')
 	
 	def convertTo(self, newCoordinates):
 		return self.__class__(self).changeTo(newCoordinates)
@@ -216,9 +214,9 @@ class ForgeryPoint(object):
 			raise ValueError, "%s must be one of %s" % (newCoordinates, self.possibleCoordinates)
 		else:
 			index = list(self.possibleCoordinates).index(newCoordinates)
-			while self.coordinatesIndex < index - 1:
+			while self.coordinatesIndex + 1 < index:
 				self.changeTo(self.possibleCoordinates[self.coordinatesIndex + 1])
-			while self.coordinatesIndex > index + 1:
+			while self.coordinatesIndex - 1 > index:
 				self.changeTo(self.possibleCoordinates[self.coordinatesIndex - 1])
 			if self.coordinates != newCoordinates:
 				x, y = getattr(self.__class__, '_convert%sTo%s' % (self.coordinates.capitalize(), newCoordinates.capitalize()))(self.view, self.x, self.y)

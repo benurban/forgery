@@ -1,11 +1,11 @@
 # ForgeryTextureMode.py
 # Forgery
 
-# Copyright (c) 2007 by Ben Urban <benurban@users.sourceforge.net>.
+# Copyright (c) 2007-2011 by Ben Urban <benurban@users.sourceforge.net>.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
+# the Free Software Foundation; either version 3 of the License, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
@@ -27,20 +27,28 @@ __all__ = (
 
 import ForgeryMode, ForgeryPalette, ForgeryTexturePalette, ForgeryTextureView
 
+from tracer import traced
+
 class ForgeryTextureMode(ForgeryMode.ForgeryMode):
 	modeID = None
 	texture = ''
 	which = None
 	
-	textures = property(fget = lambda self: self.data and self.data.textures)
-	currentTexture = property(fget = lambda self: self.textures and self.textures[self.texture])
+	@property
+	def textures(self):
+		return self.data.textures
+	@property
+	def currentTexture(self):
+		return self.textures[self.texture]
 	
 	# Shared
 	
+	@traced
 	def texturesUpdated(self):
 		ForgeryPalette.sharedPalette().update()
 		self.view.texturesUpdated()
 	
+	@traced
 	def mouseDown(self, modifiers):
 		if self.currentTexture.isBlank:
 			self.openUndoGroup(u"Remove Texture")
@@ -55,18 +63,20 @@ class ForgeryTextureMode(ForgeryMode.ForgeryMode):
 				if getattr(p, self.which).texture is not self.currentTexture:
 					self.data.setSurfaceTexture(getattr(p, self.which), self.currentTexture)
 				break
+		self.view.refresh()
 	
+	@traced
 	def mouseUp(self, modifiers):
 		self.closeUndoGroup()
+		self.view.refresh()
 	
-	# PyObjC
-	
-	def awakeFromNib(self):
-		self.paletteDelegate = ForgeryTexturePalette.ForgeryTexturePalette.alloc().initWithMode_(self)
-	
-	# wxPython
-	
-	if not usePyObjC:
+	if usePyObjC:
+		
+		@traced
+		def awakeFromNib(self):
+			self.paletteDelegate = ForgeryTexturePalette.ForgeryTexturePalette.alloc().initWithMode_(self)
+		
+	else:
 		
 		def __init__(self, *posArgs, **kwdArgs):
 			super(ForgeryTextureMode, self).__init__(*posArgs, **kwdArgs)

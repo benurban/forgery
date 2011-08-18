@@ -1,13 +1,13 @@
-#!/usr/bin/env python2.5
+#!/usr/bin/env python2.6
 
 # ForgeryTextureView.py
 # Forgery
 
-# Copyright (c) 2007 by Ben Urban <benurban@users.sourceforge.net>.
+# Copyright (c) 2007-2011 by Ben Urban <benurban@users.sourceforge.net>.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
+# the Free Software Foundation; either version 3 of the License, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
@@ -30,23 +30,18 @@ import ForgeryElements, ForgeryViewDelegate
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
-if usePyObjC:
-	
-	from PyObjCTools import NibClassBuilder
-	
-	Superclass = NibClassBuilder.AutoBaseClass
-	
-else:
-	
-	Superclass = ForgeryViewDelegate.ForgeryViewDelegate
+from tracer import traced
 
-class ForgeryTextureView(Superclass):
+class ForgeryTextureView(ForgeryViewDelegate.ForgeryViewDelegate):
 	textures = None
 	
-	which = property(fget = lambda self: self.currentMode and self.currentMode.which)
+	@property
+	def which(self):
+		return self.currentMode.which
 	
 	# Shared
 	
+	@traced
 	def texturesUpdated(self):
 		self.textures = {}
 		self.view.refresh()
@@ -59,6 +54,7 @@ class ForgeryTextureView(Superclass):
 		self.drawGrid()
 		self.drawData()
 	
+	@traced
 	def loadTextures(self):
 		keys = self.data.textures.keys()
 		if set(self.textures.keys()) != set(keys):
@@ -101,16 +97,16 @@ class ForgeryTextureView(Superclass):
 			self.drawLines()
 			self.drawVertices()
 	
-	# PyObjC
-	
-	def init(self):
-		self = super(ForgeryTextureView, self).init()
-		self.textures = {}
-		return self
-	
-	# wxPython
-	
-	if not usePyObjC:
+	if usePyObjC:
+		
+		@traced
+		def init(self):
+			self = super(ForgeryTextureView, self).init()
+			if self:
+				self.textures = {}
+			return self
+		
+	else:
 		
 		def __init__(self, document):
 			super(ForgeryTextureView, self).__init__(document)

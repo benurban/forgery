@@ -1,11 +1,11 @@
 # ForgeryMode.py
 # Forgery
 
-# Copyright (c) 2007 by Ben Urban <benurban@users.sourceforge.net>.
+# Copyright (c) 2007-2011 by Ben Urban <benurban@users.sourceforge.net>.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
+# the Free Software Foundation; either version 3 of the License, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
@@ -27,68 +27,97 @@ __all__ = (
 import ForgeryPalette
 
 if usePyObjC:
-	
-	from PyObjCTools import NibClassBuilder
-	
-	Superclass = NibClassBuilder.AutoBaseClass
-	
-else:
-	
-	Superclass = object
+	from Foundation import *
 
-class ForgeryMode(Superclass):
+from tracer import traced
+
+class ForgeryMode(NSObject if usePyObjC else object):
 	modeID = None
-	if not usePyObjC:
-		document = None
-		viewDelegate = None
-	paletteDelegate = None # for some reason it crashes upon quitting when i make it an objc.ivar
-	
 	if usePyObjC:
-		palette = property(fget = lambda self: ForgeryPalette.sharedPalette())
+		document = objc.IBOutlet()
+		paletteDelegate = None #objc.IBOutlet() # for some reason it crashes upon quitting when I make it an objc.ivar
+		statusBar = objc.IBOutlet()
+		view = objc.IBOutlet()
+		viewDelegate = objc.IBOutlet()
 	else:
-		app = property(fget = lambda self: self.document and self.document.app)
-		palette = property(fget = lambda self: self.app and self.app.palette)
-	preferences = property(fget = lambda self: self.document and self.document.preferences)
-	snapToGrid = property(fget = lambda self: self.preferences and self.preferences.snapToGrid)
-	gridSpacing = property(fget = lambda self: self.preferences and self.preferences.gridSpacing)
-	if not usePyObjC:
-		view = property(fget = lambda self: self.document and self.document.view)
-	mouse0 = property(fget = lambda self: self.view.mouse0)
-	mouse1 = property(fget = lambda self: self.view.mouse1)
-	data = property(fget = lambda self: self.document.data)
+		document = None
+		paletteDelegate = None
+		@property
+		def view(self):
+			return self.document.view
+		viewDelegate = None
+	
+	@property
+	def app(self):
+		return self.document.app
+	@property
+	def palette(self):
+		return self.app.palette
+	@property
+	def inspector(self):
+		return self.app.inspector
+	@property
+	def preferences(self):
+		return self.document.preferences
+	@property
+	def snapToGrid(self):
+		return self.preferences.snapToGrid
+	@property
+	def gridSpacing(self):
+		return self.preferences.gridSpacing
+	@property
+	def mouse0(self):
+		return self.view.mouse0
+	@property
+	def mouse1(self):
+		return self.view.mouse1
+	@property
+	def data(self):
+		return self.document.data
 	
 	# Shared
 	
+	@traced
 	def refresh(self):
 		return self.view.refresh()
 	
+	@traced
 	def openUndoGroup(self, name = None):
 		return self.document.openUndoGroup(name)
 	
+	@traced
 	def closeUndoGroup(self, name = None):
 		return self.document.closeUndoGroup(name)
 	
+	@traced
 	def activate(self):
 		self.palette.delegate = self.paletteDelegate
 		self.palette.update()
+		self.inspector.update()
 		self.refresh()
 	
+	@traced
 	def deactivate(self):
 		self.refresh()
 	
+	@traced
 	def documentActivated(self):
 		self.palette.delegate = self.paletteDelegate
 		self.palette.update()
 	
+	@traced
 	def documentDeactivated(self):
 		pass
 	
+	@traced
 	def documentClosed(self):
 		pass
 	
+	@traced
 	def texturesUpdated(self):
 		pass
 	
+	@traced
 	def validateUI(self, itemID):
 		if ID.MODES_START <= itemID <= ID.MODES_END:
 			if itemID in modes:
@@ -98,6 +127,7 @@ class ForgeryMode(Superclass):
 		else:
 			return None
 	
+	@traced
 	def updateMenuItem(self, itemID, check, setText):
 		if ID.MODES_START <= itemID <= ID.MODES_END:
 			if itemID == self.modeID:
@@ -111,60 +141,85 @@ class ForgeryMode(Superclass):
 		else:
 			return None
 	
+	@traced
 	def getStatusText(self):
-		return ""
+		return u""
 	
+	@traced
 	def cutSelection(self):
 		pass
 	
+	@traced
 	def copySelection(self):
 		pass
 	
+	@traced
 	def paste(self):
 		pass
 	
+	@traced
 	def deleteSelection(self):
 		pass
 	
+	@traced
 	def duplicateSelection(self):
 		pass
 	
+	@traced
 	def selectAll(self):
 		pass
 	
+	@traced
 	def selectNone(self):
 		pass
 	
+	@traced
 	def mouseUp(self, modifiers):
-		print "mouseUp at (%s, %s)" % tuple(self.mouse1)
+		print u"mouseUp at (%s, %s)" % tuple(self.mouse1)
 	
+	@traced
 	def mouseDown(self, modifiers):
-		print "mouseDown at (%s, %s)" % tuple(self.mouse1)
+		print u"mouseDown at (%s, %s)" % tuple(self.mouse1)
 	
 	def mouseDragged(self, modifiers):
-		print "mouseDragged from (%s, %s) to (%s, %s)" % (tuple(self.mouse0) + tuple(self.mouse1))
+		print u"mouseDragged from (%s, %s) to (%s, %s)" % (tuple(self.mouse0) + tuple(self.mouse1))
 	
+	@traced
 	def optionDown(self):
 		pass
 	
+	@traced
 	def optionUp(self):
 		pass
 	
+	@traced
 	def commandDown(self):
 		pass
 	
+	@traced
 	def commandUp(self):
 		pass
 	
+	@traced
 	def shiftDown(self):
 		pass
 	
+	@traced
 	def shiftUp(self):
 		pass
 	
 	# wxPython
 	
-	if not usePyObjC:
+	if usePyObjC:
+		
+		@traced
+		def init(self):
+			self = super(ForgeryMode, self).init()
+			if self and not self.paletteDelegate:
+				self.paletteDelegate = ForgeryPalette.ForgeryPaletteDelegate.alloc().initWithMode_(self)
+			return self
+		
+	else:
 		def __init__(self, document):
 			super(ForgeryMode, self).__init__()
 			self.document = document

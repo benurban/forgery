@@ -1,11 +1,11 @@
 # ForgeryZoomTool.py
 # Forgery
 
-# Copyright (c) 2007 by Ben Urban <benurban@users.sourceforge.net>.
+# Copyright (c) 2007-2011 by Ben Urban <benurban@users.sourceforge.net>.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
+# the Free Software Foundation; either version 3 of the License, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
@@ -25,6 +25,8 @@ __all__ = (
 
 import ForgeryCursor, ForgeryTool
 
+from tracer import traced
+
 class ForgeryZoomTool(ForgeryTool.ForgeryTool):
 	iconFileName = 'Lens.png'
 	cursor = ForgeryCursor.zoomIn
@@ -34,6 +36,7 @@ class ForgeryZoomTool(ForgeryTool.ForgeryTool):
 	
 	zoomRatio = 2
 	
+	@traced
 	def mouseDown(self, modifiers):
 		self.view.pan(self.mouse1.convertTo('object') - self.center)
 		if modifiers == (False, True, False): # option key is down
@@ -44,12 +47,15 @@ class ForgeryZoomTool(ForgeryTool.ForgeryTool):
 	def mouseDragged(self, modifiers):
 		pass
 	
+	@traced
 	def mouseUp(self, modifiers):
 		pass
 	
+	@traced
 	def optionDown(self):
 		self.setCursor(self.altCursor)
 	
+	@traced
 	def optionUp(self):
 		self.setCursor(self.cursor)
 

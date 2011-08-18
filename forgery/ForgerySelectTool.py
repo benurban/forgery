@@ -1,11 +1,11 @@
 # ForgerySelectTool.py
 # Forgery
 
-# Copyright (c) 2007 by Ben Urban <benurban@users.sourceforge.net>.
+# Copyright (c) 2007-2011 by Ben Urban <benurban@users.sourceforge.net>.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
+# the Free Software Foundation; either version 3 of the License, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
@@ -28,6 +28,7 @@ import ForgeryCursor, ForgeryElements, ForgeryInspector, ForgeryPoint, ForgeryTo
 from OpenGL.GL import *
 
 import math
+from tracer import traced
 
 class ForgerySelectTool(ForgeryTool.ForgeryTool):
 	iconFileName = 'Arrow.png'
@@ -51,13 +52,17 @@ class ForgerySelectTool(ForgeryTool.ForgeryTool):
 	#	(3 / sqrt2, -3 / sqrt2),
 	#)
 	
-	inspector = property(fget = lambda self: ForgeryInspector.sharedInspector())
+	@property
+	def inspector(self):
+		return ForgeryInspector.sharedInspector()
 	player = property(
 		fget = lambda self: getattr(self.view, 'player'),
 		fset = lambda self, value: setattr(self.view, 'player', value),
 	)
 	
-	selectionColor = property(fget = lambda self: self.preferences.selectionColor)
+	@property
+	def selectionColor(self):
+		return self.preferences.selectionColor
 	
 	def __init__(self, *posArgs, **kwdArgs):
 		super(ForgerySelectTool, self).__init__(*posArgs, **kwdArgs)
@@ -66,18 +71,21 @@ class ForgerySelectTool(ForgeryTool.ForgeryTool):
 		self.clickOrigin = None
 		self.modifiers = (False, False, False) # command, option, shift
 	
+	@traced
 	def activate(self):
 		super(ForgerySelectTool, self).activate()
 		self.addDrawHook(self.drawSelection)
 		self.refresh()
 		self.inspector.update()
 	
+	@traced
 	def deactivate(self):
 		self.removeDrawHook(self.drawSelection)
 		super(ForgerySelectTool, self).deactivate()
 		self.refresh()
 		self.inspector.update()
 	
+	@traced
 	def validateUI(self, itemID):
 		dispatchTable = {
 			ID.CUT:        self.objectsAreSelected,
@@ -93,12 +101,14 @@ class ForgerySelectTool(ForgeryTool.ForgeryTool):
 			result = result()
 		return result
 	
+	@traced
 	def objectsAreSelected(self):
 		if self.selection:
 			return True
 		else:
 			return False
 	
+	@traced
 	def getStatusText(self):
 		count = len(self.selection)
 		if count == 1:
@@ -106,6 +116,7 @@ class ForgerySelectTool(ForgeryTool.ForgeryTool):
 		else:
 			return u"%s objects selected" % count
 	
+	@traced
 	def cutSelection(self):
 		if len(self.selection) == 1:
 			undoName = u"Cut Object '%s'" % (tuple(self.selection)[0].elementID, )
@@ -114,9 +125,11 @@ class ForgerySelectTool(ForgeryTool.ForgeryTool):
 		self.copySelection()
 		self.deleteSelection(undoName = undoName)
 	
+	@traced
 	def copySelection(self): # note that this is not undoable
 		self.sendXMLToPasteboard(self.data.elementsToXML(self.selection))
 	
+	@traced
 	def paste(self):
 		self.openUndoGroup(u"Paste")
 		# FIXME
@@ -125,6 +138,7 @@ class ForgerySelectTool(ForgeryTool.ForgeryTool):
 		self.adjustScrollbars()
 		self.inspector.update()
 	
+	@traced
 	def deleteSelection(self, undoName = None):
 		if not undoName:
 			if len(self.selection) == 1:
@@ -138,6 +152,7 @@ class ForgerySelectTool(ForgeryTool.ForgeryTool):
 		self.adjustScrollbars()
 		self.inspector.update()
 	
+	@traced
 	def duplicateSelection(self):
 		if len(self.selection) == 1:
 			self.openUndoGroup(u"Duplicate Object '%s'" % (tuple(self.selection)[0].elementID, ))
@@ -145,8 +160,8 @@ class ForgerySelectTool(ForgeryTool.ForgeryTool):
 			self.openUndoGroup(u"Duplicate %s Objects" % (len(self.selection, )))
 		# FIXME
 		self.closeUndoGroup()
-		pass
 	
+	@traced
 	def selectAll(self):
 		self.selection = set( \
 			self.data.polygons.values() + \
@@ -156,11 +171,13 @@ class ForgerySelectTool(ForgeryTool.ForgeryTool):
 		self.refresh()
 		self.inspector.update()
 	
+	@traced
 	def selectNone(self):
 		self.selection = set()
 		self.refresh()
 		self.inspector.update()
 	
+	@traced
 	def mouseDown(self, modifiers):
 		self.modifiers = modifiers
 		pos = self.clickOrigin = self.mouse1.convertTo('object')
@@ -263,6 +280,7 @@ class ForgerySelectTool(ForgeryTool.ForgeryTool):
 		self.adjustScrollbars()
 		self.inspector.update()
 	
+	@traced
 	def mouseUp(self, modifiers):
 		if self.modifiers == (True, False, False): # command key is down
 			pass
@@ -305,10 +323,12 @@ class ForgerySelectTool(ForgeryTool.ForgeryTool):
 		self.refresh()
 		self.inspector.update()
 	
+	@traced
 	def sendXMLToPasteboard(self, xml):
 		# FIXME
 		pass
 	
+	@traced
 	def getXMLFromPasteboard(self):
 		# FIXME
 		return None

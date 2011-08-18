@@ -1,11 +1,11 @@
 # ForgeryToolPalette.py
 # Forgery
 
-# Copyright (c) 2007 by Ben Urban <benurban@users.sourceforge.net>.
+# Copyright (c) 2007-2011 by Ben Urban <benurban@users.sourceforge.net>.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
+# the Free Software Foundation; either version 3 of the License, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
@@ -24,15 +24,17 @@ __all__ = (
 )
 
 import ForgeryPalette, ForgeryTool
+from tracer import traced
 
 class ForgeryToolPalette(ForgeryPalette.ForgeryPaletteDelegate):
 	tools = None
-	title = "Tools"
+	title = u"Tools"
 	currentObject = property(
 		fget = lambda self: self.mode.tool,
 		fset = lambda self, value: self.mode.changeTool(value),
 	)
 	
+	@traced
 	def setupElements(self):
 		if not self.tools:
 			self.tools = {}

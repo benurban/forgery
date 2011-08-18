@@ -1,11 +1,11 @@
 # ForgeryPreferences.py
 # Forgery
 
-# Copyright (c) 2007 by Ben Urban <benurban@users.sourceforge.net>.
+# Copyright (c) 2007-2011 by Ben Urban <benurban@users.sourceforge.net>.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
+# the Free Software Foundation; either version 3 of the License, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
@@ -19,21 +19,16 @@
 
 from ForgeryCommon import *
 
+if usePyObjC:
+	from Foundation import *
+
 __all__ = (
 	'ForgeryDocumentPreferences',
 	'ForgeryPreferences',
 	'sharedPreferences',
 )
 
-if usePyObjC:
-	
-	from PyObjCTools import NibClassBuilder
-	
-	Superclass = NibClassBuilder.AutoBaseClass
-	
-else:
-	
-	Superclass = object
+from tracer import traced
 
 def unsetValue(key):
 	return property(
@@ -42,7 +37,7 @@ def unsetValue(key):
 		fdel = lambda self: self.__dict__.__delitem__(key),
 	)
 
-class ForgeryDocumentPreferences(Superclass):
+class ForgeryDocumentPreferences(NSObject if usePyObjC else object):
 	attributes = (
 		'anchorPointColor',
 		'backgroundColor',
@@ -76,10 +71,15 @@ class ForgeryDocumentPreferences(Superclass):
 		else:
 			return True
 	
+	@traced
 	def update(self, other):
-		for key in self.attributes:
-			if not other.isDefault(key):
-				setattr(self, key, getattr(other, key))
+		if hasattr(other, 'isDefault'):
+			for key in self.attributes:
+				if not other.isDefault(key):
+					setattr(self, key, getattr(other, key))
+		else:
+			for key, value in other.iteritems():
+				setattr(self, key, value)
 
 for key in ForgeryDocumentPreferences.attributes:
 	setattr(ForgeryDocumentPreferences, key, unsetValue(key))
@@ -114,22 +114,29 @@ class ForgeryPreferences(ForgeryDocumentPreferences):
 	#windowSize = (272, 272)
 	zoomFactor = 16.0
 	
+	@traced
 	def createDocument(self, data):
-		if usePyObjC:
-			result = ForgeryDocumentPreferences.alloc().init()
-		else:
-			result = ForgeryDocumentPreferences()
+		result = ForgeryDocumentPreferences.alloc().init() if usePyObjC else ForgeryDocumentPreferences()
 		result.update(self)
 		return result
 	
+	_sharedPreferences = None
 	@classmethod
-	def sharedPreferences(cls):
-		if not cls._sharedPreferences:
+	def sharedPreferences(Class):
+		if not Class._sharedPreferences:
 			if usePyObjC:
-				cls._sharedPreferences = cls.alloc().init()
+				Class._sharedPreferences = Class.alloc().init()
 			else:
-				cls._sharedPreferences = cls()
-		return cls._sharedPreferences
+				Class._sharedPreferences = Class()
+		return Class._sharedPreferences
+	
+	if usePyObjC:
+		@traced
+		def init(self):
+			self = super(ForgeryPreferences, self).init()
+			if self and not ForgeryPreferences._sharedPreferences:
+				ForgeryPreferences._sharedPreferences = self
+			return self
 
 def sharedPreferences():
 	return ForgeryPreferences.sharedPreferences()

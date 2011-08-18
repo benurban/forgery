@@ -1,11 +1,11 @@
 # ForgeryLineTool.py
 # Forgery
 
-# Copyright (c) 2007 by Ben Urban <benurban@users.sourceforge.net>.
+# Copyright (c) 2007-2011 by Ben Urban <benurban@users.sourceforge.net>.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
+# the Free Software Foundation; either version 3 of the License, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
@@ -26,6 +26,8 @@ __all__ = (
 import ForgeryCursor, ForgeryElements, ForgeryPoint, ForgeryTool
 
 from OpenGL.GL import *
+
+from tracer import traced
 
 class ForgeryLineTool(ForgeryTool.ForgeryTool):
 	iconFileName = 'Line.png'
@@ -49,16 +51,19 @@ class ForgeryLineTool(ForgeryTool.ForgeryTool):
 		self.line = None
 		self.modifiers = (False, False, False) # command, option, shift
 	
+	@traced
 	def activate(self):
 		super(ForgeryLineTool, self).activate()
 		self.addDrawHook(self.drawLine)
 		self.refresh()
 	
+	@traced
 	def deactivate(self):
 		self.removeDrawHook(self.drawLine)
 		super(ForgeryLineTool, self).deactivate()
 		self.refresh()
 	
+	@traced
 	def mouseDown(self, modifiers):
 		self.modifiers = modifiers
 		pos = self.mouse1.convertTo('object')
@@ -115,6 +120,7 @@ class ForgeryLineTool(ForgeryTool.ForgeryTool):
 		)
 		self.refresh()
 	
+	@traced
 	def mouseUp(self, modifiers):
 		if self.line:
 			self.openUndoGroup(u"Draw Line '%s'" % (self.line.elementID, ))
@@ -138,6 +144,7 @@ class ForgeryLineTool(ForgeryTool.ForgeryTool):
 		self.vertex0IsNew = True
 		self.refresh()
 	
+	@traced
 	def drawLine(self):
 		if self.line:
 			glColor3f(0.0, 0.0, 0.0)

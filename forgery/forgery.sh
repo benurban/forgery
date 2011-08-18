@@ -2,15 +2,23 @@
 
 PYTHONS="
 python
-python2.5
-python2.4
 /usr/bin/python
-/usr/bin/python2.5
-/usr/bin/python2.4
 /usr/local/bin/python
+python2.7
+/usr/bin/python2.7
+/usr/local/bin/python2.7
+/Library/Frameworks/Python.framework/Versions/2.6/bin/python2.7
+python2.6
+/usr/bin/python2.6
+/usr/local/bin/python2.6
+/Library/Frameworks/Python.framework/Versions/2.6/bin/python2.6
+python2.5
+/usr/bin/python2.5
 /usr/local/bin/python2.5
-/usr/local/bin/python2.4
 /Library/Frameworks/Python.framework/Versions/2.5/bin/python2.5
+python2.4
+/usr/bin/python2.4
+/usr/local/bin/python2.4
 /Library/Frameworks/Python.framework/Versions/2.4/bin/python2.4
 "
 

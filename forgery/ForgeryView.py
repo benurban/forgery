@@ -1,13 +1,13 @@
-#!/usr/bin/env python2.5
+#!/usr/bin/env python
 
 # ForgeryView.py
 # Forgery
 
-# Copyright (c) 2007 by Ben Urban <benurban@users.sourceforge.net>.
+# Copyright (c) 2007-2011 by Ben Urban <benurban@users.sourceforge.net>.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
+# the Free Software Foundation; either version 3 of the License, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
@@ -30,14 +30,12 @@ import ForgeryCursor, ForgeryPoint
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
+from tracer import traced
+
 if usePyObjC:
 	
 	from Foundation import *
 	from AppKit import *
-	
-	from PyObjCTools import NibClassBuilder
-	
-	Superclass = NibClassBuilder.AutoBaseClass
 	
 	def display(name, value):
 		return
@@ -50,11 +48,12 @@ else:
 	
 	import wx
 	import wx.glcanvas
-	
-	Superclass = wx.glcanvas.GLCanvas
 
-class ForgeryView(Superclass):
-	if not usePyObjC:
+class ForgeryView(NSOpenGLView if usePyObjC else wx.glcanvas.GLCanvas):
+	if usePyObjC:
+		document = objc.IBOutlet()
+		statusBar = objc.IBOutlet()
+	else:
 		document = None
 	zoomFactor = 16.0
 	center = None
@@ -68,31 +67,61 @@ class ForgeryView(Superclass):
 	clipSize = None
 	
 	if usePyObjC:
-		clipMin = property(fget = lambda self: self.center - ForgeryPoint.ForgeryPoint((self.clipSize - (1, 1)).asObject / 2.0))
-		clipMax = property(fget = lambda self: self.center + ForgeryPoint.ForgeryPoint((self.clipSize - (1, 1)).asObject / 2.0))
-		scrollSize = property(fget = lambda self: ForgeryPoint.ForgerySize((self.scrollMax - self.scrollMin).asObject))
+		@property
+		def clipMin(self):
+			return self.center - ForgeryPoint.ForgeryPoint((self.clipSize - (1, 1)).asObject / 2.0)
+		@property
+		def clipMax(self):
+			return self.center + ForgeryPoint.ForgeryPoint((self.clipSize - (1, 1)).asObject / 2.0)
+		@property
+		def scrollSize(self):
+			return ForgeryPoint.ForgerySize((self.scrollMax - self.scrollMin).asObject)
 	else:
-		clipMin = property(fget = lambda self: self.center - ForgeryPoint.ForgeryPoint((self.clipSize - (1, 1)).asObject / 2.0).scale((1.0, -1.0)))
-		clipMax = property(fget = lambda self: self.center + ForgeryPoint.ForgeryPoint((self.clipSize - (1, 1)).asObject / 2.0).scale((1.0, -1.0)))
-		scrollSize = property(fget = lambda self: ForgeryPoint.ForgerySize((self.scrollMax - self.scrollMin).asObject).scale((1.0, -1.0)))
-	extraSize = property(
-		fget = lambda self: self.clipSize.asView,
-		doc = "Amount of extra space added to each end of the scroll bars to facilitate unlimited scrolling",
-	)
+		@property
+		def clipMin(self):
+			return self.center - ForgeryPoint.ForgeryPoint((self.clipSize - (1, 1)).asObject / 2.0).scale((1.0, -1.0))
+		@property
+		def clipMax(self):
+			return self.center + ForgeryPoint.ForgeryPoint((self.clipSize - (1, 1)).asObject / 2.0).scale((1.0, -1.0))
+		@property
+		def scrollSize(self):
+			return ForgeryPoint.ForgerySize((self.scrollMax - self.scrollMin).asObject).scale((1.0, -1.0))
+	@property
+	def extraSize(self):
+		"Amount of extra space added to each end of the scroll bars to facilitate unlimited scrolling"
+		return self.clipSize.asView
 	
-	currentMode = property(fget = lambda self: self.document and self.document.currentMode)
-	delegate = property(lambda self: self.currentMode and self.currentMode.viewDelegate)
-	currentTool = property(fget = lambda self: self.mode and self.currentMode.currentTool)
-	data = property(fget = lambda self: self.document and self.document.data)
-	preferences = property(fget = lambda self: self.document and self.document.preferences)
-	backgroundColor = property(fget = lambda self: self.preferences and self.preferences.backgroundColor)
+	@property
+	def currentMode(self):
+		return self.document.currentMode
+	@property
+	def delegate(self):
+		return self.currentMode.viewDelegate
+	@property
+	def currentTool(self):
+		return self.currentMode.currentTool
+	@property
+	def data(self):
+		return self.document.data
+	@property
+	def preferences(self):
+		return self.document.preferences
+	@property
+	def backgroundColor(self):
+		return self.preferences.backgroundColor
 	if usePyObjC:
-		sizeInPixels = property(fget = lambda self: ForgeryPoint.ForgerySize('view', self, self.frame().size))
+		@property
+		def sizeInPixels(self):
+			return ForgeryPoint.ForgerySize('view', self, self.frame().size)
 	else:
-		sizeInPixels = property(fget = lambda self: ForgeryPoint.ForgerySize('clip', self, self.GetClientSize()))
+		@property
+		def sizeInPixels(self):
+			return ForgeryPoint.ForgerySize('clip', self, self.GetClientSize())
 	
 	if usePyObjC:
-		scrollView = property(fget = lambda self: self.enclosingScrollView())
+		@property
+		def scrollView(self):
+			return self.enclosingScrollView()
 	
 	# Shared
 	
@@ -102,10 +131,12 @@ class ForgeryView(Superclass):
 		else:
 			self.Refresh()
 	
+	@traced
 	def texturesUpdated(self):
 		if self.delegate:
 			self.delegate.texturesUpdated()
 	
+	@traced
 	def doInit(self):
 		if not self.center:
 			self.center = ForgeryPoint.ForgeryPoint('object', self, 0.0, 0.0)
@@ -155,7 +186,7 @@ class ForgeryView(Superclass):
 		self.refresh()
 		return proposedVisibleRect
 	
-	# FIXME: handle window sizing in cocoa
+	# FIXME: handle window sizing in Cocoa
 	def adjustScrollbars(self):
 		try:
 			elements = self.data.vertices.values()
@@ -248,6 +279,7 @@ class ForgeryView(Superclass):
 			)
 			self.refresh()
 	
+	@traced
 	def zoom(self, factor):
 		self.zoomFactor /= factor
 		#if usePyObjC:
@@ -282,6 +314,7 @@ class ForgeryView(Superclass):
 		else:
 			self.SwapBuffers()
 	
+	@traced
 	def setCursor(self, cursor):
 		if usePyObjC:
 			self.cursor = cursor
@@ -291,16 +324,19 @@ class ForgeryView(Superclass):
 	
 	# PyObjC
 	
+	@traced
 	def awakeFromNib(self):
 		self.doInit()
 	
+	@traced
 	def acceptFirstResponder(self):
 		return True
 	
 	def drawRect_(self, aRect):
 		self.draw()
 	
-	def mouseEvent_(self, event, method):
+	@traced
+	def mouseEvent_method_(self, event, method):
 		pos1 = ForgeryPoint.ForgeryPoint('window', self, event.locationInWindow())
 		delta = ForgeryPoint.ForgeryPoint('window', self, event.deltaX(), -event.deltaY()) # not sure why deltaY needs negation
 		pos0 = pos1 - delta
@@ -314,22 +350,26 @@ class ForgeryView(Superclass):
 			bool(modifiers & NSShiftKeyMask),
 		))
 	
+	@traced
 	def mouseDown_(self, event):
-		self.mouseEvent_(event, self.currentMode.mouseDown)
+		self.mouseEvent_method_(event, self.currentMode.mouseDown)
 	
+	@traced
 	def mouseUp_(self, event):
-		self.mouseEvent_(event, self.currentMode.mouseUp)
+		self.mouseEvent_method_(event, self.currentMode.mouseUp)
 		pos = ForgeryPoint.ForgeryPoint('window', self, event.locationInWindow())
 		#print pos
 		#print pos.changeTo('clip')
 		#print pos.changeTo('view')
 		#print pos.changeTo('object')
 	
+	@traced
 	def mouseDragged_(self, event):
-		self.mouseEvent_(event, self.currentMode.mouseDragged)
+		self.mouseEvent_method_(event, self.currentMode.mouseDragged)
 		#self.autoscroll_(event)
 	
-	def resetCursorRects_(self):
+	@traced
+	def resetCursorRects(self):
 		if self.cursor:
 			self.addCursorRect_cursor_(self.visibleRect(), self.cursor)
 	
@@ -432,7 +472,7 @@ class ForgeryView(Superclass):
 		elif axis == wx.VERTICAL:
 			self.center.y += delta
 		else: # axis is diagonal?
-			raise KeyError, "%r is not %r or %r" % (axis, wx.HORIZONTAL, wx.VERTICAL)
+			raise ValueError, "%r is not %r or %r" % (axis, wx.HORIZONTAL, wx.VERTICAL)
 		self.adjustScrollbars()
 	
 	def OnKeyDown(self, event):

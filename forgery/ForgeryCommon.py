@@ -1,11 +1,11 @@
 # ForgeryCommon.py
 # Forgery
 
-# Copyright (c) 2007 by Ben Urban <benurban@users.sourceforge.net>.
+# Copyright (c) 2007-2011 by Ben Urban <benurban@users.sourceforge.net>.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
+# the Free Software Foundation; either version 3 of the License, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
@@ -70,20 +70,20 @@ else:
 	if hasWX:
 		usePyObjC = False
 	else:
-		raise ImportError, "Forgery requires wxPython or PyObjC, or both"
+		raise ImportError, u"Forgery requires wxPython or PyObjC, or both"
 
 import math, os, sys, traceback
 
 if sys.platform == 'darwin' and '.app' in __file__:
 	# __file__ is probably something like
-	# '.../Forgery.app/Contents/Resources/lib/python2.5/site-packages.zip/ForgeryCommon.pyc'
-	resourcesDir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+	# '.../Forgery.app/Contents/Resources/ForgeryCommon.py'
+	resourcesDir = os.path.dirname(__file__)
 else:
 	resourcesDir = os.path.dirname(__file__)
 
 WU = 1024
 
-sqrt2 = math.sqrt(2)
+sqrt2 = math.sqrt(2.0)
 
 def errorWrap(func):
 	def wrap(*posArgs, **kwdargs):
@@ -93,6 +93,9 @@ def errorWrap(func):
 			traceback.print_exc(file = sys.stdout)
 			raise
 	
+	wrap.__doc__ = func.__doc__
+	wrap.__module__ = func.__module__
+	wrap.__name__ = func.__name__
 	return wrap
 
 trueFunc = lambda *posArgs, **kwdArgs: True
@@ -379,32 +382,32 @@ class ForgeryFillError(ForgeryError):
 
 class ForgerySpaceOccupiedError(ForgeryFillError):
 	def __init__(self, polygon):
-		super(ForgerySpaceOccupiedError, self).__init__("Polygon '%s' is already there" % (polygon.elementID, ))
+		super(ForgerySpaceOccupiedError, self).__init__(u"Polygon '%s' is already there" % (polygon.elementID, ))
 
 class ForgeryNoPolygonFoundError(ForgeryFillError):
 	def __init__(self):
-		super(ForgeryNoPolygonFoundError, self).__init__("Could not find any lines that intersect the projection")
+		super(ForgeryNoPolygonFoundError, self).__init__(u"Could not find any lines that intersect the projection")
 
 class ForgeryDeadEndError(ForgeryFillError):
 	def __init__(self, line, vertex):
-		super(ForgeryDeadEndError, self).__init__("Encountered a dead end\nfollowing line '%s' to vertex '%s'" % (line.elementID, vertex.elementID))
+		super(ForgeryDeadEndError, self).__init__(u"Encountered a dead end\nfollowing line '%s' to vertex '%s'" % (line.elementID, vertex.elementID))
 
 class ForgeryOpenPolygonError(ForgeryFillError):
 	def __init__(self, line):
-		super(ForgeryOpenPolygonError, self).__init__("The polygon did not close, or two lines share the same vertices\nline '%s' appears to be the cause" % (line0.elementID, ))
+		super(ForgeryOpenPolygonError, self).__init__(u"The polygon did not close, or two lines share the same vertices\nline '%s' appears to be the cause" % (line0.elementID, ))
 
 class ForgeryInvalidLineError(ForgeryBadDataError, ForgeryFillError):
 	def __init__(self, line):
-		super(ForgeryInvalidLineError, self).__init__("Line '%s' is invalid" % (line.elementID, ))
+		super(ForgeryInvalidLineError, self).__init__(u"Line '%s' is invalid" % (line.elementID, ))
 
 class ForgeryZeroLengthLineError(ForgeryInvalidLineError):
 	def __init__(self, line):
-		super(ForgeryInvalidLineError, self).__init__("Line '%s' has zero length" % (line.elementID, ))
+		super(ForgeryInvalidLineError, self).__init__(u"Line '%s' has zero length" % (line.elementID, ))
 
 class ForgerySideConflictError(ForgeryInvalidLineError):
 	def __init__(self, line):
-		super(ForgeryInvalidLineError, self).__init__("Line '%s' already has two sides" % (line.elementID, ))
+		super(ForgeryInvalidLineError, self).__init__(u"Line '%s' already has two sides" % (line.elementID, ))
 
 class ForgeryPointOutsidePolygonError(ForgeryFillError):
 	def __init__(self):
-		super(ForgeryPointOutsidePolygonError, self).__init__("The fill point is not inside the new polygon")
+		super(ForgeryPointOutsidePolygonError, self).__init__(u"The fill point is not inside the new polygon")

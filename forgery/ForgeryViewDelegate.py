@@ -1,11 +1,11 @@
 # ForgeryViewDelegate.py
 # Forgery
 
-# Copyright (c) 2007 by Ben Urban <benurban@users.sourceforge.net>.
+# Copyright (c) 2007-2011 by Ben Urban <benurban@users.sourceforge.net>.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
+# the Free Software Foundation; either version 3 of the License, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
@@ -24,51 +24,91 @@ from OpenGL.GLU import *
 
 import ForgeryElements
 
+if usePyObjC:
+	from Foundation import *
+
 __all__ = (
 	'ForgeryViewDelegate',
 )
 
-if usePyObjC:
-	
-	from PyObjCTools import NibClassBuilder
-	
-	Superclass = NibClassBuilder.AutoBaseClass
-	
-else:
-	
-	Superclass = object
+from tracer import traced
 
-class ForgeryViewDelegate(Superclass):
-	if not usePyObjC:
+class ForgeryViewDelegate(NSObject if usePyObjC else object):
+	if usePyObjC:
+		document = objc.IBOutlet()
+	else:
 		document = None
 	
-	data = property(fget = lambda self: self.document and self.document.data)
-	view = property(fget = lambda self: self.document and self.document.view)
-	currentMode = property(fget = lambda self: self.document and self.document.currentMode)
-	preferences = property(fget = lambda self: self.document and self.document.preferences)
-	anchorPointColor = property(fget = lambda self: self.preferences and self.preferences.anchorPointColor)
-	backgroundColor = property(fget = lambda self: self.preferences and self.preferences.backgroundColor)
-	externalLineColor = property(fget = lambda self: self.preferences and self.preferences.externalLineColor)
-	gridColor = property(fget = lambda self: self.preferences and self.preferences.gridColor)
-	gridSpacing = property(fget = lambda self: self.preferences and self.preferences.gridSpacing)
-	internalLineColor = property(fget = lambda self: self.preferences and self.preferences.internalLineColor)
-	invalidLineColor = property(fget = lambda self: self.preferences and self.preferences.invalidLineColor)
-	vertexColor = property(fget = lambda self: self.preferences and self.preferences.vertexColor)
+	@property
+	def data(self):
+		return self.document.data
+	@property
+	def view(self):
+		return self.document.view
+	@property
+	def currentMode(self):
+		return self.document.currentMode
+	@property
+	def preferences(self):
+		return self.document.preferences
+	@property
+	def anchorPointColor(self):
+		return self.preferences.anchorPointColor
+	@property
+	def backgroundColor(self):
+		return self.preferences.backgroundColor
+	@property
+	def externalLineColor(self):
+		return self.preferences.externalLineColor
+	@property
+	def gridColor(self):
+		return self.preferences.gridColor
+	@property
+	def gridSpacing(self):
+		return self.preferences.gridSpacing
+	@property
+	def internalLineColor(self):
+		return self.preferences.internalLineColor
+	@property
+	def invalidLineColor(self):
+		return self.preferences.invalidLineColor
+	@property
+	def vertexColor(self):
+		return self.preferences.vertexColor
 	
-	center = property(fget = lambda self: self.view.center)
-	clipMax = property(fget = lambda self: self.view.clipMax)
-	clipMin = property(fget = lambda self: self.view.clipMin)
-	player = property(fget = lambda self: self.view.player)
-	scrollMax = property(fget = lambda self: self.view.scrollMax)
-	scrollMin = property(fget = lambda self: self.view.scrollMin)
-	scrollPos = property(fget = lambda self: self.view.scrollPos)
-	scrollSize = property(fget = lambda self: self.view.scrollSize)
-	sizeInPixels = property(fget = lambda self: self.view.sizeInPixels)
-	zoomFactor = property(fget = lambda self: self.view.zoomFactor)
+	@property
+	def center(self):
+		return self.view.center
+	@property
+	def clipMax(self):
+		return self.view.clipMax
+	@property
+	def clipMin(self):
+		return self.view.clipMin
+	@property
+	def player(self):
+		return self.view.player
+	@property
+	def scrollMax(self):
+		return self.view.scrollMax
+	@property
+	def scrollMin(self):
+		return self.view.scrollMin
+	@property
+	def scrollPos(self):
+		return self.view.scrollPos
+	@property
+	def scrollSize(self):
+		return self.view.scrollSize
+	@property
+	def sizeInPixels(self):
+		return self.view.sizeInPixels
+	@property
+	def zoomFactor(self):
+		return self.view.zoomFactor
 	
-	realGridSpacing = property(fget = lambda self: self.__getRealGridSpacing())
-	
-	def __getRealGridSpacing(self):
+	@property
+	def realGridSpacing(self):
 		result = float(WU) / float(self.gridSpacing)
 		if self.zoomFactor > 16.0:
 			result *= self.zoomFactor / 16.0
@@ -79,6 +119,7 @@ class ForgeryViewDelegate(Superclass):
 			super(ForgeryViewDelegate, self).__init__()
 			self.document = document
 	
+	@traced
 	def texturesUpdated(self):
 		pass
 	

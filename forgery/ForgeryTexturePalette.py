@@ -1,11 +1,11 @@
 # ForgeryTexturePalette.py
 # Forgery
 
-# Copyright (c) 2007 by Ben Urban <benurban@users.sourceforge.net>.
+# Copyright (c) 2007-2011 by Ben Urban <benurban@users.sourceforge.net>.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
+# the Free Software Foundation; either version 3 of the License, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
@@ -25,22 +25,35 @@ __all__ = (
 
 import ForgeryPalette
 
+import math
+
 class ForgeryTexturePalette(ForgeryPalette.ForgeryPaletteDelegate):
-	title = "Textures"
-	textures = property(fget = lambda self: self.mode.textures)
+	title = u"Textures"
+	
+	@property
+	def textures(self):
+		return self.mode.textures
+	
 	currentObject = property(
 		fget = lambda self: getattr(self.mode, 'texture'),
 		fset = lambda self, value: setattr(self.mode, 'texture', value),
 	)
 	
+	def computeRowsAndCols(self, numTextures):
+		ratio = 3.0 / 4.0 # rows / cols
+		cols = long(math.ceil(math.sqrt(numTextures / ratio)))
+		rows = long(math.ceil(numTextures / cols))
+		return rows, cols
+	
 	def setupElements(self):
-		cols = 16
+		#cols = 16
 		self.elements = {}
 		self.icons = {}
+		rows, cols = self.computeRowsAndCols(len(self.textures))
 		keys = self.textures.keys()
 		keys.sort()
 		for index, key in enumerate(keys):
 			col = index % cols
 			row = long((index - col) / cols)
 			self.elements[(row, col)] = key
-			self.icons[(row, col)] = self.textures[key] and self.textures[key].thumbnail
+			self.icons[(row, col)] = self.textures[key].thumbnail if self.textures[key] else None
