@@ -3,499 +3,545 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 42;
+	objectVersion = 44;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		77383F230C07AB8F0043B131 /* main.py in Resources */ = {isa = PBXBuildFile; fileRef = 77383F220C07AB8F0043B131 /* main.py */; };
+		77383F2C0C07ABD10043B131 /* ForgeryDocument.py in Resources */ = {isa = PBXBuildFile; fileRef = 77383F2B0C07ABD10043B131 /* ForgeryDocument.py */; };
+		779AE5FC0C0A0980000694DF /* ForgeryDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 779AE5F90C0A0980000694DF /* ForgeryDocument.xib */; };
+		8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
+		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
+		8D15AC320486D014006FF6A4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4B0FDCFA73011CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
+		8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
+		C400D51013F62A1500796C05 /* Arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = C400D50A13F62A1500796C05 /* Arrow.png */; };
+		C400D51113F62A1500796C05 /* Bucket.png in Resources */ = {isa = PBXBuildFile; fileRef = C400D50B13F62A1500796C05 /* Bucket.png */; };
+		C400D51213F62A1500796C05 /* BucketCursor.png in Resources */ = {isa = PBXBuildFile; fileRef = C400D50C13F62A1500796C05 /* BucketCursor.png */; };
+		C400D51313F62A1500796C05 /* ClosedHandCursor.png in Resources */ = {isa = PBXBuildFile; fileRef = C400D50D13F62A1500796C05 /* ClosedHandCursor.png */; };
+		C400D51413F62A1500796C05 /* CrossCursor.png in Resources */ = {isa = PBXBuildFile; fileRef = C400D50E13F62A1500796C05 /* CrossCursor.png */; };
+		C400D51513F62A1500796C05 /* Forgery.icns in Resources */ = {isa = PBXBuildFile; fileRef = C400D50F13F62A1500796C05 /* Forgery.icns */; };
+		C400D52213F62A4F00796C05 /* Hand.png in Resources */ = {isa = PBXBuildFile; fileRef = C400D51813F62A4F00796C05 /* Hand.png */; };
+		C400D52313F62A4F00796C05 /* info.tiff in Resources */ = {isa = PBXBuildFile; fileRef = C400D51913F62A4F00796C05 /* info.tiff */; };
+		C400D52413F62A4F00796C05 /* Lens.png in Resources */ = {isa = PBXBuildFile; fileRef = C400D51A13F62A4F00796C05 /* Lens.png */; };
+		C400D52513F62A4F00796C05 /* Line.png in Resources */ = {isa = PBXBuildFile; fileRef = C400D51B13F62A4F00796C05 /* Line.png */; };
+		C400D52613F62A4F00796C05 /* OpenHandCursor.png in Resources */ = {isa = PBXBuildFile; fileRef = C400D51C13F62A4F00796C05 /* OpenHandCursor.png */; };
+		C400D52713F62A4F00796C05 /* Polygon.png in Resources */ = {isa = PBXBuildFile; fileRef = C400D51D13F62A4F00796C05 /* Polygon.png */; };
+		C400D52813F62A4F00796C05 /* Skull.png in Resources */ = {isa = PBXBuildFile; fileRef = C400D51E13F62A4F00796C05 /* Skull.png */; };
+		C400D52913F62A4F00796C05 /* Text.png in Resources */ = {isa = PBXBuildFile; fileRef = C400D51F13F62A4F00796C05 /* Text.png */; };
+		C400D52A13F62A4F00796C05 /* ZoomInCursor.png in Resources */ = {isa = PBXBuildFile; fileRef = C400D52013F62A4F00796C05 /* ZoomInCursor.png */; };
+		C400D52B13F62A4F00796C05 /* ZoomOutCursor.png in Resources */ = {isa = PBXBuildFile; fileRef = C400D52113F62A4F00796C05 /* ZoomOutCursor.png */; };
+		C400D54F13F62B0000796C05 /* ForgeryAlert.py in Resources */ = {isa = PBXBuildFile; fileRef = C400D52F13F62B0000796C05 /* ForgeryAlert.py */; };
+		C400D55013F62B0000796C05 /* ForgeryApplication.py in Resources */ = {isa = PBXBuildFile; fileRef = C400D53013F62B0000796C05 /* ForgeryApplication.py */; };
+		C400D55113F62B0000796C05 /* ForgeryCommon.py in Resources */ = {isa = PBXBuildFile; fileRef = C400D53113F62B0000796C05 /* ForgeryCommon.py */; };
+		C400D55213F62B0000796C05 /* ForgeryCursor.py in Resources */ = {isa = PBXBuildFile; fileRef = C400D53213F62B0000796C05 /* ForgeryCursor.py */; };
+		C400D55313F62B0000796C05 /* ForgeryDrawMode.py in Resources */ = {isa = PBXBuildFile; fileRef = C400D53313F62B0000796C05 /* ForgeryDrawMode.py */; };
+		C400D55413F62B0000796C05 /* ForgeryDrawView.py in Resources */ = {isa = PBXBuildFile; fileRef = C400D53413F62B0000796C05 /* ForgeryDrawView.py */; };
+		C400D55513F62B0000796C05 /* ForgeryElements.py in Resources */ = {isa = PBXBuildFile; fileRef = C400D53513F62B0000796C05 /* ForgeryElements.py */; };
+		C400D55613F62B0000796C05 /* ForgeryFillTool.py in Resources */ = {isa = PBXBuildFile; fileRef = C400D53613F62B0000796C05 /* ForgeryFillTool.py */; };
+		C400D55713F62B0000796C05 /* ForgeryInspector.py in Resources */ = {isa = PBXBuildFile; fileRef = C400D53713F62B0000796C05 /* ForgeryInspector.py */; };
+		C400D55813F62B0000796C05 /* ForgeryLineTool.py in Resources */ = {isa = PBXBuildFile; fileRef = C400D53813F62B0000796C05 /* ForgeryLineTool.py */; };
+		C400D55913F62B0000796C05 /* ForgeryMap.py in Resources */ = {isa = PBXBuildFile; fileRef = C400D53913F62B0000796C05 /* ForgeryMap.py */; };
+		C400D55A13F62B0000796C05 /* ForgeryMenuBar.py in Resources */ = {isa = PBXBuildFile; fileRef = C400D53A13F62B0000796C05 /* ForgeryMenuBar.py */; };
+		C400D55B13F62B0000796C05 /* ForgeryMode.py in Resources */ = {isa = PBXBuildFile; fileRef = C400D53B13F62B0000796C05 /* ForgeryMode.py */; };
+		C400D55C13F62B0000796C05 /* ForgeryObjectTool.py in Resources */ = {isa = PBXBuildFile; fileRef = C400D53C13F62B0000796C05 /* ForgeryObjectTool.py */; };
+		C400D55D13F62B0000796C05 /* ForgeryPalette.py in Resources */ = {isa = PBXBuildFile; fileRef = C400D53D13F62B0000796C05 /* ForgeryPalette.py */; };
+		C400D55E13F62B0000796C05 /* ForgeryPanTool.py in Resources */ = {isa = PBXBuildFile; fileRef = C400D53E13F62B0000796C05 /* ForgeryPanTool.py */; };
+		C400D55F13F62B0000796C05 /* ForgeryPoint.py in Resources */ = {isa = PBXBuildFile; fileRef = C400D53F13F62B0000796C05 /* ForgeryPoint.py */; };
+		C400D56013F62B0000796C05 /* ForgeryPreferences.py in Resources */ = {isa = PBXBuildFile; fileRef = C400D54013F62B0000796C05 /* ForgeryPreferences.py */; };
+		C400D56113F62B0000796C05 /* ForgeryRegularPolygonTool.py in Resources */ = {isa = PBXBuildFile; fileRef = C400D54113F62B0000796C05 /* ForgeryRegularPolygonTool.py */; };
+		C400D56213F62B0000796C05 /* ForgerysceAExporter.py in Resources */ = {isa = PBXBuildFile; fileRef = C400D54213F62B0000796C05 /* ForgerysceAExporter.py */; };
+		C400D56313F62B0000796C05 /* ForgerySelectTool.py in Resources */ = {isa = PBXBuildFile; fileRef = C400D54313F62B0000796C05 /* ForgerySelectTool.py */; };
+		C400D56413F62B0000796C05 /* ForgeryTextTool.py in Resources */ = {isa = PBXBuildFile; fileRef = C400D54413F62B0000796C05 /* ForgeryTextTool.py */; };
+		C400D56513F62B0000796C05 /* ForgeryTextureMode.py in Resources */ = {isa = PBXBuildFile; fileRef = C400D54513F62B0000796C05 /* ForgeryTextureMode.py */; };
+		C400D56613F62B0000796C05 /* ForgeryTexturePalette.py in Resources */ = {isa = PBXBuildFile; fileRef = C400D54613F62B0000796C05 /* ForgeryTexturePalette.py */; };
+		C400D56713F62B0000796C05 /* ForgeryTextureView.py in Resources */ = {isa = PBXBuildFile; fileRef = C400D54713F62B0000796C05 /* ForgeryTextureView.py */; };
+		C400D56813F62B0000796C05 /* ForgeryTool.py in Resources */ = {isa = PBXBuildFile; fileRef = C400D54813F62B0000796C05 /* ForgeryTool.py */; };
+		C400D56913F62B0000796C05 /* ForgeryToolPalette.py in Resources */ = {isa = PBXBuildFile; fileRef = C400D54913F62B0000796C05 /* ForgeryToolPalette.py */; };
+		C400D56A13F62B0000796C05 /* ForgeryUndoManager.py in Resources */ = {isa = PBXBuildFile; fileRef = C400D54A13F62B0000796C05 /* ForgeryUndoManager.py */; };
+		C400D56B13F62B0000796C05 /* ForgeryView.py in Resources */ = {isa = PBXBuildFile; fileRef = C400D54B13F62B0000796C05 /* ForgeryView.py */; };
+		C400D56C13F62B0000796C05 /* ForgeryViewDelegate.py in Resources */ = {isa = PBXBuildFile; fileRef = C400D54C13F62B0000796C05 /* ForgeryViewDelegate.py */; };
+		C400D56D13F62B0000796C05 /* ForgeryXMLParser.py in Resources */ = {isa = PBXBuildFile; fileRef = C400D54D13F62B0000796C05 /* ForgeryXMLParser.py */; };
+		C400D56E13F62B0000796C05 /* ForgeryZoomTool.py in Resources */ = {isa = PBXBuildFile; fileRef = C400D54E13F62B0000796C05 /* ForgeryZoomTool.py */; };
+		C402081113F76D7D009EDB54 /* tracer.py in Resources */ = {isa = PBXBuildFile; fileRef = C402081013F76D7D009EDB54 /* tracer.py */; };
+		C4020BBF13F9000C009EDB54 /* ForgeryApplication.xib in Resources */ = {isa = PBXBuildFile; fileRef = C4020BBE13F9000C009EDB54 /* ForgeryApplication.xib */; };
+		C46FA29D13F6263300635FF4 /* Python.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C46FA29C13F6263300635FF4 /* Python.framework */; };
+		C49411E113FBA741004059D5 /* ForgeryProgressWindow.py in Resources */ = {isa = PBXBuildFile; fileRef = C49411E013FBA741004059D5 /* ForgeryProgressWindow.py */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C45FC72F139E598A004A1820 /* Copy PyObjC */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = PyObjC;
+			dstSubfolderSpec = 7;
+			files = (
+			);
+			name = "Copy PyObjC";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		C40FA6150C1937E300B4291F /* Forgery.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Forgery.icns; sourceTree = "<group>"; };
-		C459F5D80C26DA8C006AEF27 /* info.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = info.tiff; sourceTree = "<group>"; };
-		C45CC0340C0A010B00FA59B6 /* ForgeryUndoManager.py */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.python; path = ForgeryUndoManager.py; sourceTree = "<group>"; };
-		C46230130BD2B87D00A54125 /* sample_map.sceB */ = {isa = PBXFileReference; explicitFileType = text.xml; fileEncoding = 30; path = sample_map.sceB; sourceTree = "<group>"; };
-		C47678D20C078DA800333705 /* ForgeryInspector.py */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.python; path = ForgeryInspector.py; sourceTree = "<group>"; };
-		C486713D0C025B2F007E6FA7 /* ForgeryPalette.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = ForgeryPalette.nib; sourceTree = "<group>"; };
-		C48671430C02684C007E6FA7 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/ForgeryInspector.nib; sourceTree = "<group>"; };
-		C49596550BCFCE6A00D4FE05 /* Forgery.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; path = Forgery.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		C49596A30BCFD7E900D4FE05 /* ForgeryXMLParser.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryXMLParser.py; sourceTree = "<group>"; };
-		C496AA9D0C26629E0074840E /* info.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = info.tiff; sourceTree = "<group>"; };
-		C4983D770C1F1C1300BDACE4 /* ForgeryPoint.py */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.python; path = ForgeryPoint.py; sourceTree = "<group>"; };
-		C4A11A1F0BD1448100713599 /* ForgeryElements.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryElements.py; sourceTree = "<group>"; };
-		C4A2088C07FFDF390083055D /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/ForgeryDocument.nib; sourceTree = "<group>"; };
-		C4AAA2E60BFB964B00C21BB6 /* ForgeryMap.py */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.python; path = ForgeryMap.py; sourceTree = "<group>"; };
-		C4AAA31C0BFBA6D700C21BB6 /* ForgeryCommon.py */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.python; path = ForgeryCommon.py; sourceTree = "<group>"; };
-		C4AAA36E0BFBF44E00C21BB6 /* ForgeryView.py */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.python; path = ForgeryView.py; sourceTree = "<group>"; };
-		C4AAA3740BFBF72700C21BB6 /* ForgeryMode.py */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.python; path = ForgeryMode.py; sourceTree = "<group>"; };
-		C4B992C50C0FA45C002F0480 /* ForgeryCursor.py */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.python; path = ForgeryCursor.py; sourceTree = "<group>"; };
-		C4B992C80C0FA4D0002F0480 /* ClosedHandCursor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ClosedHandCursor.png; sourceTree = "<group>"; };
-		C4CD59FD0BFD373400A2A172 /* ForgeryDrawMode.py */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.python; path = ForgeryDrawMode.py; sourceTree = "<group>"; };
-		C4CD5A000BFD381800A2A172 /* ForgeryDrawView.py */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.python; path = ForgeryDrawView.py; sourceTree = "<group>"; };
-		C4CD5A010BFD381800A2A172 /* ForgeryFillTool.py */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.python; path = ForgeryFillTool.py; sourceTree = "<group>"; };
-		C4CD5A020BFD381800A2A172 /* ForgeryLineTool.py */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.python; path = ForgeryLineTool.py; sourceTree = "<group>"; };
-		C4CD5A030BFD381800A2A172 /* ForgeryMenuBar.py */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.python; path = ForgeryMenuBar.py; sourceTree = "<group>"; };
-		C4CD5A040BFD381800A2A172 /* ForgeryObjectTool.py */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.python; path = ForgeryObjectTool.py; sourceTree = "<group>"; };
-		C4CD5A050BFD381800A2A172 /* ForgeryPalette.py */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.python; path = ForgeryPalette.py; sourceTree = "<group>"; };
-		C4CD5A060BFD381800A2A172 /* ForgeryPanTool.py */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.python; path = ForgeryPanTool.py; sourceTree = "<group>"; };
-		C4CD5A070BFD381800A2A172 /* ForgeryPreferences.py */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.python; path = ForgeryPreferences.py; sourceTree = "<group>"; };
-		C4CD5A080BFD381800A2A172 /* ForgeryRegularPolygonTool.py */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.python; path = ForgeryRegularPolygonTool.py; sourceTree = "<group>"; };
-		C4CD5A090BFD381800A2A172 /* ForgerySelectTool.py */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.python; path = ForgerySelectTool.py; sourceTree = "<group>"; };
-		C4CD5A0A0BFD381800A2A172 /* ForgeryTextTool.py */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.python; path = ForgeryTextTool.py; sourceTree = "<group>"; };
-		C4CD5A0B0BFD381800A2A172 /* ForgeryTextureMode.py */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.python; path = ForgeryTextureMode.py; sourceTree = "<group>"; };
-		C4CD5A0C0BFD381800A2A172 /* ForgeryTexturePalette.py */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.python; path = ForgeryTexturePalette.py; sourceTree = "<group>"; };
-		C4CD5A0D0BFD381800A2A172 /* ForgeryTextureView.py */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.python; path = ForgeryTextureView.py; sourceTree = "<group>"; };
-		C4CD5A0E0BFD381800A2A172 /* ForgeryTool.py */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.python; path = ForgeryTool.py; sourceTree = "<group>"; };
-		C4CD5A0F0BFD381800A2A172 /* ForgeryToolPalette.py */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.python; path = ForgeryToolPalette.py; sourceTree = "<group>"; };
-		C4CD5A100BFD381800A2A172 /* ForgeryZoomTool.py */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.python; path = ForgeryZoomTool.py; sourceTree = "<group>"; };
-		C4CD5A110BFD381800A2A172 /* ForgerysceAExporter.py */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.python; path = ForgerysceAExporter.py; sourceTree = "<group>"; };
-		C4CD5A6E0BFD3F4400A2A172 /* ZoomOutCursor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ZoomOutCursor.png; sourceTree = "<group>"; };
-		C4CD5A6F0BFD3F4400A2A172 /* Bucket.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Bucket.png; sourceTree = "<group>"; };
-		C4CD5A700BFD3F4400A2A172 /* Hand.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Hand.png; sourceTree = "<group>"; };
-		C4CD5A710BFD3F4400A2A172 /* Arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Arrow.png; sourceTree = "<group>"; };
-		C4CD5A720BFD3F4400A2A172 /* Line.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Line.png; sourceTree = "<group>"; };
-		C4CD5A730BFD3F4400A2A172 /* OpenHandCursor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OpenHandCursor.png; sourceTree = "<group>"; };
-		C4CD5A740BFD3F4400A2A172 /* CrossCursor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CrossCursor.png; sourceTree = "<group>"; };
-		C4CD5A750BFD3F4400A2A172 /* Skull.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Skull.png; sourceTree = "<group>"; };
-		C4CD5A760BFD3F4400A2A172 /* Lens.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Lens.png; sourceTree = "<group>"; };
-		C4CD5A770BFD3F4400A2A172 /* Text.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Text.png; sourceTree = "<group>"; };
-		C4CD5A780BFD3F4400A2A172 /* ZoomInCursor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ZoomInCursor.png; sourceTree = "<group>"; };
-		C4CD5A790BFD3F4400A2A172 /* BucketCursor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BucketCursor.png; sourceTree = "<group>"; };
-		C4CD5A7A0BFD3F4400A2A172 /* Polygon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Polygon.png; sourceTree = "<group>"; };
-		C4CD5B040BFE985E00A2A172 /* ForgeryViewDelegate.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryViewDelegate.py; sourceTree = "<group>"; };
-		C4CD5BEC0BFF61FD00A2A172 /* build.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = build.sh; sourceTree = "<group>"; };
-		C4D2A00A07FF563C00EDA198 /* setup.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = setup.py; sourceTree = "<group>"; };
-		C4D2A00E07FF576900EDA198 /* Forgery.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = Forgery.py; sourceTree = "<group>"; };
-		C4D2A01307FF5B0900EDA198 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
-		C4D2A03507FF5BF800EDA198 /* ForgeryDocument.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryDocument.py; sourceTree = "<group>"; };
-		C4D868F90C0B409F00C24903 /* ForgeryAlert.py */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.python; path = ForgeryAlert.py; sourceTree = "<group>"; };
-		C4D8690B0C0B5D2E00C24903 /* ForgeryApplication.py */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.python; path = ForgeryApplication.py; sourceTree = "<group>"; };
-		C4DAD4E60BFFB64F0040175F /* dist */ = {isa = PBXFileReference; lastKnownFileType = folder; path = dist; sourceTree = SOURCE_ROOT; };
-		C4DAD7C80BFFB74C0040175F /* MANIFEST.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MANIFEST.in; sourceTree = "<group>"; };
-		C4DAD7D10BFFB80F0040175F /* COPYING */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
-		C4DAD7D20BFFB82C0040175F /* forgery.sh */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.sh; path = forgery.sh; sourceTree = "<group>"; };
-		C4DAD7D60BFFB8AF0040175F /* README */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
-		C4E30E3107FFA7A90043E6B0 /* Info.plist */ = {isa = PBXFileReference; explicitFileType = text.plist; fileEncoding = 4; path = Info.plist; sourceTree = "<group>"; };
+		089C1660FE840EACC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		2A37F4B0FDCFA73011CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		2A37F4BAFDCFA73011CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = English; path = English.lproj/Credits.rtf; sourceTree = "<group>"; };
+		32DBCF750370BD2300C91783 /* Forgery_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Forgery_Prefix.pch; sourceTree = "<group>"; };
+		77383F220C07AB8F0043B131 /* main.py */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.python; path = main.py; sourceTree = "<group>"; };
+		77383F2B0C07ABD10043B131 /* ForgeryDocument.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryDocument.py; sourceTree = "<group>"; };
+		779AE5FA0C0A0980000694DF /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/ForgeryDocument.xib; sourceTree = "<group>"; };
+		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8D15AC370486D014006FF6A4 /* Forgery.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Forgery.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C400D50A13F62A1500796C05 /* Arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Arrow.png; sourceTree = "<group>"; };
+		C400D50B13F62A1500796C05 /* Bucket.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Bucket.png; sourceTree = "<group>"; };
+		C400D50C13F62A1500796C05 /* BucketCursor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BucketCursor.png; sourceTree = "<group>"; };
+		C400D50D13F62A1500796C05 /* ClosedHandCursor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ClosedHandCursor.png; sourceTree = "<group>"; };
+		C400D50E13F62A1500796C05 /* CrossCursor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CrossCursor.png; sourceTree = "<group>"; };
+		C400D50F13F62A1500796C05 /* Forgery.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Forgery.icns; sourceTree = "<group>"; };
+		C400D51813F62A4F00796C05 /* Hand.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Hand.png; sourceTree = "<group>"; };
+		C400D51913F62A4F00796C05 /* info.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = info.tiff; sourceTree = "<group>"; };
+		C400D51A13F62A4F00796C05 /* Lens.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Lens.png; sourceTree = "<group>"; };
+		C400D51B13F62A4F00796C05 /* Line.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Line.png; sourceTree = "<group>"; };
+		C400D51C13F62A4F00796C05 /* OpenHandCursor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OpenHandCursor.png; sourceTree = "<group>"; };
+		C400D51D13F62A4F00796C05 /* Polygon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Polygon.png; sourceTree = "<group>"; };
+		C400D51E13F62A4F00796C05 /* Skull.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Skull.png; sourceTree = "<group>"; };
+		C400D51F13F62A4F00796C05 /* Text.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Text.png; sourceTree = "<group>"; };
+		C400D52013F62A4F00796C05 /* ZoomInCursor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ZoomInCursor.png; sourceTree = "<group>"; };
+		C400D52113F62A4F00796C05 /* ZoomOutCursor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ZoomOutCursor.png; sourceTree = "<group>"; };
+		C400D52F13F62B0000796C05 /* ForgeryAlert.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryAlert.py; sourceTree = "<group>"; };
+		C400D53013F62B0000796C05 /* ForgeryApplication.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryApplication.py; sourceTree = "<group>"; };
+		C400D53113F62B0000796C05 /* ForgeryCommon.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryCommon.py; sourceTree = "<group>"; };
+		C400D53213F62B0000796C05 /* ForgeryCursor.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryCursor.py; sourceTree = "<group>"; };
+		C400D53313F62B0000796C05 /* ForgeryDrawMode.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryDrawMode.py; sourceTree = "<group>"; };
+		C400D53413F62B0000796C05 /* ForgeryDrawView.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryDrawView.py; sourceTree = "<group>"; };
+		C400D53513F62B0000796C05 /* ForgeryElements.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryElements.py; sourceTree = "<group>"; };
+		C400D53613F62B0000796C05 /* ForgeryFillTool.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryFillTool.py; sourceTree = "<group>"; };
+		C400D53713F62B0000796C05 /* ForgeryInspector.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryInspector.py; sourceTree = "<group>"; };
+		C400D53813F62B0000796C05 /* ForgeryLineTool.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryLineTool.py; sourceTree = "<group>"; };
+		C400D53913F62B0000796C05 /* ForgeryMap.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryMap.py; sourceTree = "<group>"; };
+		C400D53A13F62B0000796C05 /* ForgeryMenuBar.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryMenuBar.py; sourceTree = "<group>"; };
+		C400D53B13F62B0000796C05 /* ForgeryMode.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryMode.py; sourceTree = "<group>"; };
+		C400D53C13F62B0000796C05 /* ForgeryObjectTool.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryObjectTool.py; sourceTree = "<group>"; };
+		C400D53D13F62B0000796C05 /* ForgeryPalette.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryPalette.py; sourceTree = "<group>"; };
+		C400D53E13F62B0000796C05 /* ForgeryPanTool.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryPanTool.py; sourceTree = "<group>"; };
+		C400D53F13F62B0000796C05 /* ForgeryPoint.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryPoint.py; sourceTree = "<group>"; };
+		C400D54013F62B0000796C05 /* ForgeryPreferences.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryPreferences.py; sourceTree = "<group>"; };
+		C400D54113F62B0000796C05 /* ForgeryRegularPolygonTool.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryRegularPolygonTool.py; sourceTree = "<group>"; };
+		C400D54213F62B0000796C05 /* ForgerysceAExporter.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgerysceAExporter.py; sourceTree = "<group>"; };
+		C400D54313F62B0000796C05 /* ForgerySelectTool.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgerySelectTool.py; sourceTree = "<group>"; };
+		C400D54413F62B0000796C05 /* ForgeryTextTool.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryTextTool.py; sourceTree = "<group>"; };
+		C400D54513F62B0000796C05 /* ForgeryTextureMode.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryTextureMode.py; sourceTree = "<group>"; };
+		C400D54613F62B0000796C05 /* ForgeryTexturePalette.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryTexturePalette.py; sourceTree = "<group>"; };
+		C400D54713F62B0000796C05 /* ForgeryTextureView.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryTextureView.py; sourceTree = "<group>"; };
+		C400D54813F62B0000796C05 /* ForgeryTool.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryTool.py; sourceTree = "<group>"; };
+		C400D54913F62B0000796C05 /* ForgeryToolPalette.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryToolPalette.py; sourceTree = "<group>"; };
+		C400D54A13F62B0000796C05 /* ForgeryUndoManager.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryUndoManager.py; sourceTree = "<group>"; };
+		C400D54B13F62B0000796C05 /* ForgeryView.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryView.py; sourceTree = "<group>"; };
+		C400D54C13F62B0000796C05 /* ForgeryViewDelegate.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryViewDelegate.py; sourceTree = "<group>"; };
+		C400D54D13F62B0000796C05 /* ForgeryXMLParser.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryXMLParser.py; sourceTree = "<group>"; };
+		C400D54E13F62B0000796C05 /* ForgeryZoomTool.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryZoomTool.py; sourceTree = "<group>"; };
+		C400D57013F62B3400796C05 /* sample_map.sceB */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sample_map.sceB; sourceTree = "<group>"; };
+		C400D57313F62B9900796C05 /* MANIFEST.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MANIFEST.in; sourceTree = "<group>"; };
+		C400D57413F62B9900796C05 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		C400D57513F62B9900796C05 /* setup.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = setup.py; sourceTree = "<group>"; };
+		C400D57A13F62BD500796C05 /* build.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = build.sh; sourceTree = "<group>"; };
+		C400D57B13F62BD500796C05 /* forgery.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = forgery.sh; sourceTree = "<group>"; };
+		C400D57D13F62C3200796C05 /* COPYING */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
+		C402081013F76D7D009EDB54 /* tracer.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = tracer.py; sourceTree = "<group>"; };
+		C4020B4F13F8B3D2009EDB54 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/ForgeryApplication.xib; sourceTree = "<group>"; };
+		C46FA29C13F6263300635FF4 /* Python.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Python.framework; path = /System/Library/Frameworks/Python.framework; sourceTree = "<absolute>"; };
+		C49411E013FBA741004059D5 /* ForgeryProgressWindow.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryProgressWindow.py; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXGroup section */
-		C46230120BD2B85000A54125 /* Sample Data */ = {
-			isa = PBXGroup;
-			children = (
-				C46230130BD2B87D00A54125 /* sample_map.sceB */,
+/* Begin PBXFrameworksBuildPhase section */
+		8D15AC330486D014006FF6A4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */,
+				C46FA29D13F6263300635FF4 /* Python.framework in Frameworks */,
 			);
-			name = "Sample Data";
-			sourceTree = "<group>";
+			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C495964F0BCFCE1300D4FE05 /* Products */ = {
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		19C28FB0FE9D524F11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C49596550BCFCE6A00D4FE05 /* Forgery.app */,
-				C4DAD4E60BFFB64F0040175F /* dist */,
+				8D15AC370486D014006FF6A4 /* Forgery.app */,
 			);
 			name = Products;
-			path = ..;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		C4CD5BEE0BFF624C00A2A172 /* Scripts */ = {
-			isa = PBXGroup;
-			children = (
-				C4CD5BEC0BFF61FD00A2A172 /* build.sh */,
-				C4DAD7D20BFFB82C0040175F /* forgery.sh */,
-			);
-			name = Scripts;
 			sourceTree = "<group>";
 		};
-		C4D29FE007FF53B000EDA198 = {
+		2A37F4AAFDCFA73011CA2CEA /* Forgery */ = {
 			isa = PBXGroup;
 			children = (
-				C46230120BD2B85000A54125 /* Sample Data */,
-				C4D2A00607FF55F400EDA198 /* Classes */,
-				C4D2A00507FF55D000EDA198 /* Main Script */,
-				C4D2A00407FF55C400EDA198 /* Resources */,
-				C4D2A01507FF5B3B00EDA198 /* Other Source */,
-				C4CD5BEE0BFF624C00A2A172 /* Scripts */,
-				C495964F0BCFCE1300D4FE05 /* Products */,
+				C400D56F13F62B2800796C05 /* Sample Data */,
+				2A37F4ABFDCFA73011CA2CEA /* Classes */,
+				2A37F4AFFDCFA73011CA2CEA /* Main */,
+				2A37F4B8FDCFA73011CA2CEA /* Resources */,
+				C400D57213F62B4F00796C05 /* Other Source */,
+				C400D57913F62BC500796C05 /* Scripts */,
+				2A37F4C3FDCFA73011CA2CEA /* Frameworks */,
+				19C28FB0FE9D524F11CA2CBB /* Products */,
 			);
+			name = Forgery;
 			sourceTree = "<group>";
 		};
-		C4D2A00407FF55C400EDA198 /* Resources */ = {
+		2A37F4ABFDCFA73011CA2CEA /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				C496AA9D0C26629E0074840E /* info.tiff */,
-				C4CD5A710BFD3F4400A2A172 /* Arrow.png */,
-				C4CD5A6F0BFD3F4400A2A172 /* Bucket.png */,
-				C4CD5A790BFD3F4400A2A172 /* BucketCursor.png */,
-				C4B992C80C0FA4D0002F0480 /* ClosedHandCursor.png */,
-				C4CD5A740BFD3F4400A2A172 /* CrossCursor.png */,
-				C4CD5A700BFD3F4400A2A172 /* Hand.png */,
-				C4CD5A760BFD3F4400A2A172 /* Lens.png */,
-				C4CD5A720BFD3F4400A2A172 /* Line.png */,
-				C4CD5A730BFD3F4400A2A172 /* OpenHandCursor.png */,
-				C4CD5A7A0BFD3F4400A2A172 /* Polygon.png */,
-				C4CD5A750BFD3F4400A2A172 /* Skull.png */,
-				C4CD5A770BFD3F4400A2A172 /* Text.png */,
-				C4CD5A780BFD3F4400A2A172 /* ZoomInCursor.png */,
-				C4CD5A6E0BFD3F4400A2A172 /* ZoomOutCursor.png */,
-				C40FA6150C1937E300B4291F /* Forgery.icns */,
-				C4D2A01407FF5B1C00EDA198 /* MainMenu.nib */,
-				C4A2088B07FFDF390083055D /* ForgeryDocument.nib */,
-				C42A25720C02958E0080C59D /* ForgeryInspector.nib */,
-				C486713D0C025B2F007E6FA7 /* ForgeryPalette.nib */,
-				C459F5D80C26DA8C006AEF27 /* info.tiff */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-		};
-		C4D2A00507FF55D000EDA198 /* Main Script */ = {
-			isa = PBXGroup;
-			children = (
-				C4D2A00E07FF576900EDA198 /* Forgery.py */,
-			);
-			name = "Main Script";
-			sourceTree = "<group>";
-		};
-		C4D2A00607FF55F400EDA198 /* Classes */ = {
-			isa = PBXGroup;
-			children = (
-				C4AAA31C0BFBA6D700C21BB6 /* ForgeryCommon.py */,
-				C4D8690B0C0B5D2E00C24903 /* ForgeryApplication.py */,
-				C4D868F90C0B409F00C24903 /* ForgeryAlert.py */,
-				C4CD5A070BFD381800A2A172 /* ForgeryPreferences.py */,
-				C4D2A03507FF5BF800EDA198 /* ForgeryDocument.py */,
-				C4AAA36E0BFBF44E00C21BB6 /* ForgeryView.py */,
-				C4983D770C1F1C1300BDACE4 /* ForgeryPoint.py */,
-				C4CD5A030BFD381800A2A172 /* ForgeryMenuBar.py */,
-				C45CC0340C0A010B00FA59B6 /* ForgeryUndoManager.py */,
-				C4AAA2E60BFB964B00C21BB6 /* ForgeryMap.py */,
-				C4A11A1F0BD1448100713599 /* ForgeryElements.py */,
-				C4AAA3740BFBF72700C21BB6 /* ForgeryMode.py */,
-				C4CD5B040BFE985E00A2A172 /* ForgeryViewDelegate.py */,
-				C4CD5A050BFD381800A2A172 /* ForgeryPalette.py */,
-				C4CD59FD0BFD373400A2A172 /* ForgeryDrawMode.py */,
-				C4CD5A000BFD381800A2A172 /* ForgeryDrawView.py */,
-				C4CD5A0F0BFD381800A2A172 /* ForgeryToolPalette.py */,
-				C4CD5A0B0BFD381800A2A172 /* ForgeryTextureMode.py */,
-				C4CD5A0D0BFD381800A2A172 /* ForgeryTextureView.py */,
-				C4CD5A0C0BFD381800A2A172 /* ForgeryTexturePalette.py */,
-				C47678D20C078DA800333705 /* ForgeryInspector.py */,
-				C4B992C50C0FA45C002F0480 /* ForgeryCursor.py */,
-				C4CD5A0E0BFD381800A2A172 /* ForgeryTool.py */,
-				C4CD5A090BFD381800A2A172 /* ForgerySelectTool.py */,
-				C4CD5A020BFD381800A2A172 /* ForgeryLineTool.py */,
-				C4CD5A080BFD381800A2A172 /* ForgeryRegularPolygonTool.py */,
-				C4CD5A010BFD381800A2A172 /* ForgeryFillTool.py */,
-				C4CD5A060BFD381800A2A172 /* ForgeryPanTool.py */,
-				C4CD5A100BFD381800A2A172 /* ForgeryZoomTool.py */,
-				C4CD5A0A0BFD381800A2A172 /* ForgeryTextTool.py */,
-				C4CD5A040BFD381800A2A172 /* ForgeryObjectTool.py */,
-				C49596A30BCFD7E900D4FE05 /* ForgeryXMLParser.py */,
-				C4CD5A110BFD381800A2A172 /* ForgerysceAExporter.py */,
+				C402081013F76D7D009EDB54 /* tracer.py */,
+				C400D52F13F62B0000796C05 /* ForgeryAlert.py */,
+				C400D53013F62B0000796C05 /* ForgeryApplication.py */,
+				C400D53113F62B0000796C05 /* ForgeryCommon.py */,
+				C400D53213F62B0000796C05 /* ForgeryCursor.py */,
+				77383F2B0C07ABD10043B131 /* ForgeryDocument.py */,
+				C400D53313F62B0000796C05 /* ForgeryDrawMode.py */,
+				C400D53413F62B0000796C05 /* ForgeryDrawView.py */,
+				C400D53513F62B0000796C05 /* ForgeryElements.py */,
+				C400D53613F62B0000796C05 /* ForgeryFillTool.py */,
+				C400D53713F62B0000796C05 /* ForgeryInspector.py */,
+				C400D53813F62B0000796C05 /* ForgeryLineTool.py */,
+				C400D53913F62B0000796C05 /* ForgeryMap.py */,
+				C400D53A13F62B0000796C05 /* ForgeryMenuBar.py */,
+				C400D53B13F62B0000796C05 /* ForgeryMode.py */,
+				C400D53C13F62B0000796C05 /* ForgeryObjectTool.py */,
+				C400D53D13F62B0000796C05 /* ForgeryPalette.py */,
+				C400D53E13F62B0000796C05 /* ForgeryPanTool.py */,
+				C400D53F13F62B0000796C05 /* ForgeryPoint.py */,
+				C400D54013F62B0000796C05 /* ForgeryPreferences.py */,
+				C49411E013FBA741004059D5 /* ForgeryProgressWindow.py */,
+				C400D54113F62B0000796C05 /* ForgeryRegularPolygonTool.py */,
+				C400D54213F62B0000796C05 /* ForgerysceAExporter.py */,
+				C400D54313F62B0000796C05 /* ForgerySelectTool.py */,
+				C400D54413F62B0000796C05 /* ForgeryTextTool.py */,
+				C400D54513F62B0000796C05 /* ForgeryTextureMode.py */,
+				C400D54613F62B0000796C05 /* ForgeryTexturePalette.py */,
+				C400D54713F62B0000796C05 /* ForgeryTextureView.py */,
+				C400D54813F62B0000796C05 /* ForgeryTool.py */,
+				C400D54913F62B0000796C05 /* ForgeryToolPalette.py */,
+				C400D54A13F62B0000796C05 /* ForgeryUndoManager.py */,
+				C400D54B13F62B0000796C05 /* ForgeryView.py */,
+				C400D54C13F62B0000796C05 /* ForgeryViewDelegate.py */,
+				C400D54D13F62B0000796C05 /* ForgeryXMLParser.py */,
+				C400D54E13F62B0000796C05 /* ForgeryZoomTool.py */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
 		};
-		C4D2A01507FF5B3B00EDA198 /* Other Source */ = {
+		2A37F4AFFDCFA73011CA2CEA /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				C4D2A00A07FF563C00EDA198 /* setup.py */,
-				C4E30E3107FFA7A90043E6B0 /* Info.plist */,
-				C4DAD7C80BFFB74C0040175F /* MANIFEST.in */,
-				C4DAD7D10BFFB80F0040175F /* COPYING */,
-				C4DAD7D60BFFB8AF0040175F /* README */,
+				32DBCF750370BD2300C91783 /* Forgery_Prefix.pch */,
+				2A37F4B0FDCFA73011CA2CEA /* main.m */,
+				77383F220C07AB8F0043B131 /* main.py */,
+			);
+			name = Main;
+			sourceTree = "<group>";
+		};
+		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				C400D51913F62A4F00796C05 /* info.tiff */,
+				C400D50A13F62A1500796C05 /* Arrow.png */,
+				C400D50B13F62A1500796C05 /* Bucket.png */,
+				C400D50C13F62A1500796C05 /* BucketCursor.png */,
+				C400D50D13F62A1500796C05 /* ClosedHandCursor.png */,
+				C400D50E13F62A1500796C05 /* CrossCursor.png */,
+				C400D51813F62A4F00796C05 /* Hand.png */,
+				C400D51A13F62A4F00796C05 /* Lens.png */,
+				C400D51B13F62A4F00796C05 /* Line.png */,
+				C400D51C13F62A4F00796C05 /* OpenHandCursor.png */,
+				C400D51D13F62A4F00796C05 /* Polygon.png */,
+				C400D51E13F62A4F00796C05 /* Skull.png */,
+				C400D51F13F62A4F00796C05 /* Text.png */,
+				C400D52013F62A4F00796C05 /* ZoomInCursor.png */,
+				C400D52113F62A4F00796C05 /* ZoomOutCursor.png */,
+				C400D50F13F62A1500796C05 /* Forgery.icns */,
+				779AE5F90C0A0980000694DF /* ForgeryDocument.xib */,
+				C4020BBE13F9000C009EDB54 /* ForgeryApplication.xib */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		2A37F4C3FDCFA73011CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */,
+				C46FA29C13F6263300635FF4 /* Python.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C400D56F13F62B2800796C05 /* Sample Data */ = {
+			isa = PBXGroup;
+			children = (
+				C400D57013F62B3400796C05 /* sample_map.sceB */,
+			);
+			name = "Sample Data";
+			sourceTree = "<group>";
+		};
+		C400D57213F62B4F00796C05 /* Other Source */ = {
+			isa = PBXGroup;
+			children = (
+				C400D57513F62B9900796C05 /* setup.py */,
+				2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */,
+				8D15AC360486D014006FF6A4 /* Info.plist */,
+				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
+				C400D57D13F62C3200796C05 /* COPYING */,
+				C400D57313F62B9900796C05 /* MANIFEST.in */,
+				C400D57413F62B9900796C05 /* README */,
 			);
 			name = "Other Source";
 			sourceTree = "<group>";
 		};
+		C400D57913F62BC500796C05 /* Scripts */ = {
+			isa = PBXGroup;
+			children = (
+				C400D57A13F62BD500796C05 /* build.sh */,
+				C400D57B13F62BD500796C05 /* forgery.sh */,
+			);
+			name = Scripts;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
-/* Begin PBXLegacyTarget section */
-		C495363B0BFF83EA001B1FA6 /* Build */ = {
-			isa = PBXLegacyTarget;
-			buildArgumentsString = "/bin/sh build.sh build";
-			buildConfigurationList = C49536410BFF8446001B1FA6 /* Build configuration list for PBXLegacyTarget "Build" */;
+/* Begin PBXNativeTarget section */
+		8D15AC270486D014006FF6A4 /* Forgery */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C05733C708A9546B00998B17 /* Build configuration list for PBXNativeTarget "Forgery" */;
 			buildPhases = (
+				8D15AC2B0486D014006FF6A4 /* Resources */,
+				8D15AC300486D014006FF6A4 /* Sources */,
+				8D15AC330486D014006FF6A4 /* Frameworks */,
+				C45FC72F139E598A004A1820 /* Copy PyObjC */,
 			);
-			buildToolPath = /usr/bin/env;
-			buildWorkingDirectory = "$(SRC_ROOT)";
+			buildRules = (
+			);
 			dependencies = (
 			);
-			name = Build;
-			passBuildSettingsInEnvironment = 1;
-			productName = Build;
+			name = Forgery;
+			productInstallPath = "$(HOME)/Applications";
+			productName = Forgery;
+			productReference = 8D15AC370486D014006FF6A4 /* Forgery.app */;
+			productType = "com.apple.product-type.application";
 		};
-		C495365F0BFF876F001B1FA6 /* Clean */ = {
-			isa = PBXLegacyTarget;
-			buildArgumentsString = "/bin/sh build.sh clean $(ACTION)";
-			buildConfigurationList = C49536620BFF87B1001B1FA6 /* Build configuration list for PBXLegacyTarget "Clean" */;
-			buildPhases = (
-			);
-			buildToolPath = /usr/bin/env;
-			buildWorkingDirectory = "$(SRC_ROOT)";
-			dependencies = (
-			);
-			name = Clean;
-			passBuildSettingsInEnvironment = 1;
-			productName = Clean;
-		};
-		C4CD5C620BFF82AB00A2A172 /* Source Distribution */ = {
-			isa = PBXLegacyTarget;
-			buildArgumentsString = "/bin/sh build.sh sdist $(ACTION)";
-			buildConfigurationList = C4CD5C630BFF82F100A2A172 /* Build configuration list for PBXLegacyTarget "Source Distribution" */;
-			buildPhases = (
-			);
-			buildToolPath = /usr/bin/env;
-			buildWorkingDirectory = "$(SRC_ROOT)";
-			dependencies = (
-			);
-			name = "Source Distribution";
-			passBuildSettingsInEnvironment = 1;
-			productName = "Source Distribution";
-		};
-		C4DAD7F80BFFBD810040175F /* Binary Distribution */ = {
-			isa = PBXLegacyTarget;
-			buildArgumentsString = "/bin/sh build.sh bdist $(ACTION)";
-			buildConfigurationList = C4DAD7F90BFFBD810040175F /* Build configuration list for PBXLegacyTarget "Binary Distribution" */;
-			buildPhases = (
-			);
-			buildToolPath = /usr/bin/env;
-			buildWorkingDirectory = "$(SRC_ROOT)";
-			dependencies = (
-			);
-			name = "Binary Distribution";
-			passBuildSettingsInEnvironment = 1;
-			productName = "Source Distribution";
-		};
-/* End PBXLegacyTarget section */
+/* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		C4D29FE407FF53B000EDA198 /* Project object */ = {
+		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = C495963F0BCFCDC700D4FE05 /* Build configuration list for PBXProject "Forgery" */;
-			hasScannedForEncodings = 0;
-			mainGroup = C4D29FE007FF53B000EDA198;
+			buildConfigurationList = C05733CB08A9546B00998B17 /* Build configuration list for PBXProject "Forgery" */;
+			compatibilityVersion = "Xcode 3.0";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* Forgery */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
-				C495363B0BFF83EA001B1FA6 /* Build */,
-				C4CD5C620BFF82AB00A2A172 /* Source Distribution */,
-				C4DAD7F80BFFBD810040175F /* Binary Distribution */,
-				C495365F0BFF876F001B1FA6 /* Clean */,
+				8D15AC270486D014006FF6A4 /* Forgery */,
 			);
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		8D15AC2B0486D014006FF6A4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */,
+				8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */,
+				77383F230C07AB8F0043B131 /* main.py in Resources */,
+				77383F2C0C07ABD10043B131 /* ForgeryDocument.py in Resources */,
+				779AE5FC0C0A0980000694DF /* ForgeryDocument.xib in Resources */,
+				C400D51013F62A1500796C05 /* Arrow.png in Resources */,
+				C400D51113F62A1500796C05 /* Bucket.png in Resources */,
+				C400D51213F62A1500796C05 /* BucketCursor.png in Resources */,
+				C400D51313F62A1500796C05 /* ClosedHandCursor.png in Resources */,
+				C400D51413F62A1500796C05 /* CrossCursor.png in Resources */,
+				C400D51513F62A1500796C05 /* Forgery.icns in Resources */,
+				C400D52213F62A4F00796C05 /* Hand.png in Resources */,
+				C400D52313F62A4F00796C05 /* info.tiff in Resources */,
+				C400D52413F62A4F00796C05 /* Lens.png in Resources */,
+				C400D52513F62A4F00796C05 /* Line.png in Resources */,
+				C400D52613F62A4F00796C05 /* OpenHandCursor.png in Resources */,
+				C400D52713F62A4F00796C05 /* Polygon.png in Resources */,
+				C400D52813F62A4F00796C05 /* Skull.png in Resources */,
+				C400D52913F62A4F00796C05 /* Text.png in Resources */,
+				C400D52A13F62A4F00796C05 /* ZoomInCursor.png in Resources */,
+				C400D52B13F62A4F00796C05 /* ZoomOutCursor.png in Resources */,
+				C400D54F13F62B0000796C05 /* ForgeryAlert.py in Resources */,
+				C400D55013F62B0000796C05 /* ForgeryApplication.py in Resources */,
+				C400D55113F62B0000796C05 /* ForgeryCommon.py in Resources */,
+				C400D55213F62B0000796C05 /* ForgeryCursor.py in Resources */,
+				C400D55313F62B0000796C05 /* ForgeryDrawMode.py in Resources */,
+				C400D55413F62B0000796C05 /* ForgeryDrawView.py in Resources */,
+				C400D55513F62B0000796C05 /* ForgeryElements.py in Resources */,
+				C400D55613F62B0000796C05 /* ForgeryFillTool.py in Resources */,
+				C400D55713F62B0000796C05 /* ForgeryInspector.py in Resources */,
+				C400D55813F62B0000796C05 /* ForgeryLineTool.py in Resources */,
+				C400D55913F62B0000796C05 /* ForgeryMap.py in Resources */,
+				C400D55A13F62B0000796C05 /* ForgeryMenuBar.py in Resources */,
+				C400D55B13F62B0000796C05 /* ForgeryMode.py in Resources */,
+				C400D55C13F62B0000796C05 /* ForgeryObjectTool.py in Resources */,
+				C400D55D13F62B0000796C05 /* ForgeryPalette.py in Resources */,
+				C400D55E13F62B0000796C05 /* ForgeryPanTool.py in Resources */,
+				C400D55F13F62B0000796C05 /* ForgeryPoint.py in Resources */,
+				C400D56013F62B0000796C05 /* ForgeryPreferences.py in Resources */,
+				C400D56113F62B0000796C05 /* ForgeryRegularPolygonTool.py in Resources */,
+				C400D56213F62B0000796C05 /* ForgerysceAExporter.py in Resources */,
+				C400D56313F62B0000796C05 /* ForgerySelectTool.py in Resources */,
+				C400D56413F62B0000796C05 /* ForgeryTextTool.py in Resources */,
+				C400D56513F62B0000796C05 /* ForgeryTextureMode.py in Resources */,
+				C400D56613F62B0000796C05 /* ForgeryTexturePalette.py in Resources */,
+				C400D56713F62B0000796C05 /* ForgeryTextureView.py in Resources */,
+				C400D56813F62B0000796C05 /* ForgeryTool.py in Resources */,
+				C400D56913F62B0000796C05 /* ForgeryToolPalette.py in Resources */,
+				C400D56A13F62B0000796C05 /* ForgeryUndoManager.py in Resources */,
+				C400D56B13F62B0000796C05 /* ForgeryView.py in Resources */,
+				C400D56C13F62B0000796C05 /* ForgeryViewDelegate.py in Resources */,
+				C400D56D13F62B0000796C05 /* ForgeryXMLParser.py in Resources */,
+				C400D56E13F62B0000796C05 /* ForgeryZoomTool.py in Resources */,
+				C402081113F76D7D009EDB54 /* tracer.py in Resources */,
+				C4020BBF13F9000C009EDB54 /* ForgeryApplication.xib in Resources */,
+				C49411E113FBA741004059D5 /* ForgeryProgressWindow.py in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8D15AC300486D014006FF6A4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D15AC320486D014006FF6A4 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
 /* Begin PBXVariantGroup section */
-		C42A25720C02958E0080C59D /* ForgeryInspector.nib */ = {
+		089C165FFE840EACC02AAC07 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				C48671430C02684C007E6FA7 /* English */,
+				089C1660FE840EACC02AAC07 /* English */,
 			);
-			name = ForgeryInspector.nib;
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		C4A2088B07FFDF390083055D /* ForgeryDocument.nib */ = {
+		2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */ = {
 			isa = PBXVariantGroup;
 			children = (
-				C4A2088C07FFDF390083055D /* English */,
+				2A37F4BAFDCFA73011CA2CEA /* English */,
 			);
-			name = ForgeryDocument.nib;
+			name = Credits.rtf;
 			sourceTree = "<group>";
 		};
-		C4D2A01407FF5B1C00EDA198 /* MainMenu.nib */ = {
+		779AE5F90C0A0980000694DF /* ForgeryDocument.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				C4D2A01307FF5B0900EDA198 /* English */,
+				779AE5FA0C0A0980000694DF /* English */,
 			);
-			name = MainMenu.nib;
+			name = ForgeryDocument.xib;
+			sourceTree = "<group>";
+		};
+		C4020BBE13F9000C009EDB54 /* ForgeryApplication.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C4020B4F13F8B3D2009EDB54 /* English */,
+			);
+			name = ForgeryApplication.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		C49536420BFF8446001B1FA6 /* Development */ = {
+		C05733C808A9546B00998B17 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				PRODUCT_NAME = Build;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Forgery_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				PRODUCT_NAME = Forgery;
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = YES;
 			};
-			name = Development;
+			name = Debug;
 		};
-		C49536430BFF8446001B1FA6 /* Deployment */ = {
+		C05733C908A9546B00998B17 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				PRODUCT_NAME = Build;
-				ZERO_LINK = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Forgery_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				PRODUCT_NAME = Forgery;
+				WRAPPER_EXTENSION = app;
 			};
-			name = Deployment;
+			name = Release;
 		};
-		C49536440BFF8446001B1FA6 /* Default */ = {
+		C05733CC08A9546B00998B17 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				PRODUCT_NAME = Build;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
 			};
-			name = Default;
+			name = Debug;
 		};
-		C49536630BFF87B1001B1FA6 /* Development */ = {
+		C05733CD08A9546B00998B17 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				PRODUCT_NAME = Clean;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
 			};
-			name = Development;
-		};
-		C49536640BFF87B1001B1FA6 /* Deployment */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				PRODUCT_NAME = Clean;
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-		C49536650BFF87B1001B1FA6 /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = Clean;
-			};
-			name = Default;
-		};
-		C49596400BCFCDC700D4FE05 /* Development */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-			};
-			name = Development;
-		};
-		C49596410BCFCDC700D4FE05 /* Deployment */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-			};
-			name = Deployment;
-		};
-		C49596420BCFCDC700D4FE05 /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-			};
-			name = Default;
-		};
-		C4CD5C640BFF82F100A2A172 /* Development */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				PRODUCT_NAME = "Source Distribution";
-			};
-			name = Development;
-		};
-		C4CD5C650BFF82F100A2A172 /* Deployment */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				PRODUCT_NAME = "Source Distribution";
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-		C4CD5C660BFF82F100A2A172 /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "Source Distribution";
-			};
-			name = Default;
-		};
-		C4DAD7FA0BFFBD810040175F /* Development */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				PRODUCT_NAME = "Source Distribution";
-			};
-			name = Development;
-		};
-		C4DAD7FB0BFFBD810040175F /* Deployment */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				PRODUCT_NAME = "Binary Distribution";
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-		C4DAD7FC0BFFBD810040175F /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "Source Distribution";
-			};
-			name = Default;
+			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C49536410BFF8446001B1FA6 /* Build configuration list for PBXLegacyTarget "Build" */ = {
+		C05733C708A9546B00998B17 /* Build configuration list for PBXNativeTarget "Forgery" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				C49536420BFF8446001B1FA6 /* Development */,
-				C49536430BFF8446001B1FA6 /* Deployment */,
-				C49536440BFF8446001B1FA6 /* Default */,
+				C05733C808A9546B00998B17 /* Debug */,
+				C05733C908A9546B00998B17 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = Release;
 		};
-		C49536620BFF87B1001B1FA6 /* Build configuration list for PBXLegacyTarget "Clean" */ = {
+		C05733CB08A9546B00998B17 /* Build configuration list for PBXProject "Forgery" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				C49536630BFF87B1001B1FA6 /* Development */,
-				C49536640BFF87B1001B1FA6 /* Deployment */,
-				C49536650BFF87B1001B1FA6 /* Default */,
+				C05733CC08A9546B00998B17 /* Debug */,
+				C05733CD08A9546B00998B17 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
-		};
-		C495963F0BCFCDC700D4FE05 /* Build configuration list for PBXProject "Forgery" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				C49596400BCFCDC700D4FE05 /* Development */,
-				C49596410BCFCDC700D4FE05 /* Deployment */,
-				C49596420BCFCDC700D4FE05 /* Default */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
-		};
-		C4CD5C630BFF82F100A2A172 /* Build configuration list for PBXLegacyTarget "Source Distribution" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				C4CD5C640BFF82F100A2A172 /* Development */,
-				C4CD5C650BFF82F100A2A172 /* Deployment */,
-				C4CD5C660BFF82F100A2A172 /* Default */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
-		};
-		C4DAD7F90BFFBD810040175F /* Build configuration list for PBXLegacyTarget "Binary Distribution" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				C4DAD7FA0BFFBD810040175F /* Development */,
-				C4DAD7FB0BFFBD810040175F /* Deployment */,
-				C4DAD7FC0BFFBD810040175F /* Default */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = C4D29FE407FF53B000EDA198 /* Project object */;
+	rootObject = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
 }
