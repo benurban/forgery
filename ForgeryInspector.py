@@ -95,8 +95,13 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 		return {
 			'vertex0Field': self.lineVertex0Field,
 			'vertex1Field': self.lineVertex1Field,
-			'solidCheckbox': self.lineSolidCheckbox,
-			'transparentCheckbox': self.lineTransparentCheckbox,
+			'blocksPlayersCheckbox': self.lineBlocksPlayersCheckbox,
+			'blocksAlliesCheckbox': self.lineBlocksAlliesCheckbox,
+			'blocksEnemiesCheckbox': self.lineBlocksEnemiesCheckbox,
+			'blocksTeamsCheckbox': self.lineBlocksTeamsCheckbox,
+			'blocksTeamsPropertiesButton': self.lineBlocksTeamsPropertiesButton,
+			'mapVisibilityRadioGroup': self.lineMapVisibilityRadioGroup,
+			'mapVisibilityPropertiesButton': self.lineMapVisibilityPropertiesButton,
 			'side': (
 				{
 					'polygonField': self.lineSide0PolygonField,
@@ -108,13 +113,7 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 						'effectMenu': self.lineSide0BottomEffectMenu,
 						'effectPropertiesButton': self.lineSide0BottomEffectPropertiesButton,
 						'lightField': self.lineSide0BottomLightField,
-						'switchCheckbox': self.lineSide0BottomSwitchCheckbox,
-						'switchPropertiesButton': self.lineSide0BottomSwitchPropertiesButton,
-						'patternBufferCheckbox': self.lineSide0BottomPatternBufferCheckbox,
-						'terminalCheckbox': self.lineSide0BottomTerminalCheckbox,
-						'terminalPropertiesButton': self.lineSide0BottomTerminalPropertiesButton,
-						'rechargerCheckbox': self.lineSide0BottomRechargerCheckbox,
-						'rechargerPropertiesButton': self.lineSide0BottomRechargerPropertiesButton,
+						'actionsButton': self.lineSide0BottomActionsButton,
 					},
 					'middle': {
 						'dxSlider': self.lineSide0MiddleDXSlider,
@@ -124,13 +123,7 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 						'effectMenu': self.lineSide0MiddleEffectMenu,
 						'effectPropertiesButton': self.lineSide0MiddleEffectPropertiesButton,
 						'lightField': self.lineSide0MiddleLightField,
-						'switchCheckbox': self.lineSide0MiddleSwitchCheckbox,
-						'switchPropertiesButton': self.lineSide0MiddleSwitchPropertiesButton,
-						'patternBufferCheckbox': self.lineSide0MiddlePatternBufferCheckbox,
-						'terminalCheckbox': self.lineSide0MiddleTerminalCheckbox,
-						'terminalPropertiesButton': self.lineSide0MiddleTerminalPropertiesButton,
-						'rechargerCheckbox': self.lineSide0MiddleRechargerCheckbox,
-						'rechargerPropertiesButton': self.lineSide0MiddleRechargerPropertiesButton,
+						'actionsButton': self.lineSide0MiddleActionsButton,
 					},
 					'top': {
 						'dxSlider': self.lineSide0TopDXSlider,
@@ -140,13 +133,7 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 						'effectMenu': self.lineSide0TopEffectMenu,
 						'effectPropertiesButton': self.lineSide0TopEffectPropertiesButton,
 						'lightField': self.lineSide0TopLightField,
-						'switchCheckbox': self.lineSide0TopSwitchCheckbox,
-						'switchPropertiesButton': self.lineSide0TopSwitchPropertiesButton,
-						'patternBufferCheckbox': self.lineSide0TopPatternBufferCheckbox,
-						'terminalCheckbox': self.lineSide0TopTerminalCheckbox,
-						'terminalPropertiesButton': self.lineSide0TopTerminalPropertiesButton,
-						'rechargerCheckbox': self.lineSide0TopRechargerCheckbox,
-						'rechargerPropertiesButton': self.lineSide0TopRechargerPropertiesButton,
+						'actionsButton': self.lineSide0TopActionsButton,
 					},
 				}, {
 					'polygonField': self.lineSide1PolygonField,
@@ -158,13 +145,7 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 						'effectMenu': self.lineSide1BottomEffectMenu,
 						'effectPropertiesButton': self.lineSide1BottomEffectPropertiesButton,
 						'lightField': self.lineSide1BottomLightField,
-						'switchCheckbox': self.lineSide1BottomSwitchCheckbox,
-						'switchPropertiesButton': self.lineSide1BottomSwitchPropertiesButton,
-						'patternBufferCheckbox': self.lineSide1BottomPatternBufferCheckbox,
-						'terminalCheckbox': self.lineSide1BottomTerminalCheckbox,
-						'terminalPropertiesButton': self.lineSide1BottomTerminalPropertiesButton,
-						'rechargerCheckbox': self.lineSide1BottomRechargerCheckbox,
-						'rechargerPropertiesButton': self.lineSide1BottomRechargerPropertiesButton,
+						'actionsButton': self.lineSide1BottomActionsButton,
 					},
 					'middle': {
 						'dxSlider': self.lineSide1MiddleDXSlider,
@@ -174,13 +155,7 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 						'effectMenu': self.lineSide1MiddleEffectMenu,
 						'effectPropertiesButton': self.lineSide1MiddleEffectPropertiesButton,
 						'lightField': self.lineSide1MiddleLightField,
-						'switchCheckbox': self.lineSide1MiddleSwitchCheckbox,
-						'switchPropertiesButton': self.lineSide1MiddleSwitchPropertiesButton,
-						'patternBufferCheckbox': self.lineSide1MiddlePatternBufferCheckbox,
-						'terminalCheckbox': self.lineSide1MiddleTerminalCheckbox,
-						'terminalPropertiesButton': self.lineSide1MiddleTerminalPropertiesButton,
-						'rechargerCheckbox': self.lineSide1MiddleRechargerCheckbox,
-						'rechargerPropertiesButton': self.lineSide1MiddleRechargerPropertiesButton,
+						'actionsButton': self.lineSide1MiddleActionsButton,
 					},
 					'top': {
 						'dxSlider': self.lineSide1TopDXSlider,
@@ -190,13 +165,7 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 						'effectMenu': self.lineSide1TopEffectMenu,
 						'effectPropertiesButton': self.lineSide1TopEffectPropertiesButton,
 						'lightField': self.lineSide1TopLightField,
-						'switchCheckbox': self.lineSide1TopSwitchCheckbox,
-						'switchPropertiesButton': self.lineSide1TopSwitchPropertiesButton,
-						'patternBufferCheckbox': self.lineSide1TopPatternBufferCheckbox,
-						'terminalCheckbox': self.lineSide1TopTerminalCheckbox,
-						'terminalPropertiesButton': self.lineSide1TopTerminalPropertiesButton,
-						'rechargerCheckbox': self.lineSide1TopRechargerCheckbox,
-						'rechargerPropertiesButton': self.lineSide1TopRechargerPropertiesButton,
+						'actionsButton': self.lineSide1TopActionsButton,
 					},
 				},
 			),
@@ -211,6 +180,7 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 				'offsetField': self.polygonLayerOffsetField,
 				'offsetUnitsField': self.polygonLayerOffsetUnitsField,
 			},
+			'actionsButton': self.polygonActionsButton,
 			'floor': {
 				'heightField': self.polygonFloorHeightField,
 				'heightStepper': self.polygonFloorHeightStepper,
@@ -223,13 +193,7 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 				'effectMenu': self.polygonFloorEffectMenu,
 				'effectPropertiesButton': self.polygonFloorEffectPropertiesButton,
 				'lightField': self.polygonFloorLightField,
-				'switchCheckbox': self.polygonFloorSwitchCheckbox,
-				'switchPropertiesButton': self.polygonFloorSwitchPropertiesButton,
-				'patternBufferCheckbox': self.polygonFloorPatternBufferCheckbox,
-				'terminalCheckbox': self.polygonFloorTerminalCheckbox,
-				'terminalPropertiesButton': self.polygonFloorTerminalPropertiesButton,
-				'rechargerCheckbox': self.polygonFloorRechargerCheckbox,
-				'rechargerPropertiesButton': self.polygonFloorRechargerPropertiesButton,
+				'actionsButton': self.polygonFloorActionsButton,
 			},
 			'ceiling': {
 				'heightField': self.polygonCeilingHeightField,
@@ -243,13 +207,7 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 				'effectMenu': self.polygonCeilingEffectMenu,
 				'effectPropertiesButton': self.polygonCeilingEffectPropertiesButton,
 				'lightField': self.polygonCeilingLightField,
-				'switchCheckbox': self.polygonCeilingSwitchCheckbox,
-				'switchPropertiesButton': self.polygonCeilingSwitchPropertiesButton,
-				'patternBufferCheckbox': self.polygonCeilingPatternBufferCheckbox,
-				'terminalCheckbox': self.polygonCeilingTerminalCheckbox,
-				'terminalPropertiesButton': self.polygonCeilingTerminalPropertiesButton,
-				'rechargerCheckbox': self.polygonCeilingRechargerCheckbox,
-				'rechargerPropertiesButton': self.polygonCeilingRechargerPropertiesButton,
+				'actionsButton': self.polygonCeilingActionsButton,
 			},
 		}
 	
@@ -447,13 +405,23 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 		if usePyObjC:
 			lineUI['vertex0Field'].setStringValue_(unicode(line.vertex0.elementID))
 			lineUI['vertex1Field'].setStringValue_(unicode(line.vertex1.elementID))
-			# FIXME: NSButton lineSolidCheckbox
-			# FIXME: NSButton lineTransparentCheckbox
+			# FIXME: NSButton lineBlocksPlayersCheckbox
+			# FIXME: NSButton lineBlocksAlliesCheckbox
+			# FIXME: NSButton lineBlocksEnemiesCheckbox
+			# FIXME: NSButton lineBlocksTeamsCheckbox
+			# FIXME: NSButton lineBlocksTeamsPropertiesButton
+			# FIXME: NSMatrix lineMapVisibilityRadioGroup
+			# FIXME: NSButton lineMapVisibilityPropertiesButton
 		else:
 			lineUI['vertex0Field'].ChangeValue(unicode(line.vertex0.elementID))
 			lineUI['vertex1Field'].ChangeValue(unicode(line.vertex1.elementID))
-			# FIXME: wx.Checkbox lineSolidCheckbox
-			# FIXME: wx.Checkbox lineTransparentCheckbox
+			# FIXME: wx.Checkbox lineBlocksPlayersCheckbox
+			# FIXME: wx.Checkbox lineBlocksAlliesCheckbox
+			# FIXME: wx.Checkbox lineBlocksEnemiesCheckbox
+			# FIXME: wx.Checkbox lineBlocksTeamsCheckbox
+			# FIXME: ? lineBlocksTeamsPropertiesButton
+			# FIXME: ? lineMapVisibilityRadioGroup
+			# FIXME: ? lineMapVisibilityPropertiesButton
 		for index, sideUI in enumerate(lineUI['side']):
 			self.updateSide(line, getattr(line, 'side' + str(index)), index, sideUI)
 	
@@ -461,6 +429,7 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 	def updatePolygon(self, polygon, polygonUI):
 		polygon.findSides()
 		if usePyObjC:
+			# FIXME: Ranges?
 			polygonUI['floor']['heightField'].setDoubleValue_(polygon.floorHeight)
 			polygonUI['floor']['heightStepper'].setDoubleValue_(polygon.floorHeight)
 			polygonUI['floor']['offsetField'].setDoubleValue_(polygon.floorOffset)
@@ -470,6 +439,7 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 			polygonUI['ceiling']['offsetField'].setDoubleValue_(polygon.ceilingOffset)
 			polygonUI['ceiling']['offsetStepper'].setDoubleValue_(polygon.ceilingOffset)
 		else:
+			# FIXME: Steppers?
 			polygonUI['floor']['heightField'].SetRange(-2147483648, int(polygon.ceilingHeight))
 			polygonUI['floor']['heightField'].SetValue(int(polygon.floorHeight))
 			polygonUI['floor']['offsetField'].SetRange(-2147483648, int(polygon.ceilingOffset))
@@ -533,7 +503,7 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 			except AttributeError: # this will happen for invalid lines
 				polygon = u""
 			if usePyObjC:
-				sideUI['polygonField'].setEnabled_(True)
+				#sideUI['polygonField'].setEnabled_(True)
 				sideUI['polygonField'].setStringValue_(polygon)
 			else:
 				sideUI['polygonField'].ChangeValue(polygon)
@@ -542,7 +512,7 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 			self.updateSurface(side.upperSurface, sideUI['top'])
 		else:
 			if usePyObjC:
-				sideUI['polygonField'].setEnabled_(False)
+				#sideUI['polygonField'].setEnabled_(False)
 				sideUI['polygonField'].setStringValue_(u"")
 			else:
 				sideUI['polygonField'].ChangeValue(u"")
@@ -583,29 +553,10 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 					surfaceUI['effectPropertiesButton'].setEnabled_(False)
 				surfaceUI['lightField'].setEnabled_(True)
 				# FIXME: NSTokenField surfaceUI['lightField']
-				surfaceUI['switchCheckbox'].setEnabled_(True)
-				if 'switch' in surface.actions:
-					surfaceUI['switchCheckbox'].setState_(True)
-				else:
-					surfaceUI['switchCheckbox'].setState_(False)
-				surfaceUI['switchPropertiesButton'].setEnabled_(True)
-				surfaceUI['patternBufferCheckbox'].setEnabled_(True)
-				if 'pattern buffer' in surface.actions:
-					surfaceUI['patternBufferCheckbox'].setState_(True)
-				else:
-					surfaceUI['patternBufferCheckbox'].setState_(False)
-				surfaceUI['terminalCheckbox'].setEnabled_(True)
-				if 'terminal' in surface.actions:
-					surfaceUI['terminalCheckbox'].setState_(True)
-				else:
-					surfaceUI['terminalCheckbox'].setState_(False)
-				surfaceUI['terminalPropertiesButton'].setEnabled_(True)
-				surfaceUI['rechargerCheckbox'].setEnabled_(True)
-				if 'recharger' in surface.actions:
-					surfaceUI['rechargerCheckbox'].setState_(True)
-				else:
-					surfaceUI['rechargerCheckbox'].setState_(False)
-				surfaceUI['rechargerPropertiesButton'].setEnabled_(True)
+				surfaceUI['actionsButton'].setEnabled_(True)
+				# FIXME: Check Events panel and highlight button appropriately
+				surfaceUI['actionsButton'].setState_(False)
+				# FIXME: Update Events panel
 			else:
 				surfaceUI['dxSlider'].Enable()
 				surfaceUI['dxSlider'].SetValue(int(surface.dx))
@@ -636,29 +587,10 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 					surfaceUI['effectPropertiesButton'].Disable()
 				surfaceUI['lightField'].Enable()
 				# FIXME: wx.TextCtrl surfaceUI['lightField']
-				surfaceUI['switchCheckbox'].Enable()
-				if 'switch' in surface.actions:
-					surfaceUI['switchCheckbox'].SetValue(True)
-				else:
-					surfaceUI['switchCheckbox'].SetValue(False)
-				surfaceUI['switchPropertiesButton'].Enable()
-				surfaceUI['patternBufferCheckbox'].Enable()
-				if 'pattern buffer' in surface.actions:
-					surfaceUI['patternBufferCheckbox'].SetValue(True)
-				else:
-					surfaceUI['patternBufferCheckbox'].SetValue(False)
-				surfaceUI['terminalCheckbox'].Enable()
-				if 'terminal' in surface.actions:
-					surfaceUI['terminalCheckbox'].SetValue(True)
-				else:
-					surfaceUI['terminalCheckbox'].SetValue(False)
-				surfaceUI['terminalPropertiesButton'].Enable()
-				surfaceUI['rechargerCheckbox'].Enable()
-				if 'recharger' in surface.actions:
-					surfaceUI['rechargerCheckbox'].SetValue(True)
-				else:
-					surfaceUI['rechargerCheckbox'].SetValue(False)
-				surfaceUI['rechargerPropertiesButton'].Enable()
+				surfaceUI['actionsButton'].Enable()
+				# FIXME: Check Events panel and highlight button appropriately
+				surfaceUI['actionsButton'].SetValue(False)
+				# FIXME: Update Events panel
 		else:
 			if usePyObjC:
 				surfaceUI['dxSlider'].setEnabled_(False)
@@ -673,17 +605,10 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 				surfaceUI['effectPropertiesButton'].setEnabled_(False)
 				surfaceUI['lightField'].setEnabled_(False)
 				surfaceUI['lightField'].setStringValue_(u"")
-				surfaceUI['switchCheckbox'].setEnabled_(False)
-				surfaceUI['switchCheckbox'].setState_(False)
-				surfaceUI['switchPropertiesButton'].setEnabled_(False)
-				surfaceUI['patternBufferCheckbox'].setEnabled_(False)
-				surfaceUI['patternBufferCheckbox'].setState_(False)
-				surfaceUI['terminalCheckbox'].setEnabled_(False)
-				surfaceUI['terminalCheckbox'].setState_(False)
-				surfaceUI['terminalPropertiesButton'].setEnabled_(False)
-				surfaceUI['rechargerCheckbox'].setEnabled_(False)
-				surfaceUI['rechargerCheckbox'].setState_(False)
-				surfaceUI['rechargerPropertiesButton'].setEnabled_(False)
+				surfaceUI['actionsButton'].setEnabled_(False)
+				surfaceUI['actionsButton'].setState_(False)
+				# FIXME: Detach Events panel if attached to this actions button
+				# FIXME: Update Events panel
 			else:
 				surfaceUI['dxSlider'].Disable()
 				surfaceUI['dxSlider'].SetValue(0)
@@ -698,17 +623,10 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 				surfaceUI['effectPropertiesButton'].Disable()
 				surfaceUI['lightField'].Disable()
 				surfaceUI['lightField'].ChangeValue("")
-				surfaceUI['switchCheckbox'].Disable()
-				surfaceUI['switchCheckbox'].SetValue(False)
-				surfaceUI['switchPropertiesButton'].Disable()
-				surfaceUI['patternBufferCheckbox'].Disable()
-				surfaceUI['patternBufferCheckbox'].SetValue(False)
-				surfaceUI['terminalCheckbox'].Disable()
-				surfaceUI['terminalCheckbox'].SetValue(False)
-				surfaceUI['terminalPropertiesButton'].Disable()
-				surfaceUI['rechargerCheckbox'].Disable()
-				surfaceUI['rechargerCheckbox'].SetValue(False)
-				surfaceUI['rechargerPropertiesButton'].Disable()
+				surfaceUI['actionsButton'].Disable()
+				surfaceUI['actionsButton'].SetValue(False)
+				# FIXME: Detach Events panel if attached to this actions button
+				# FIXME: Update Events panel
 	
 	@traced
 	def openUndoGroup(self, name = None):
@@ -908,8 +826,13 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 		vertexYField = objc.IBOutlet()
 		lineVertex0Field = objc.IBOutlet()
 		lineVertex1Field = objc.IBOutlet()
-		lineSolidCheckbox = objc.IBOutlet()
-		lineTransparentCheckbox = objc.IBOutlet()
+		lineBlocksPlayersCheckbox = objc.IBOutlet()
+		lineBlocksAlliesCheckbox = objc.IBOutlet()
+		lineBlocksEnemiesCheckbox = objc.IBOutlet()
+		lineBlocksTeamsCheckbox = objc.IBOutlet()
+		lineBlocksTeamsPropertiesButton = objc.IBOutlet()
+		lineMapVisibilityRadioGroup = objc.IBOutlet()
+		lineMapVisibilityPropertiesButton = objc.IBOutlet()
 		lineSide0PolygonField = objc.IBOutlet()
 		lineSide0BottomDXSlider = objc.IBOutlet()
 		lineSide0BottomDYSlider = objc.IBOutlet()
@@ -918,13 +841,7 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 		lineSide0BottomEffectMenu = objc.IBOutlet()
 		lineSide0BottomEffectPropertiesButton = objc.IBOutlet()
 		lineSide0BottomLightField = objc.IBOutlet()
-		lineSide0BottomSwitchCheckbox = objc.IBOutlet()
-		lineSide0BottomSwitchPropertiesButton = objc.IBOutlet()
-		lineSide0BottomPatternBufferCheckbox = objc.IBOutlet()
-		lineSide0BottomTerminalCheckbox = objc.IBOutlet()
-		lineSide0BottomTerminalPropertiesButton = objc.IBOutlet()
-		lineSide0BottomRechargerCheckbox = objc.IBOutlet()
-		lineSide0BottomRechargerPropertiesButton = objc.IBOutlet()
+		lineSide0BottomActionsButton = objc.IBOutlet()
 		lineSide0MiddleDXSlider = objc.IBOutlet()
 		lineSide0MiddleDYSlider = objc.IBOutlet()
 		lineSide0MiddleTextureWell = objc.IBOutlet()
@@ -932,13 +849,7 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 		lineSide0MiddleEffectMenu = objc.IBOutlet()
 		lineSide0MiddleEffectPropertiesButton = objc.IBOutlet()
 		lineSide0MiddleLightField = objc.IBOutlet()
-		lineSide0MiddleSwitchCheckbox = objc.IBOutlet()
-		lineSide0MiddleSwitchPropertiesButton = objc.IBOutlet()
-		lineSide0MiddlePatternBufferCheckbox = objc.IBOutlet()
-		lineSide0MiddleTerminalCheckbox = objc.IBOutlet()
-		lineSide0MiddleTerminalPropertiesButton = objc.IBOutlet()
-		lineSide0MiddleRechargerCheckbox = objc.IBOutlet()
-		lineSide0MiddleRechargerPropertiesButton = objc.IBOutlet()
+		lineSide0MiddleActionsButton = objc.IBOutlet()
 		lineSide0TopDXSlider = objc.IBOutlet()
 		lineSide0TopDYSlider = objc.IBOutlet()
 		lineSide0TopTextureWell = objc.IBOutlet()
@@ -946,13 +857,7 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 		lineSide0TopEffectMenu = objc.IBOutlet()
 		lineSide0TopEffectPropertiesButton = objc.IBOutlet()
 		lineSide0TopLightField = objc.IBOutlet()
-		lineSide0TopSwitchCheckbox = objc.IBOutlet()
-		lineSide0TopSwitchPropertiesButton = objc.IBOutlet()
-		lineSide0TopPatternBufferCheckbox = objc.IBOutlet()
-		lineSide0TopTerminalCheckbox = objc.IBOutlet()
-		lineSide0TopTerminalPropertiesButton = objc.IBOutlet()
-		lineSide0TopRechargerCheckbox = objc.IBOutlet()
-		lineSide0TopRechargerPropertiesButton = objc.IBOutlet()
+		lineSide0TopActionsButton = objc.IBOutlet()
 		lineSide1PolygonField = objc.IBOutlet()
 		lineSide1BottomDXSlider = objc.IBOutlet()
 		lineSide1BottomDYSlider = objc.IBOutlet()
@@ -961,13 +866,7 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 		lineSide1BottomEffectMenu = objc.IBOutlet()
 		lineSide1BottomEffectPropertiesButton = objc.IBOutlet()
 		lineSide1BottomLightField = objc.IBOutlet()
-		lineSide1BottomSwitchCheckbox = objc.IBOutlet()
-		lineSide1BottomSwitchPropertiesButton = objc.IBOutlet()
-		lineSide1BottomPatternBufferCheckbox = objc.IBOutlet()
-		lineSide1BottomTerminalCheckbox = objc.IBOutlet()
-		lineSide1BottomTerminalPropertiesButton = objc.IBOutlet()
-		lineSide1BottomRechargerCheckbox = objc.IBOutlet()
-		lineSide1BottomRechargerPropertiesButton = objc.IBOutlet()
+		lineSide1BottomActionsButton = objc.IBOutlet()
 		lineSide1MiddleDXSlider = objc.IBOutlet()
 		lineSide1MiddleDYSlider = objc.IBOutlet()
 		lineSide1MiddleTextureWell = objc.IBOutlet()
@@ -975,13 +874,7 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 		lineSide1MiddleEffectMenu = objc.IBOutlet()
 		lineSide1MiddleEffectPropertiesButton = objc.IBOutlet()
 		lineSide1MiddleLightField = objc.IBOutlet()
-		lineSide1MiddleSwitchCheckbox = objc.IBOutlet()
-		lineSide1MiddleSwitchPropertiesButton = objc.IBOutlet()
-		lineSide1MiddlePatternBufferCheckbox = objc.IBOutlet()
-		lineSide1MiddleTerminalCheckbox = objc.IBOutlet()
-		lineSide1MiddleTerminalPropertiesButton = objc.IBOutlet()
-		lineSide1MiddleRechargerCheckbox = objc.IBOutlet()
-		lineSide1MiddleRechargerPropertiesButton = objc.IBOutlet()
+		lineSide1MiddleActionsButton = objc.IBOutlet()
 		lineSide1TopDXSlider = objc.IBOutlet()
 		lineSide1TopDYSlider = objc.IBOutlet()
 		lineSide1TopTextureWell = objc.IBOutlet()
@@ -989,17 +882,12 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 		lineSide1TopEffectMenu = objc.IBOutlet()
 		lineSide1TopEffectPropertiesButton = objc.IBOutlet()
 		lineSide1TopLightField = objc.IBOutlet()
-		lineSide1TopSwitchCheckbox = objc.IBOutlet()
-		lineSide1TopSwitchPropertiesButton = objc.IBOutlet()
-		lineSide1TopPatternBufferCheckbox = objc.IBOutlet()
-		lineSide1TopTerminalCheckbox = objc.IBOutlet()
-		lineSide1TopTerminalPropertiesButton = objc.IBOutlet()
-		lineSide1TopRechargerCheckbox = objc.IBOutlet()
-		lineSide1TopRechargerPropertiesButton = objc.IBOutlet()
+		lineSide1TopActionsButton = objc.IBOutlet()
 		polygonTable = objc.IBOutlet()
 		polygonLayerMenu = objc.IBOutlet()
 		polygonLayerOffsetField = objc.IBOutlet()
 		polygonLayerOffsetUnitsField = objc.IBOutlet()
+		polygonActionsButton = objc.IBOutlet()
 		polygonFloorHeightField = objc.IBOutlet()
 		polygonFloorHeightStepper = objc.IBOutlet()
 		polygonFloorOffsetField = objc.IBOutlet()
@@ -1011,13 +899,7 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 		polygonFloorEffectMenu = objc.IBOutlet()
 		polygonFloorEffectPropertiesButton = objc.IBOutlet()
 		polygonFloorLightField = objc.IBOutlet()
-		polygonFloorSwitchCheckbox = objc.IBOutlet()
-		polygonFloorSwitchPropertiesButton = objc.IBOutlet()
-		polygonFloorPatternBufferCheckbox = objc.IBOutlet()
-		polygonFloorTerminalCheckbox = objc.IBOutlet()
-		polygonFloorTerminalPropertiesButton = objc.IBOutlet()
-		polygonFloorRechargerCheckbox = objc.IBOutlet()
-		polygonFloorRechargerPropertiesButton = objc.IBOutlet()
+		polygonFloorActionsButton = objc.IBOutlet()
 		polygonCeilingHeightField = objc.IBOutlet()
 		polygonCeilingHeightStepper = objc.IBOutlet()
 		polygonCeilingOffsetField = objc.IBOutlet()
@@ -1029,13 +911,7 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 		polygonCeilingEffectMenu = objc.IBOutlet()
 		polygonCeilingEffectPropertiesButton = objc.IBOutlet()
 		polygonCeilingLightField = objc.IBOutlet()
-		polygonCeilingSwitchCheckbox = objc.IBOutlet()
-		polygonCeilingSwitchPropertiesButton = objc.IBOutlet()
-		polygonCeilingPatternBufferCheckbox = objc.IBOutlet()
-		polygonCeilingTerminalCheckbox = objc.IBOutlet()
-		polygonCeilingTerminalPropertiesButton = objc.IBOutlet()
-		polygonCeilingRechargerCheckbox = objc.IBOutlet()
-		polygonCeilingRechargerPropertiesButton = objc.IBOutlet()
+		polygonCeilingActionsButton = objc.IBOutlet()
 		
 		@traced
 		def init(self):
@@ -1195,8 +1071,13 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 		vertexYField = None
 		lineVertex0Field = None
 		lineVertex1Field = None
-		lineSolidCheckbox = None
-		lineTransparentCheckbox = None
+		lineBlocksPlayersCheckbox = None
+		lineBlocksAlliesCheckbox = None
+		lineBlocksEnemiesCheckbox = None
+		lineBlocksTeamsCheckbox = None
+		lineBlocksTeamsPropertiesButton = None
+		lineMapVisibilityRadioGroup = None
+		lineMapVisibilityPropertiesButton = None
 		lineSide0PolygonField = None
 		lineSide0BottomDXSlider = None
 		lineSide0BottomDYSlider = None
@@ -1205,13 +1086,7 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 		lineSide0BottomEffectMenu = None
 		lineSide0BottomEffectPropertiesButton = None
 		lineSide0BottomLightField = None
-		lineSide0BottomSwitchCheckbox = None
-		lineSide0BottomSwitchPropertiesButton = None
-		lineSide0BottomPatternBufferCheckbox = None
-		lineSide0BottomTerminalCheckbox = None
-		lineSide0BottomTerminalPropertiesButton = None
-		lineSide0BottomRechargerCheckbox = None
-		lineSide0BottomRechargerPropertiesButton = None
+		lineSide0BottomActionsButton = None
 		lineSide0MiddleDXSlider = None
 		lineSide0MiddleDYSlider = None
 		lineSide0MiddleTextureWell = None
@@ -1219,13 +1094,7 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 		lineSide0MiddleEffectMenu = None
 		lineSide0MiddleEffectPropertiesButton = None
 		lineSide0MiddleLightField = None
-		lineSide0MiddleSwitchCheckbox = None
-		lineSide0MiddleSwitchPropertiesButton = None
-		lineSide0MiddlePatternBufferCheckbox = None
-		lineSide0MiddleTerminalCheckbox = None
-		lineSide0MiddleTerminalPropertiesButton = None
-		lineSide0MiddleRechargerCheckbox = None
-		lineSide0MiddleRechargerPropertiesButton = None
+		lineSide0MiddleActionsButton = None
 		lineSide0TopDXSlider = None
 		lineSide0TopDYSlider = None
 		lineSide0TopTextureWell = None
@@ -1233,13 +1102,7 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 		lineSide0TopEffectMenu = None
 		lineSide0TopEffectPropertiesButton = None
 		lineSide0TopLightField = None
-		lineSide0TopSwitchCheckbox = None
-		lineSide0TopSwitchPropertiesButton = None
-		lineSide0TopPatternBufferCheckbox = None
-		lineSide0TopTerminalCheckbox = None
-		lineSide0TopTerminalPropertiesButton = None
-		lineSide0TopRechargerCheckbox = None
-		lineSide0TopRechargerPropertiesButton = None
+		lineSide0TopActionsButton = None
 		lineSide1PolygonField = None
 		lineSide1BottomDXSlider = None
 		lineSide1BottomDYSlider = None
@@ -1248,13 +1111,7 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 		lineSide1BottomEffectMenu = None
 		lineSide1BottomEffectPropertiesButton = None
 		lineSide1BottomLightField = None
-		lineSide1BottomSwitchCheckbox = None
-		lineSide1BottomSwitchPropertiesButton = None
-		lineSide1BottomPatternBufferCheckbox = None
-		lineSide1BottomTerminalCheckbox = None
-		lineSide1BottomTerminalPropertiesButton = None
-		lineSide1BottomRechargerCheckbox = None
-		lineSide1BottomRechargerPropertiesButton = None
+		lineSide1BottomActionsButton = None
 		lineSide1MiddleDXSlider = None
 		lineSide1MiddleDYSlider = None
 		lineSide1MiddleTextureWell = None
@@ -1262,13 +1119,7 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 		lineSide1MiddleEffectMenu = None
 		lineSide1MiddleEffectPropertiesButton = None
 		lineSide1MiddleLightField = None
-		lineSide1MiddleSwitchCheckbox = None
-		lineSide1MiddleSwitchPropertiesButton = None
-		lineSide1MiddlePatternBufferCheckbox = None
-		lineSide1MiddleTerminalCheckbox = None
-		lineSide1MiddleTerminalPropertiesButton = None
-		lineSide1MiddleRechargerCheckbox = None
-		lineSide1MiddleRechargerPropertiesButton = None
+		lineSide1MiddleActionsButton = None
 		lineSide1TopDXSlider = None
 		lineSide1TopDYSlider = None
 		lineSide1TopTextureWell = None
@@ -1276,17 +1127,12 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 		lineSide1TopEffectMenu = None
 		lineSide1TopEffectPropertiesButton = None
 		lineSide1TopLightField = None
-		lineSide1TopSwitchCheckbox = None
-		lineSide1TopSwitchPropertiesButton = None
-		lineSide1TopPatternBufferCheckbox = None
-		lineSide1TopTerminalCheckbox = None
-		lineSide1TopTerminalPropertiesButton = None
-		lineSide1TopRechargerCheckbox = None
-		lineSide1TopRechargerPropertiesButton = None
+		lineSide1TopActionsButton = None
 		polygonTable = None
 		polygonLayerMenu = None
 		polygonLayerOffsetField = None
 		polygonLayerOffsetUnitsField = None
+		polygonActionsButton = None
 		polygonFloorHeightField = None
 		polygonFloorHeightStepper = None
 		polygonFloorOffsetField = None
@@ -1298,13 +1144,7 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 		polygonFloorEffectMenu = None
 		polygonFloorEffectPropertiesButton = None
 		polygonFloorLightField = None
-		polygonFloorSwitchCheckbox = None
-		polygonFloorSwitchPropertiesButton = None
-		polygonFloorPatternBufferCheckbox = None
-		polygonFloorTerminalCheckbox = None
-		polygonFloorTerminalPropertiesButton = None
-		polygonFloorRechargerCheckbox = None
-		polygonFloorRechargerPropertiesButton = None
+		polygonFloorActionsButton = None
 		polygonCeilingHeightField = None
 		polygonCeilingHeightStepper = None
 		polygonCeilingOffsetField = None
@@ -1316,13 +1156,7 @@ class ForgeryInspector(NSWindowController if usePyObjC else wx.MiniFrame):
 		polygonCeilingEffectMenu = None
 		polygonCeilingEffectPropertiesButton = None
 		polygonCeilingLightField = None
-		polygonCeilingSwitchCheckbox = None
-		polygonCeilingSwitchPropertiesButton = None
-		polygonCeilingPatternBufferCheckbox = None
-		polygonCeilingTerminalCheckbox = None
-		polygonCeilingTerminalPropertiesButton = None
-		polygonCeilingRechargerCheckbox = None
-		polygonCeilingRechargerPropertiesButton = None
+		polygonCeilingActionsButton = None
 		
 		def __init__(self):
 			super(ForgeryInspector, self).__init__(

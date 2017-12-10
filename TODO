@@ -1,0 +1,7 @@
+* "Timing" or "Choreography" panel, for continuous actions (UI similar to GarageBand's tracks)
+* Starting inventory (for ctrl-shift-N)
+* 'Always visible in map' flag for lines and polygons
+* 'Visible in HUD' flag for lines, polygons, text, and objects
+* Map appearance for lines, polygons, text, and objects
+* Line flags to block enemies, allies, players, and teams
+* Modifier key in texture mode to adjust dx and dy

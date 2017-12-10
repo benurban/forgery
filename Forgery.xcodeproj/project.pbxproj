@@ -64,6 +64,7 @@
 		C400D56E13F62B0000796C05 /* ForgeryZoomTool.py in Resources */ = {isa = PBXBuildFile; fileRef = C400D54E13F62B0000796C05 /* ForgeryZoomTool.py */; };
 		C402081113F76D7D009EDB54 /* tracer.py in Resources */ = {isa = PBXBuildFile; fileRef = C402081013F76D7D009EDB54 /* tracer.py */; };
 		C4020BBF13F9000C009EDB54 /* ForgeryApplication.xib in Resources */ = {isa = PBXBuildFile; fileRef = C4020BBE13F9000C009EDB54 /* ForgeryApplication.xib */; };
+		C46980C913FD16C4004C406B /* ForgerysceBLoader.py in Resources */ = {isa = PBXBuildFile; fileRef = C46980C813FD16C4004C406B /* ForgerysceBLoader.py */; };
 		C46FA29D13F6263300635FF4 /* Python.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C46FA29C13F6263300635FF4 /* Python.framework */; };
 		C49411E113FBA741004059D5 /* ForgeryProgressWindow.py in Resources */ = {isa = PBXBuildFile; fileRef = C49411E013FBA741004059D5 /* ForgeryProgressWindow.py */; };
 /* End PBXBuildFile section */
@@ -149,6 +150,8 @@
 		C400D57D13F62C3200796C05 /* COPYING */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
 		C402081013F76D7D009EDB54 /* tracer.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = tracer.py; sourceTree = "<group>"; };
 		C4020B4F13F8B3D2009EDB54 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/ForgeryApplication.xib; sourceTree = "<group>"; };
+		C46980C513FD1570004C406B /* sample_map.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = sample_map.plist; sourceTree = "<group>"; };
+		C46980C813FD16C4004C406B /* ForgerysceBLoader.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgerysceBLoader.py; sourceTree = "<group>"; };
 		C46FA29C13F6263300635FF4 /* Python.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Python.framework; path = /System/Library/Frameworks/Python.framework; sourceTree = "<absolute>"; };
 		C49411E013FBA741004059D5 /* ForgeryProgressWindow.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ForgeryProgressWindow.py; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -215,6 +218,7 @@
 				C49411E013FBA741004059D5 /* ForgeryProgressWindow.py */,
 				C400D54113F62B0000796C05 /* ForgeryRegularPolygonTool.py */,
 				C400D54213F62B0000796C05 /* ForgerysceAExporter.py */,
+				C46980C813FD16C4004C406B /* ForgerysceBLoader.py */,
 				C400D54313F62B0000796C05 /* ForgerySelectTool.py */,
 				C400D54413F62B0000796C05 /* ForgeryTextTool.py */,
 				C400D54513F62B0000796C05 /* ForgeryTextureMode.py */,
@@ -278,6 +282,7 @@
 		C400D56F13F62B2800796C05 /* Sample Data */ = {
 			isa = PBXGroup;
 			children = (
+				C46980C513FD1570004C406B /* sample_map.plist */,
 				C400D57013F62B3400796C05 /* sample_map.sceB */,
 			);
 			name = "Sample Data";
@@ -413,6 +418,7 @@
 				C402081113F76D7D009EDB54 /* tracer.py in Resources */,
 				C4020BBF13F9000C009EDB54 /* ForgeryApplication.xib in Resources */,
 				C49411E113FBA741004059D5 /* ForgeryProgressWindow.py in Resources */,
+				C46980C913FD16C4004C406B /* ForgerysceBLoader.py in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

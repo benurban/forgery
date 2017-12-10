@@ -25,11 +25,12 @@ __all__ = (
 	'ForgeryMap',
 )
 
-import ForgeryApplication, ForgeryElements, ForgeryUndoManager, ForgeryXMLParser
+import ForgeryElements, ForgeryUndoManager, ForgeryXMLParser
 
 if usePyObjC:
 	from Foundation import *
 	import objc
+	import ForgeryApplication
 
 import os
 
@@ -66,7 +67,7 @@ class ForgeryMap(NSObject if usePyObjC else object):
 	else:
 		def __init__(self):
 			super(ForgeryMap, self).__init__()
-			self.undoManager = ForgeryUndoManager.ForgeryUndoManager(self)
+			self.undoManager = ForgeryUndoManager.ForgeryUndoManager()
 			self.flush()
 	
 	@traced
